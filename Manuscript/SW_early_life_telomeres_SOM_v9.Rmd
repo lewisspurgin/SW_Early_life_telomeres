@@ -5,6 +5,9 @@ output: word_document
 ###Supplementary information for Spurgin *et al.* "Telomeres reveal complex silver spoon effects in a wild population"
 
 
+
+
+
 ```{r load and clean, include = F}
 
 #Set wd one level up
@@ -33,8 +36,37 @@ opts_chunk$set(echo=FALSE,
 ```
 
 
+**Table S1** Model selection table for analysis of factors affecting early life telomere length in juvenile Seychelles warblers. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. i = intercept.
+
+```{r Table S1}
+
+#Run the model
+lm1 <- lmer(TLKB ~ TQspace + Insect + GroupSize + Sex + Condition + Helper + (1|LayYear),
+            data = FlSAall,REML=FALSE)
+
+lm1 <- standardize(lm1)
 
 
+#Model averaging
+lm2 <- dredge(lm1)
+t1 <- as.matrix(subset(lm2, delta<=6))
+colnames(t1)[2:7] <- c('Sex', 'Body condition','Group size','Helper','Food av.','TQ')
+getterms <- function(x)
+  {
+  temp <- c('i',names(which(!(is.na(x[2:7])))))
+  return(paste(temp,collapse = " + "))
+  }
+
+tableS1 <- data.frame(Model = apply(t1,1,getterms),t1[,c('df','AICc','delta','weight')])
+colnames(tableS1) <- c('Model','df','AICc', 'Delta AICc','Weight')
+rownames(tableS1) <- NULL
+tableS1$Model[tableS1$Model == ''] <- 'Null model'
+kable(tableS1,digits=3)
+
+```
+
+
+PAGEBREAK
 
 ```{r Figure S1,fig.width=4,fig.height=4}
 
@@ -128,12 +160,6 @@ PAGEBREAK
 
 
 
-
-
-
-
-
-
 ```{r Figure S3,fig.width=5}
 
 temp <- subset(FlSA,LayYear %in% c(1999,2006,2007,2000))
@@ -177,45 +203,3 @@ multiplot(FigS3A,FigS3B)
 
 **Figure S3** Within cohort relationships between telomere length and **A** local density and **B** body condition in juvenile Seychelles warblers. Only years with juvenile sample sizes >20 are included. Lines and shaded areas represent fitted values and 95% confidence limits from linear regressions.
 
-
-
-
-
-
-
-```{r Figure S4,fig.width=5,fig.height=5}
-glm1 <- glm(SurvivedNext ~ Sex + Condition + TLKB + Insect + Ageclass + TLKB + GroupSize,
-            data = FlSAall,
-            family = 'binomial')
-glm1 <- standardize(glm1)
-glm2 <- dredge(glm1)
-glm2avg <- model.avg(glm2, subset = delta <=6)
-myimp2 <- importance(glm2avg)
-
-#Make into a nice table
-table2 <- imptable(glm2avg,myimp2)
-table2 <- signif(table2,2)
-
-#Sort out row names
-nams <- rownames(table2)
-nams[nams == 'c.Ageclass'] <- 'Age class'
-nams[nams == 'z.Condition'] <- 'Body condition'
-nams[nams == 'c.Sex'] <- 'Sex'
-nams[nams == 'z.Insect'] <- 'Food av.'
-nams[nams == 'z.TQspace'] <- 'TQ'
-nams[nams == 'z.TLKB'] <- 'TL'
-nams[nams == 'z.GroupSize'] <- 'Local density'
-nams[nams == 'z.Insect:z.TLKB'] <- 'TL x Food av.'
-
-
-rownames(table2) <- nams
-colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
-
-table2 <- data.frame(table2,myx=row.names(table2))
-
-forestplot(table2)
-
-```
-
-
-**Figure S4** Model averaged estimates and confidence intervals (points and error bars, respectively) for all explanatory terms used in a generalised linear model with a binomial error structure and survival to adulthood as the response. Numbers in brackets are the relative importance of each term in the top model set (see main text for details). Food av = annual food availability, TL = telomere length TQ = territory quality.
