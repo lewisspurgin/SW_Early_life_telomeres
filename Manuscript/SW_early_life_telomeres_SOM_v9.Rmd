@@ -1,0 +1,221 @@
+---
+output: word_document
+---
+
+###Supplementary information for Spurgin *et al.* "Telomeres reveal complex silver spoon effects in a wild population"
+
+
+```{r load and clean, include = F}
+
+#Set wd one level up
+setwd('..')
+
+
+#Load and clean data
+
+source('Scripts/SW juvenile telomeres IPC load.r')
+source('Scripts/SW juvenile telomeres IPC functions.r')
+source('Scripts/SW juvenile telomeres IPC clean.r')
+
+
+#Set some options
+options(na.action='na.fail')
+opts_knit$set(root.dir = getwd())
+opts_chunk$set(echo=FALSE,
+               warning=FALSE,
+               message=FALSE,
+               fig.path='../Figures/',
+               fig.width= 4,
+               fig.height= 8,
+               fig.show='asis',
+               dev='png')
+
+```
+
+
+
+
+
+```{r Figure S1,fig.width=4,fig.height=4}
+
+
+temp <- dd
+
+ddFigS1 <- ddply(dd,
+                 .(Age),
+                 summarize,
+                 TLKBmean = mean(TLKB),
+                 TLKBse = se(TLKB))
+
+ddFigS1 <- ddFigS1[complete.cases(ddFigS1),]
+ddFigS1 <- subset(ddFigS1,Age<14)
+
+FigS1 <- ggplot(ddFigS1,
+       aes(x = Age,
+           y = TLKBmean)) +
+  geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
+  ylab('Telomere length (kb)') + 
+  xlab('Age') + 
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16))
+
+FigS1
+
+```
+
+
+**Figure S1** Cross-sectional telomere length (mean $\pm$ s.e.) in relation to age in Seychelles warblers.
+
+PAGEBREAK
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r Figure S2,fig.width=4,fig.height=4}
+
+
+temp <- FlSA
+
+ddFigS2 <- ddply(temp,
+                 .(LayYear),
+                 summarize,
+                 TLKBmean = mean(TLKB),
+                 TLKBse = se(TLKB))
+
+ddFigS2 <- ddFigS2[complete.cases(ddFigS2),]
+ddFigS2$LayYear <- as.numeric(paste(ddFigS2$LayYear))
+
+FigS2 <- ggplot(ddFigS2,
+       aes(x = LayYear,
+           y = TLKBmean)) +
+  geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
+  ylab('Telomere length (kb)') + 
+  xlab('Lay Year') + 
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16))
+
+FigS2
+
+```
+
+
+**Figure S2** Cross-sectional juvenile telomere length (mean $\pm$ s.e.) across birth years in Seychelles warblers
+
+PAGEBREAK
+
+
+
+
+
+
+
+
+
+
+```{r Figure S3,fig.width=5}
+
+temp <- subset(FlSA,LayYear %in% c(1999,2006,2007,2000))
+
+FigS3A <- ggplot(temp,
+      aes(x=GroupSize,
+      y=TLKB,
+      col=LayYear)) +
+  stat_smooth(method=lm,fullrange=T,alpha=0.2, aes(fill=LayYear),lwd=1.2) + 
+    ylab('Telomere length (kb)') + 
+  xlab('Local Density') + 
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16)) +
+  scale_color_brewer(palette='Set1') + 
+  scale_fill_brewer(palette='Set1') +
+  annotate('text',x=2,y=10,label='A')
+
+
+FigS3B <- ggplot(temp,
+      aes(x=Condition,
+      y=TLKB,
+      col=LayYear)) +
+  stat_smooth(method=lm,fullrange=T,alpha=0.2, aes(fill=LayYear),lwd=1.2) + 
+    ylab('Telomere length (kb)') + 
+  xlab('Body Condition') + 
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16)) +
+  scale_color_brewer(palette='Set1') + 
+  scale_fill_brewer(palette='Set1') +
+  annotate('text',x=-2,y=15,label='B')
+
+multiplot(FigS3A,FigS3B)
+
+```
+
+**Figure S3** Within cohort relationships between telomere length and **A** local density and **B** body condition in juvenile Seychelles warblers. Only years with juvenile sample sizes >20 are included. Lines and shaded areas represent fitted values and 95% confidence limits from linear regressions.
+
+
+
+
+
+
+
+```{r Figure S4,fig.width=5,fig.height=5}
+glm1 <- glm(SurvivedNext ~ Sex + Condition + TLKB + Insect + Ageclass + TLKB + GroupSize,
+            data = FlSAall,
+            family = 'binomial')
+glm1 <- standardize(glm1)
+glm2 <- dredge(glm1)
+glm2avg <- model.avg(glm2, subset = delta <=6)
+myimp2 <- importance(glm2avg)
+
+#Make into a nice table
+table2 <- imptable(glm2avg,myimp2)
+table2 <- signif(table2,2)
+
+#Sort out row names
+nams <- rownames(table2)
+nams[nams == 'c.Ageclass'] <- 'Age class'
+nams[nams == 'z.Condition'] <- 'Body condition'
+nams[nams == 'c.Sex'] <- 'Sex'
+nams[nams == 'z.Insect'] <- 'Food av.'
+nams[nams == 'z.TQspace'] <- 'TQ'
+nams[nams == 'z.TLKB'] <- 'TL'
+nams[nams == 'z.GroupSize'] <- 'Local density'
+nams[nams == 'z.Insect:z.TLKB'] <- 'TL x Food av.'
+
+
+rownames(table2) <- nams
+colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
+
+table2 <- data.frame(table2,myx=row.names(table2))
+
+forestplot(table2)
+
+```
+
+
+**Figure S4** Model averaged estimates and confidence intervals (points and error bars, respectively) for all explanatory terms used in a generalised linear model with a binomial error structure and survival to adulthood as the response. Numbers in brackets are the relative importance of each term in the top model set (see main text for details). Food av = annual food availability, TL = telomere length TQ = territory quality.

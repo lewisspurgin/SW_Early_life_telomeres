@@ -1,0 +1,172 @@
+---
+output:
+  word_document:
+    fig_caption: yes
+    highlight: null
+bibliography: mybib.bib
+csl: ProceedingsB.csl
+---
+```{r load and clean, include = F}
+
+#Set wd one level up
+setwd('..')
+
+
+#Load and clean data
+
+source('Scripts/SW juvenile telomeres IPC load.r')
+source('Scripts/SW juvenile telomeres IPC functions.r')
+source('Scripts/SW juvenile telomeres IPC clean.r')
+
+```
+
+
+
+
+###Telomeres reveal complex silver spoon effects in a wild population
+
+Lewis G. Spurgin^1^,  Kathryn L. Bebbington^1^, Eleanor A. Fairfield^1^, Jan Komdeur^2^, Terry Burke^3^, Hannah, L. Dugdale^3^,  and David S. Richardson^1,4^.
+
+1. School of Biological Sciences, University of East Anglia, Norwich Research Park, NR4 7TJ, United Kingdom
+2. Behavioural Ecology and Self-organization Group, Centre for Ecological and Evolutionary Studies, University of Groningen, Groningen, The Netherlands
+3. Department of Animal and Plant Sciences, NERC Biomolecular Analysis Facility, University of Sheffield, Sheffield, UK
+4. Nature Seychelles, Roche Caiman, Mahé, Republic of Seychelles
+
+**Correspondence:** Lewis Spurgin: lewisspurgin@gmail.com; David Richardson: david.richardson@uea.ac.uk
+
+**Keywords:** Ageing; Life-history; Seychelles warbler; Telomeres
+
+
+
+
+PAGEBREAK
+
+###Abstract
+Favourable conditions early in life can confer delayed survival advantages. These 'silver spoon effects' are most likely common in nature and are central to our understanding of life history evolution and population ecology. However, how silver spoon effects vary among individuals, populations and species remains poorly understood. Telomeres can act as biomarkers of cost in wild populations, and may provide insight into how silver spoon effects occur. Using a dataset spanning over a decade, we studied how telomere length links spatiotemporal variation in early-life conditions to survival to in the Seychelles warbler (*Acrocephalus sechellensis*). We show that early-life telomere length varies markedly across birth years, and that this variation is positively related to annual variation in food availability. We then show that having short telomeres as a juvenile is associated with reduced late life survival, but that this relationship was subject to strong cohort effects. Having short telomeres was associated with reduced late-life survival among individuals born in years where food was limited, but not among individuals born in years with high food availability. Our results suggest that telomeres can reveal hidden costs and complex silver spoon effects in wild populations.
+
+
+PAGEBREAK
+
+###Introduction
+Being subject to favourable environmental conditions during development and growth can confer fitness advantages later in life (so called 'silver spoon effects') [@Grafen1988; @Monaghan2008]. There is now evidence that adult fitness can be affected by a range of early-life experiences, including variation in resource availability [@Hayward2013], population density [@Nussey2007] and natural or anthropogenic environmental disturbance [@Reid2003]. Understanding the causes and consequences of these early-life experiences is key to understanding many ecological and evolutionary  processes, including  patterns of natural and sexual selection,  population growth rates and even local extinction [@Coulson2001; @Roach2014]. Understanding silver spoon effects is therefore of central interest to ecologists, evolutionary biologists and conservationists.
+
+While it is clear that silver spoon effects can occur, we have little understanding of how and under what conditions early-life environments will affect adult fitness. Because the phenotypic consequences of an adverse environment can depend on an individual's genetic or epigenetic makeup [@Hoffman2000; @Richards2006], the later-life consequences of a good/poor start are expected to vary among individuals, populations and species. Moreover, it is not always possible to fully quantify what constitutes a good or bad environment, and any 'hidden' environmental variation may obscure relationships relationships between the early-life conditions that are measured and adult phenotypes. Indeed, the pervasiveness of silver spoon effects varies between species [@Drummond2011], cohorts [@Reid2003] and sexes [@Wilkin2009]. In order to better understand the later-life consequences of early-life experiences, we therefore need to understand, or at least be able to measure, how the environment differentially affects individuals within a population.
+
+A key process that has been associated with adult survival is the rate at which telomere repeats are lost. Telomeres shorten with age [@Monaghan2006], and in response to oxidative damage that can occur due to environmental stress [@VonZglinicki2002]. When telomeres reach a critical shortness cells senesce  [@Campisi2003], resulting in organismal senescence and death  [@Wong2003]. These links between telomere length and senescence have inspired a great deal of recent research into telomere ecology [@Monaghan2014]. An emerging consensus from this research is that telomeres can act as biomarkers of cost in wild populations, retaining signatures of ecological stress that are otherwise difficult to detect [@Schultner2014; @Asghar2015].
+
+There is evidence from a range of taxa that the greatest rate of telomere loss occurs in early life (e.g. [@Frenck1998; @Haussmann2003]), and that the extent of this early-life telomere shortening is influenced by the environment [@Boonekamp2014]. Moreover, a recent laboratory study showed that juvenile telomere dynamics are related to late-life survival [@Heidinger2012]. However, whether telomeres provide a link between early-life conditions and late-life survival in the wild is not known.
+
+The longitudinal study (since 1986) of the Seychelles warbler (*Acrocephalus sechellensis*) population on Cousin Island provides an excellent opportunity to assess the relationship between early-life environmental variation, telomere length and late-life fitness. Firstly, due to the isolated nature of the study population and intensive field monitoring, we have excellent survival data and sampling material spanning many years (see methods, below). Secondly, telomere length predicts survival independently of age in adult Seychelles warblers, suggesting that telomeres act as a biomarker of cost in this species [@Barrett2013a]. Finally, ecological conditions on Cousin are variable over space and time due to spatiotemporal variation in foliage cover and food availability [@VandeCrommenacker2011a].
+
+In Seychelles warblers, oxidative stress is linked to natal territory quality [@VandeCrommenacker2011a], but neither natal territory quality nor natal local density are linked to juvenile or adult survival [@Brouwer2006; @Hammers2013]. In this study we analyse patterns of early-life telomere length and subsequent survival to test the prediction that telomeres fill a missing link between early-life environmental variation and late-life fitness. Specifically we predict that: i) individuals raised in good quality conditions will have longer telomeres, and ii) the relationship between telomere length and early-life conditions influences short and long-term survival.
+
+
+
+
+
+
+###Methods
+
+#####Study species and sampling
+The Seychelles warbler is a small (~15 g) passerine bird with a mean life expectancy of 5.5 years at fledging [@Hammers2013]. The population of *ca.* 320 adults on Cousin Island (04'20'S, 55'40'E) has been intensively studied since 1986 [@Richardson2003b; @Barrett2013a]. Individuals are usually ringed in their first year of life, and so are of known age. They are then followed throughout their lives, and as they are non-migratory endemics and are naturally confined to the island [@Komdeur2004a], a biannual census of birds on the island gives an accurate measure of levels of local density and individual survival rate [@Barrett2013a]. Full details of catching and census methods can be found in Brouwer *et al.* [@Brouwer2012].
+
+All territories are mapped biannually based on detailed observational data of foraging and territorial defence behaviour, and surveyed for territory quality [@Richardson2003b]. Territory quality is calculated based on territory size, foliage cover and insect abundance [@Komdeur1992] and averaged within territories [@Hammers2013]. Cousin is also subject to inter-annual variation in rainfall and food availability, and such yearly effects may override the effects of absolute territory quality. As an estimate of annual variation in food availability, we calculated an index of the number of insects across the entire island during the main breeding season of each sampling year based on the insect abundance data (see above).
+
+Each time a bird is caught on Cousin body mass and tarsus length are measured, and age is assessed on the basis of eye colour and previous captures [@Richardson2003b]. A blood sample (ca 25 $\mu$l) is taken from each bird via brachial venipuncture, and stored in 1 m1 absolute ethanol in a 1.5 ml screw-cap microfuge tube at room temperature.
+
+
+#####Molecular methods
+Genomic DNA was extracted from a ~2 mm^2^ flake of preserved blood using the DNeasy Blood and Tissue Kit (Qiagen), following the manufacturer's protocol, with the modification of overnight lysis at 37^o^C and a final DNA elution volume of 80 $\mu$l. DNA concentration and purity were quantified using a NanoDrop 8000 Spectrophotometer (ThermoScientific), and DNA integrity was validated by by visualization with ethidium bromide after electrophoresis on a 1.2% agarose gel. Sex was determined using the molecular method outlined by Griffiths *et al.* [-@Griffiths1998].
+
+Telomere lengths were measured from `r nrow(FlSA)` samples taken cross-sectionally from birds aged between two and twelve months, between `r min(as.numeric(paste(juv$LayYear)))` and `r max(as.numeric(paste(juv$LayYear)))`. Of these birds, `r nrow(subset(FlSA,Ageclass=='FL'))` were aged between two and six months (juveniles), and `r nrow(subset(FlSA,Ageclass=='SA'))` were aged seven to twelve months (subadults). We chose to focus on juveniles and subadults rather than nestlings, because i) we have juvenile samples spanning a range of years, whereas nestling samples are predominantly from two early years, and ii) telomere length during the nestling phase will largely be a product of inheritance and growth, whereas in juveniles and subadults we expect telomere length to incorporate the impact of early-life experiences. We measured absolute telomere quantity per diploid genome using a quantitative PCR (qPCR) assay  (full details in [@Barrett2012]).
+
+#####Statistical analyses
+We performed all analyses using R version 3.0.1 [@RDevelopmentCoreTeam2011]. We used linear models (LMs) and generalised linear models (GLMs) with model averaging to assess the causes and consequences of early-life telomere length in the Seychelles warbler. For each analysis we created a full model with all terms and biologically relevant interactions, from which a top model set was defined, containing all models with AICc $\leq$ 6 compared to the best supported model [@Burnham2011]. We report model averaged coefficients, confidence intervals, and 'relative importance', which reflects the relative weights of each predictor variable across the top model set. Model averaging was carried out using the MuMIn package (version 1.10.5) in R [@Barton2012].
+
+We first tested whether early-life environmental variation influences telomere length using linear models, with telomere length as the response variable. As explanatory variables we included body condition (calculated as deviation from a regression line of mass on tarsus length; [@VandeCrommenacker2011a]), sex, age class (juvenile or subadult), territory quality, yearly food availability and local density (measured as the number of individuals in the juvenile's natal social group [@Brouwer2012]).
+
+We then used generalised linear models to examine variation in telomere length in relation to survival. In these models we included the same predictor variables as the previous analysis, plus early-life telomere length. We first performed logistic regression to test whether telomere length predicts survival to adulthood (response = survived to the following year; yes/no). We then used Poisson regression, excluding individuals that died in their first year of life, to test whether telomere length predicts late-life survival (in years).
+
+
+
+
+###Results
+
+Mean ($\pm$ standard error) early-life telomere length was `r round2(mean(FlSAall$TLKB))` $\pm$ `r round2(se(FlSAall$TLKB))` kb. This is only marginally higher than mean telomere length for all adult birds (`r round2(mean(subset(dd,Age>0)$TLKB))` $\pm$ `r round2(se(subset(dd,Age>0)$TLKB))` kb), and lower than the mean for one year-old birds based on cross-sectional data (`r round2(mean(subset(dd,Age==1)$TLKB))` $\pm$ `r round2(se(subset(dd,Age==1)$TLKB))` kb; Figure S1). Using longitudinal data, however, we found that telomere length was shorter in young adult birds compared to when they were juveniles (mean loss between juvenile and first adult sample = `r round(mean(FlSA$TLloss,na.rm=T),1)*1000` bp). We found no significant difference in telomere length between age classes (juvenile vs subadult), or between sexes (Figure 1A).
+
+Early-life telomere length differed substantially among birth years (Figure S2), with longer telomeres in years where insect abundance was high (Figure 1B). Model averaging confirmed this strong, positive effect of yearly food availability on telomere length (Figure 1A). The best supported model with early-life telomere length as the response variable contained annual food availability, body condition and local density as explanatory variables (R^2^ = `r round2(summary(lm(TLKB~YQ+GroupSize+Condition,data=FlSAall))$r.squared)`). Early-life telomere length  was positively related to body condition (Figure 1C), and negatively related to local density, although in the latter case model-averaged confidence intervals overlapped zero (Figure 1A).
+
+To better visualise cohort effects we plotted the relationship between telomere length and both local density and body condition among cohort years (Figure S3). We found that the relationship between local density and telomere length varied among cohorts, from being negative to positive (Figure S3A). A similar, albeit less pronounced, pattern was observed for within-cohort relationships between telomere length and body condition (Figure S3B).
+
+Annual food availability and local density were the most important factors predicting survival to adulthood in juvenile Seychelles warblers (Figure S4). The top model contained these two factors, but was very weak in terms of explanatory power (McFadden's pseudo R^2^ = `r round2(1-logLik(glm(SurvivedNext~TLKB*Insect+GroupSize,family='binomial',data=FlSAall))/logLik(glm(SurvivedNext~1,family='binomial',data=FlSAall)))`), and the confidence intervals for all explanatory terms overlapped zero (Figure S4), suggesting that none of the variables studied predict survival to adulthood.
+
+Early-life telomere length and annual food availability, plus the interaction between these two variables, were the top predictors of late-life survival (Figure 2A). The interaction between telomere length and annual food availability was in the top model explaining late-life survival, and this model had good explanatory power (McFadden's pseudo R^2^ = `r round2(1-logLik(glm(RemainingLife~TLKB*Insect,family='poisson',data=subset(FlSAall,RemainingLife>0)))/logLik(glm(RemainingLife~1,family='poisson',data=FlSAall)))`). There was a positive relationship between telomere length and late-life survival in years of low insect abundance, with no such relationship when food availability was high (Figure 2B).
+
+
+
+
+
+
+###Discussion
+Previous studies have shown that in juvenile Seychelles warblers, neither territory quality nor annual variation in food availability predict survival to adulthood or late-life survival [@Brouwer2006; @Brouwer2012; @Hammers2013]. Here we show that telomeres link early-life conditions to later-life survival in the Seychelles warbler. These findings have a number of implications for research on life history evolution in wild populations.
+
+Our finding that food availability is related to early-life telomere length adds to a growing body of correlative and experimental evidence showing that the natal environment can have pronounced impacts on early-life telomere length [@Monaghan2014].  However, very few studies have shown that temporal variation in environmental conditions affects telomere length [@Mizutani2013]. We suspect this is more due to a lack of available long-term datasets with telomere screening, rather than the Seychelles warbler being unique. Indeed, the environment on Cousin is benign in comparison with many regions outside the tropics, where populations undergo large fluctuations in size (e.g. [@Coulson2001]). We therefore expect that as more long-term studies generate telomere datasets, the effects of temporal changes in the environment on telomere dynamics will become increasingly clear.
+
+We found no evidence that telomere length predicts survival to adulthood in Seychelles warblers. This is surprising, as we previously found that telomere length in adult Seychelles warblers predicts survival to the next year [@Barrett2013a]. Moreover, our cross-sectional data show that telomere length is longer, on average, in one year-old birds compared to juveniles (Figure S1), while there was no evidence of telomere lengthening from the longitudinal data. A pattern like this is expected when there is selective disappearance - a known phenomenon in studies of telomere dynamics whereby individuals with short telomeres die, resulting in an apparent increase in telomere length in cross-sectional data [@Haussmann2008a]. Thus, the raw data suggest that a survival effect may occur in early life, but this was not supported by our logistic regression analyses. This contradiction in results may be due to lack of power if a survival effect is present but weak and/or cohort specific. Increased sampling within years will help better elucidate the short-term survival impacts of early-life telomere length in this system. 
+
+In captive zebra finches, juvenile telomere length predicts late-life survival [@Heidinger2012]. Our results are the first to replicate this relationship in the wild. However, the effect varied among cohorts, suggesting that the relationship between early-life telomere length and late-life survival may not be a straightforward one in natural systems. Indeed, it appears that the interplay between the environment, telomeres and late-life survival at a given point in time is a snapshot of a fluid and dynamic evolutionary process. We therefore recommend that relationships involving telomeres from single cohorts should be interpreted with caution until we gain a better understanding of what drives spatiotemporal variation in telomere dynamics and survival.
+
+Together, our results confirm that there is cohort-level variation in the relationship between the early-life environment and later-life survival, and suggest that telomeres go some to way to capturing this complexity. Thus, our results support the idea that telomeres can be used as a 'generic currency' with which we can measure variation in costs among individuals and populations [@Asghar2015]. The prospect of using telomeres as indicators of population health is a particularly interesting one, as such an approach would be useful to a broad range of conservation and animal health practitioners. Our findings suggest that telomere length at the population level does reflect environmental stress. However, our analyses are confined to a single island, and research across populations with different environments and genetic histories is required in order to provide further insight into the usefulness of telomeres as biomarkers of population health.
+
+Despite the promise of telomeres as biomarkers of cost, ecologists interested in understanding variation within populations are still left with the problem of identifying what explains individual-level variation in telomere length. Telomere length in juveniles will be the product of a range of factors, including inherited telomere length at birth [@Horn2011], age at sampling [@Heidinger2012], the early-life environment [@Boonekamp2014], and, potentially, individual quality. In the Seychelles warbler we do not yet know how these different factors contribute to within-cohort variation in telomere length. However, a previous study on the Seychelles warbler showed that maternal heterozygosity influences offspring survival in bad years, but not good years [@Brouwer2007]. This raises the possibility that in the Seychelles warbler there is variation in individual quality, and high quality individuals are better able to cope with early-life stress [@Brouwer2007]. Thus in the near future it will become possible to use telomeres to link genetic variation, inheritance, environmental variation and senescence in the Seychelles warbler and other long-term systems.
+
+
+
+
+
+
+###Ethics
+All research activities were approved by the ethics committee at the University of East Anglia, the Seychelles Department of Environment and the Seychelles Bureau of Standards (approval reference A0347).
+
+
+
+
+
+###Data accessibility
+All data required to reproduce the analyses within this manuscript have been uploaded to Dryad (XXXX)
+
+
+
+
+
+###Competing interests
+There are no competing interests
+
+
+
+
+
+###Authors' contributions
+DSR developed the idea, obtained funding for the overall telomere project and managed the study; DSR, JK, HLD and TB supervised the overall running of the overall Seychelles warbler project and contributed resources; HLD managed the longitudinal fitness database. EAF and KLB generated and processed the telomere data; LGS performed the analyses and wrote the manuscript in discussion with DSR. All authors read and contributed to the manuscript.
+
+
+
+
+
+
+###Acknowledgements
+Nature Seychelles facilitate the long-term Seychelles warbler project, allowing us to stay on Cousin Island, and providing accommodation and facilities during field work. The Seychelles Bureau of Standards and Department of Environment gave permission for sampling and fieldwork. Emma Barrett laid the foundations for this study, generating much of the telomere  data. We thank everyone who has helped in the field, and the current Seychelles warbler research group for useful discussions.
+
+
+
+
+
+###Funding
+This work was funded by two Natural Environment Research Council (NERC) grants to DSR (NE/F02083X/1 and NE/K005502/1) on which JK, TB and HLD were project partners. HLD was funded by a NERC fellowship.
+
+
+
+
+
+###References
+
