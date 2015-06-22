@@ -402,7 +402,7 @@ ggsurv <- function(s, CI = 'def', plot.cens = T, surv.col = 'gg.def',
 }
 
 
-# In-tect functions -------------------------------------------------------
+# In-text functions -------------------------------------------------------
 
 
 #Round to 2 or 3 dp and keep trailing zeros

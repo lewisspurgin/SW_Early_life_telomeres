@@ -150,7 +150,7 @@ dd <- subset(dd,BodyMass>11)
 
 
 mymed <- median(dd$TLKB,na.rm=T)
-dd$TLF <- ifelse(dd$TLKB > mymed,'Long','Short')
+dd$TLF <- ifelse(dd$TLKB > mymed,'Long telomeres','Short telomeres')
 
 # Subset juveniles --------------------------------------------------------------
 
