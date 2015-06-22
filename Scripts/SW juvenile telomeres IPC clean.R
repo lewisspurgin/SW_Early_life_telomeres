@@ -150,9 +150,7 @@ dd <- subset(dd,BodyMass>11)
 
 
 mymed <- median(dd$TLKB,na.rm=T)
-mysd <- 2*sd(dd$TLKB,na.rm=T)
-dd$TLF <- ifelse(dd$TLKB > 6.2,'Long','Short')
-dd$TLI <- paste(dd$TLF,dd$InsectF)
+dd$TLF <- ifelse(dd$TLKB > mymed,'Long','Short')
 
 # Subset juveniles --------------------------------------------------------------
 
