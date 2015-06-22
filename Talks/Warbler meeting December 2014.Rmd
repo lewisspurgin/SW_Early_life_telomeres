@@ -1,0 +1,583 @@
+---
+title: "Early life telomere dynamics"
+author: "Lewis Spurgin"
+date: "December 2014"
+output: beamer_presentation
+---
+
+
+```{r load clean, include = FALSE}
+#Load and clean data
+rm(list=ls())
+setwd('..')
+source('Scripts/SW juvenile telomeres IPC load.r')
+source('Scripts/SW juvenile telomeres IPC functions.r')
+source('Scripts/SW juvenile telomeres IPC clean v2.r')
+
+```
+
+##Late life consequences of early life experiences
+\begin{center}
+  \includegraphics{Pictures/BrouwerFig.png}
+\end{center}
+
+
+
+
+
+
+
+
+
+
+
+
+##Telomeres as biomarkers of early life costs
+\begin{center}
+  \includegraphics{Pictures/HeidingerFig.png}
+\end{center}
+
+
+
+
+
+
+
+
+
+
+
+
+
+## **Questions**
+
+####1. Is telomere loss greatest in the first year of life?
+
+
+####2. What factors affect telomere length in early life?  
+
+
+####3. What are the consequences of early life telomere dynamics?
+
+\begin{center}
+  \includegraphics{Pictures/SWfeedingcomp.png}
+\end{center}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## **Data**
+- Juvenile birds caught between 1997-2000 (plus a few later ones)
+
+- Mostly Dead
+
+- *N* = `r nrow(juv)`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## **Is telomere loss greatest in the first year of life?**
+
+```{r, echo=FALSE,fig.height=5,fig.width=8,fig.cap='Telomere length and age'}
+par(pty='s')
+errorplot(y = dd$TLKB,
+          x = dd$Age,
+          myylab = 'Telomere Length (kb)',
+          myxlab = 'Age')
+polygon(x=c(-0.2,0.81,0.81,-0.2),
+        y=c(5.5,5.5,6,6),
+        col='white',
+        border = NA)
+```
+
+
+
+
+
+
+
+
+
+
+## **Is telomere loss greatest in the first year of life?**
+
+```{r, echo=FALSE,fig.height=5,fig.width=8, fig.cap='Telomere length and age'}
+par(pty='s')
+errorplot(y = dd$TLKB,
+          x = dd$Age,
+          myylab = 'Telomere Length (kb)',
+          myxlab = 'Age')
+```
+
+
+
+
+
+
+
+
+
+
+
+
+## **Is telomere loss greatest in the first year of life?**
+
+```{r, echo=FALSE,fig.height=5,fig.width=8, fig.cap='Telomere length and juvenile age'}
+par(pty='s')
+errorplot(y = dd$TLKB,
+          x = dd$Ageclass,
+          myylab = 'Telomere Length (kb)',
+          myxlab = 'Age Class')
+```
+
+
+
+
+
+tapply(juv$LogTL,list(juv$EPP,juv$Sex),length)
+
+
+
+
+
+
+
+
+## **Questions**
+
+####1. Is telomere loss greatest in the first year of life?  
+*Yes, but it's lost at a very early stage*
+
+####2. What factors affect telomere length in early life?  
+
+
+####3. What are the consequences of early life telomere dynamics?
+
+\begin{center}
+  \includegraphics{Pictures/SWfeedingcomp.png}
+\end{center}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## **What factors affect telomere length in early life?**
+
+####Key factors:
+
+- Territory Quality
+- Age class x Sex
+- EPP
+
+\begin{center}
+  \includegraphics{Pictures/cousinandchicks.png}
+  \end{center}
+
+
+
+
+
+
+
+
+
+
+
+
+## **What factors affect telomere length in early life?**
+```{r, echo=FALSE,fig.height=5,fig.width=8,fig.cap='Telomere length and territory quality',fig.pos='H'}
+par(pty='s')
+errorplot(juv$TLKB,juv$LogTQF,
+          myxlab = 'Territory Quality',
+          myylab = 'Telomere Length (kb)')
+  
+```
+
+
+
+
+
+
+
+
+## **What factors affect telomere length in early life?**
+```{r, echo=FALSE,fig.height=4,fig.width=8, fig.cap='Telomere length and Sex * Age'}
+layout(matrix(1:2,1,2))
+par(mar = c(5,5,2,0))
+errorplot(y = m_juv$TLKB,
+          x = m_juv$Ageclass,
+          myylab = 'Telomere Length (kb)',
+          myxlab = 'Age Class',
+          mymain = 'Males',
+          myylim = c(5,7),
+          myxlim <- c(0,1))
+
+par(mar=c(5,3,2,2))
+errorplot(y = f_juv$TLKB,
+          x = f_juv$Ageclass,
+          myylab = '',
+          myxlab = 'Age Class',
+          mymain = 'Females',
+          myylim = c(5,7),
+          myxlim <- c(0,1))
+```
+
+
+
+
+
+
+
+## **What factors affect telomere length in early life?**
+```{r, echo=FALSE,fig.height=4,fig.width=8, fig.cap='Telomere length and EPP * Age'}
+layout(matrix(1:2,1,2))
+par(mar = c(5,5,2,0))
+errorplot(y = juvnotEPP$TLKB,
+          x = juvnotEPP$Ageclass,
+          myylab = 'Telomere Length (kb)',
+          myxlab = 'Age Class',
+          mymain = 'Within Pair',
+          myylim = c(5,7),
+          myxlim <- c(0,1))
+
+par(mar=c(5,3,2,2))
+errorplot(y = juvEPP$TLKB,
+          x = juvEPP$Ageclass,
+          myylab = '',
+          myxlab = 'Age Class',
+          mymain = 'Extra Pair',
+          myylim = c(5,7),
+          myxlim <- c(0,1))
+```
+
+
+
+
+
+
+
+
+
+
+## **What factors affect telomere length in early life?**
+```{r, echo=FALSE,fig.height=4,fig.width=8, fig.cap='Telomere length and EPP * Age'}
+layout(matrix(1:2,1,2))
+par(mar = c(5,5,2,0))
+errorplot(y = juvHelp$TLKB,
+          x = juvHelp$Ageclass,
+          myylab = 'Telomere Length (kb)',
+          myxlab = 'Age Class',
+          mymain = 'Helpers present',
+          myylim = c(4.5,7),
+          myxlim <- c(0,1))
+
+par(mar=c(5,3,2,2))
+errorplot(y = juvNotHelp$TLKB,
+          x = juvNotHelp$Ageclass,
+          myylab = '',
+          myxlab = 'Age Class',
+          mymain = 'Helpers absent',
+          myylim = c(4.5,7),
+          myxlim <- c(0,1))
+```
+
+
+
+
+
+
+
+
+## **Questions**
+
+####1. Is telomere loss greatest in the first year of life?  
+*Yes, but it's lost at a very early stage*
+
+####2. What factors affect telomere length in early life?  
+*Age, Sex, Territory Quality and EPP*
+
+####3. What are the consequences of early life telomere dynamics?
+
+
+\begin{center}
+  \includegraphics{Pictures/SWfeedingcomp.png}
+\end{center}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## **What are the consequences of early life telomere length?**
+```{r, echo=FALSE,fig.height=4,fig.width=8, fig.cap='Telomere length and survival'}
+
+
+layout(matrix(1:2,1,2))
+
+
+######
+#Survival to next year
+######
+
+errorplot(x=juv$SurvivedNextFig,y=juv$TLKB,
+          myxlim = c(-0.5,1.5),
+          myylim = c(5,6),
+          myylab = 'Telomere Length (kb)',
+          myxlab = 'Survived to adulthood?')
+
+######
+#Remaining Life
+######
+
+plot1(RemainingLife~TLKB,
+      mydata=juv,
+      myxlab = 'Telomere Length (kb)',
+      myylab = 'Remaining Life',
+      myylim=c(0,20))
+
+#Run a model(for fit line)
+glm1 <- zeroinfl(RemainingLife~TLKB,
+      data=juv,
+      dist='poisson')
+
+#Get fitted values and fit the line
+predProbs<-predict(glm1,data.frame(TLKB=seq(1, 12, length.out=100)), type="response")
+lines(seq(1, 12, length.out=100), predProbs, col='red', lwd=2)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## **What are the consequences of early life telomere length?**
+```{r, echo=FALSE,fig.height=4,fig.width=8, fig.cap='Telomere length and survival'}
+
+
+layout(matrix(1:2,1,2))
+
+
+######
+#Survival to next year
+######
+
+errorplot(x=m_juv$SurvivedNextFig,y=m_juv$TLKB,
+          myxlim = c(-0.5,1.5),
+          myylim = c(4,7),
+          myylab = 'Telomere Length (kb)',
+          myxlab = 'Survived to adulthood?')
+errorplot(x=f_juv$SurvivedNextFig,y=f_juv$TLKB,
+          add=T,
+          mylegend=T,
+          legendlevels = c('Males','Females'))
+
+######
+#Remaining Life
+######
+
+plot1(RemainingLife~TLKB,
+      mydata=juv,
+      myxlab = 'Telomere Length (kb)',
+      myylab = 'Remaining Life',
+      myylim=c(0,20))
+
+#Run a model(for fit line)
+glmMale <- zeroinfl(RemainingLife~TLKB,
+      data=m_juv,
+      dist='poisson')
+glmFemale <- zeroinfl(RemainingLife~TLKB,
+      data=f_juv,
+      dist='poisson')
+
+#Get fitted values and fit the line
+predProbs<-predict(glmMale,data.frame(TLKB=seq(1, 12, length.out=100)), type="response")
+lines(seq(1, 12, length.out=100), predProbs, col='red', lwd=2)
+predProbs<-predict(glmFemale,data.frame(TLKB=seq(1, 12, length.out=100)), type="response")
+lines(seq(1, 12, length.out=100), predProbs, col='blue', lwd=2)
+
+legend('topleft',
+       pch='--',
+       bty='n',
+       col=c('red','blue'),
+       legend=c('Males','Females'),
+       cex=1.2)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+## **What are the consequences of early life telomere length?**
+```{r, echo=FALSE,fig.height=4,fig.width=8, fig.cap='Telomere length and survival'}
+
+
+layout(matrix(1:2,1,2))
+
+
+######
+#Survival to next year
+######
+
+errorplot(x=juvEPP$SurvivedNextFig,y=juvEPP$TLKB,
+          myxlim = c(-0.5,1.5),
+          myylim = c(4.5,7.5),
+          myylab = 'Telomere Length (kb)',
+          myxlab = 'Survived to adulthood?')
+errorplot(x=juvnotEPP$SurvivedNextFig,y=juvnotEPP$TLKB,
+          add=T,
+          mylegend=T,
+          legendlevels = c('Extra Pair','Within Pair'))
+
+######
+#Remaining Life
+######
+
+plot1(RemainingLife~TLKB,
+      mydata=juv,
+      myxlab = 'Telomere Length (kb)',
+      myylab = 'Remaining Life',
+      myylim=c(0,20))
+
+#Run a model(for fit line)
+glmEPP <- zeroinfl(RemainingLife~TLKB,
+      data=juvEPP,
+      dist='poisson')
+glmnotEPP <- zeroinfl(RemainingLife~TLKB,
+      data=juvnotEPP,
+      dist='poisson')
+
+#Get fitted values and fit the line
+predProbs<-predict(glmEPP,data.frame(TLKB=seq(1, 12, length.out=100)), type="response")
+lines(seq(1, 12, length.out=100), predProbs, col='red', lwd=2)
+predProbs<-predict(glmnotEPP,data.frame(TLKB=seq(1, 12, length.out=100)), type="response")
+lines(seq(1, 12, length.out=100), predProbs, col='blue', lwd=2)
+
+legend('topleft',
+       pch='--',
+       bty='n',
+       col=c('red','blue'),
+       legend=c('Extra Pair','Within Pair'),
+       cex=1.2)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+##Telomeres as biomarkers of early life costs
+\begin{center}
+  \includegraphics{Pictures/BoonekampFig.png}
+\end{center}
+
+
+
+
+
+
+
+
+
+
+
+
+## **Questions**
+
+####1. Is telomere loss greatest in the first year of life?  
+*Yes, but it's lost at a very early stage*
+
+####2. What factors affect telomere length in early life?  
+*Age, Sex, Territory Quality and EPP*
+
+####3. What are the consequences of early life telomere dynamics?
+*Important for survival but dependent on early life conditions*
+
+\begin{center}
+  \includegraphics{Pictures/SWfeedingcomp.png}
+\end{center}
+
+

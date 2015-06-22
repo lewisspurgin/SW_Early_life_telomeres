@@ -1,0 +1,586 @@
+---
+output:
+  beamer_presentation:
+    fig_caption: false
+    colortheme: 'seahorse'
+---
+
+
+```{r setwd, include = F}
+
+#Set working directory up one level
+setwd('..')
+
+#Load and clean data
+source('Scripts/SW juvenile telomeres IPC load.r')
+source('Scripts/SW juvenile telomeres IPC functions.r')
+source('Scripts/SW juvenile telomeres IPC clean.r')
+
+
+#Set some options
+
+opts_chunk$set(echo=FALSE,
+               warning=FALSE,
+               message=FALSE)
+
+```
+
+
+
+
+
+
+
+## Good Years, Bad Years and Telomeres in a Wild Bird Population
+
+\begin{center}
+  \includegraphics{Pictures/SWfeedingcomp2.png} \\~\\
+
+
+Lewis Spurgin \\~\\
+
+March 2015 \\~\\
+
+  \includegraphics{Pictures/UEANERCwide.png}
+  
+\end{center}
+
+
+
+
+
+
+
+
+
+## The benefits of a good start
+
+\begin{center}
+  \includegraphics{Pictures/Bullingdon.png}
+\end{center}
+
+
+## The benefits of a good start
+
+\begin{center}
+  \includegraphics{Pictures/Slytherin.png}
+\end{center}
+
+
+
+
+
+
+
+
+
+
+
+
+## A good/bad start doesn't affect everyone equally
+
+\begin{center}
+  \includegraphics{Pictures/powers.png}
+\end{center}
+
+
+
+
+
+
+
+
+
+
+
+## Silver spoons in ecology
+
+
+\begin{center}
+  \includegraphics{Pictures/DeerFig.png}
+\end{center}
+
+
+
+
+
+
+
+
+
+## Silver spoons in ecology
+
+
+\begin{center}
+  \includegraphics{Pictures/GreatTitFig.png}
+\end{center}
+
+
+
+
+
+
+
+## Can we quantify how badly an individual suffers from a bad start in life?
+
+\begin{center}
+  \includegraphics{Pictures/BirdOfParadise.png}
+\end{center}
+
+
+
+
+
+
+
+
+## Telomeres - (TTAGGG)~*n*~
+
+
+\begin{center}
+  \includegraphics{Pictures/Telomeres.png}
+\end{center}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Telomeres and oxidative stress
+
+
+\begin{center}
+  \includegraphics{Pictures/Oxidants.png}
+\end{center}
+
+
+
+
+
+
+
+
+
+## Telomeres - biomarkers of cost
+
+
+\begin{center}
+  \includegraphics{Pictures/Google.png}
+\end{center}
+
+
+
+
+
+
+
+## Telomeres and silver spoons
+
+
+\begin{center}
+  \includegraphics{Pictures/ShagFig.png}
+\end{center}
+
+
+
+
+
+
+
+
+
+
+
+
+## Telomeres and silver spoons
+
+
+\begin{center}
+  \includegraphics{Pictures/HeidingerFig.png}
+\end{center}
+
+
+
+
+
+
+## Seychelles warbler (*Acrocephalus sechellensis*)
+
+
+\begin{center}
+  \includegraphics{Pictures/CousinAndWarbler.png}
+\end{center}
+
+
+
+
+
+
+
+
+## Seychelles warbler (*Acrocephalus sechellensis*)
+
+
+\begin{center}
+  \includegraphics{Pictures/SWnest.png}
+\end{center}
+
+
+
+
+
+
+
+## It rains in the tropics
+
+
+\begin{center}
+  \includegraphics{Pictures/Rain.png}
+\end{center}
+
+
+
+
+
+
+## Food availiability varies over time
+
+```{r food availability over time,fig.width=4,fig.height=4}
+temp <- subset(FlSAall,LayYear!='1996')
+
+temp$LayYear <- as.numeric(paste(temp$LayYear))
+Fig1A <- ggplot(temp,
+       aes(x = LayYear,
+           y = Insect)) +
+  xlab('Year') + 
+  ylab('Insect availability') + 
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14),
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16)) +
+  geom_ribbon(aes(ymax=Insect+InsectSE,ymin=Insect-InsectSE),alpha=0.2) +
+  geom_path()
+
+Fig1A
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Food availiability in early life doesn't predict lifespan in the Seychelles warbler
+
+```{r Lifespan and food availability,fig.width=4,fig.height=4}
+
+
+temp <- FlSAall
+temp$Insect <- factor(temp$Insect)
+
+ddFig1A <- ddply(temp,
+                 .(Insect),
+                 summarize,
+                 TLKBmean = mean(RemainingLife),
+                 TLKBse = 1.96*se(RemainingLife))
+ddFig1A <- ddFig1A[complete.cases(ddFig1A),]
+ddFig1A$Insect <- as.numeric(paste(ddFig1A$Insect))
+
+Fig1A <- ggplot(ddFig1A,
+       aes(x = Insect,
+           y = TLKBmean)) +
+  ylab('Lifespan') + 
+  xlab('Food availability in early life') + 
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16)) +
+
+  geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse))
+
+Fig1A
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Predictions
+
+**Telomeres link early life conditions to late life survival**
+
+- Juvenile telomere length varies over years
+
+- Telomere length in early life is related  to food availability
+
+- Individuals who suffer greatest telomere shortening in early life have reduced late life survival
+
+\begin{center}
+  \includegraphics{Pictures/BirdOfParadiseSmall.png}
+\end{center}
+
+
+
+
+## Measuring warbler telomeres
+
+\begin{center}
+  \includegraphics{Pictures/Emma.png}
+\end{center}
+
+
+
+
+
+
+## Juvenile telomere length varies over years
+
+
+
+```{r Telomere length over time,fig.width=4,fig.height=4}
+
+
+temp <- FlSA
+
+ddFigS2 <- ddply(temp,
+                 .(LayYear),
+                 summarize,
+                 TLKBmean = mean(TLKB),
+                 TLKBse = se(TLKB))
+
+ddFigS2 <- ddFigS2[complete.cases(ddFigS2),]
+ddFigS2$LayYear <- as.numeric(paste(ddFigS2$LayYear))
+
+FigS2 <- ggplot(ddFigS2,
+       aes(x = LayYear,
+           y = TLKBmean)) +
+  geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
+  geom_line() +
+  ylab('Telomere length (kb)') + 
+  xlab('Lay Year') + 
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16))
+
+FigS2
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+## Telomere length in early life is related  to food availability
+
+```{r Telomeres and food availability,fig.width=4,fig.height=4}
+
+
+temp <- FlSAall
+temp$Insect <- factor(temp$Insect)
+
+ddFig1A <- ddply(temp,
+                 .(Insect),
+                 summarize,
+                 TLKBmean = mean(TLKB),
+                 TLKBse = 1.96*se(TLKB))
+ddFig1A <- ddFig1A[complete.cases(ddFig1A),]
+ddFig1A$Insect <- as.numeric(paste(ddFig1A$Insect))
+
+Fig1A <- ggplot(ddFig1A,
+       aes(x = Insect,
+           y = TLKBmean)) +
+  ylab('Telomere length (kb)') + 
+  xlab('Food availability in early life') + 
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16)) +
+  stat_smooth(data=FlSAall,aes(x=Insect,y=TLKB),method=lm,col=grey(0.7)) +
+  geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse))
+
+Fig1A
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Individuals who suffer greatest telomere shortening in early life have reduced late life survival
+
+```{r Telomeres and survival,fig.width=5.5,fig.height=4}
+
+
+Fig2 <- ggplot(subset(subset(FlSAall,RemainingLife>1),RemainingLife<11),
+                aes(y = RemainingLife,
+                x = TLKB,
+                col=YQ)) +
+  theme_classic() +
+  geom_point(alpha=0.3) +
+  xlab('Telomere length (kb)') + 
+  ylab('Remaining life') + 
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.x = element_text(size = 16), 
+        axis.title.y = element_text(size = 16,vjust = 1), 
+        legend.text = element_text(size = 13),
+        legend.title = element_blank()) +
+  scale_color_manual(values=c('#d95f02','#1b9e77'))+
+  scale_fill_manual(values=c('#d95f02','#1b9e77'))+
+  stat_smooth(method=glm,family=poisson,lwd=1.2,aes(fill=YQ,lty=YQ),fullrange=T)
+
+Fig2
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Predictions
+
+**Telomeres link early life conditions to late life survival**
+
+- Juvenile telomere length varies over years
+
+- Telomere length in early life is related  to food availability
+
+- Individuals who suffer greatest telomere shortening in early life have reduced late life survival
+
+\begin{center}
+  \includegraphics{Pictures/BirdOfParadiseSmall.png}
+\end{center}
+
+
+
+
+## Predictions
+
+**Telomeres link early life conditions to late life survival**
+
+- Juvenile telomere length varies over years **YES**
+
+- Telomere length in early life is related  to food availability
+
+- Individuals who suffer greatest telomere shortening in early life have reduced late life survival
+
+\begin{center}
+  \includegraphics{Pictures/BirdOfParadiseSmall.png}
+\end{center}
+
+
+
+
+
+## Predictions
+
+**Telomeres link early life conditions to late life survival**
+
+- Juvenile telomere length varies over years **YES**
+
+- Telomere length in early life is related  to food availability **YES**
+
+- Individuals who suffer greatest telomere shortening in early life have reduced late life survival
+
+\begin{center}
+  \includegraphics{Pictures/BirdOfParadiseSmall.png}
+\end{center}
+
+
+
+
+
+
+## Predictions
+
+**Telomeres link early life conditions to late life survival**
+
+- Juvenile telomere length varies over years **YES**
+
+- Telomere length in early life is related to food availability **YES**
+
+- Individuals who suffer greatest telomere shortening in early life have reduced late life survival **YES**
+
+\begin{center}
+  \includegraphics{Pictures/BirdOfParadiseSmall.png}
+\end{center}
+
+
+
+
+
+
+
+
+
+## Thank you!
+
+\begin{center}
+  \includegraphics{Pictures/Acks.png}
+\end{center}
