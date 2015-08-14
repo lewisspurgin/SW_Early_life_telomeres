@@ -126,6 +126,13 @@ se <- function(x) sd(x,na.rm=T)/sqrt(length(x))
 
 
 
+# Find telomere function --------------------------------------------------
+
+findTL <- function(x,TLfile = AvgTL)
+{
+  bird <- paste(x)
+  return(TLfile[names(TLfile) == bird])
+}
 
 
 # Knitr options -----------------------------------------------------------

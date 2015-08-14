@@ -52,8 +52,8 @@ PAGEBREAK
 
 
 #Run the model
-lm1 <- lmer(TLKB~ TQspace + Insect + GroupSize + Sex + Condition + Helper + (1|LayYear),
-            data = FlSAall,REML=FALSE)
+lm1 <- lmer(TLKB ~ TQspace + Insect + NonHelper + Sex + Tarsus + BodyMass + Helper + (1|LayYear),
+            data = chickall,REML=FALSE)
 
 lm1 <- standardize(lm1)
 
@@ -72,8 +72,9 @@ table1 <- signif(table1,2)
 #Sort out row/col names
 nams <- rownames(table1)
 nams[nams == 'c.Ageclass'] <- 'Age class'
-nams[nams == 'z.Condition'] <- 'Body condition'
-nams[nams == 'z.GroupSize'] <- 'Local density'
+nams[nams == 'z.BodyMass'] <- 'Body mass'
+nams[nams == 'z.Tarsus'] <- 'Tarsus'
+nams[nams == 'z.NonHelper'] <- 'Non helpers'
 nams[nams == 'c.Sex'] <- 'Sex'
 nams[nams == 'z.Insect'] <- 'Food av.'
 nams[nams == 'z.TQspace'] <- 'TQ'
@@ -87,52 +88,130 @@ table1 <- data.frame(table1,myx=row.names(table1))
 Fig1A <- forestplot(table1) +
   annotate('text',x=0.5,y=4,label='A')
 
+######################################
+temp <- chickall
+temp$Helper <- ifelse(temp$Helper>0,'Helpers present','Helpers absent')
+
+
+ddFig1B <- ddply(temp,
+                 .(Helper),
+                 summarize,
+                 TLKBmean = mean(TLKB),
+                 TLKBse = se(TLKB))
+
+Fig1B <- ggplot(ddFig1B,
+       aes(x = Helper,
+           y = TLKBmean)) +
+  ylab('Telomere length (kb)') + 
+  xlab('') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16)) +
+  geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
+  scale_colour_manual(values = wes_palette("Royal1")) +
+  annotate('text',x=0.5,y=7.5,label='B')
+
+
+Fig1C <- ggplot(chickall,
+       aes(x = BodyMass,
+           y = TLKB)) +
+  ylab('Telomere length (kb)') + 
+  xlab('Body mass (g)') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16)) +
+  geom_point() +
+  stat_smooth(method = 'lm',col = 'black') +
+  annotate('text',x=12,y=15,label='C')
+
+multiplot(Fig1A,Fig1B,Fig1C,layout=matrix(c(1,1,1,1,1,1,2,3,2,3), nrow=5, byrow=TRUE))
+
+
+```
+
+
+PAGEBREAK
+
+```{r Figure 2,fig.width=5,fig.height=9}
+###########
+#Fig 2A
+
+
+
+#Run the model
+lm1 <- lmer(TLKB ~ TQspace + Insect + NonHelper + Sex + Tarsus + BodyMass + Helper + (1|LayYear),
+            data = FlSAall,REML=FALSE)
+
+lm1 <- standardize(lm1)
+
+
+#Model averaging
+lm2 <- dredge(lm1)
+lmavg <- model.avg(lm2,subset = delta <=6)
+myimp <- importance(lmavg) #Relative importance of each explanatory variable
+  
+
+#Put it all into a nice table
+table1 <- imptable(lmavg,myimp)
+table1 <- signif(table1,2)
+
+
+
+#Sort out row/col names
+nams <- rownames(table1)
+nams[nams == 'c.Ageclass'] <- 'Age class'
+nams[nams == 'z.BodyMass'] <- 'Body mass'
+nams[nams == 'z.Tarsus'] <- 'Tarsus'
+nams[nams == 'z.NonHelper'] <- 'Non helpers'
+nams[nams == 'c.Sex'] <- 'Sex'
+nams[nams == 'z.Insect'] <- 'Food av.'
+nams[nams == 'z.TQspace'] <- 'TQ'
+nams[nams == 'z.Helper'] <- 'Helpers'
+
+
+rownames(table1) <- nams
+colnames(table1) <- c('Estimate','SE','2.5%','97.5%','RI')
+
+table1 <- data.frame(table1,myx=row.names(table1))
+
+Fig2A <- forestplot(table1) +
+  annotate('text',x=0.5,y=4,label='A')
+
 
 ######################################
 temp <- FlSAall
 temp$Insect <- factor(temp$Insect)
 
-ddFig1B <- ddply(temp,
+ddFig2B <- ddply(temp,
                  .(Insect),
                  summarize,
                  TLKBmean = mean(TLKB),
                  TLKBse = 1.96*se(TLKB))
-ddFig1B <- ddFig1B[complete.cases(ddFig1B),]
-ddFig1B$Insect <- as.numeric(paste(ddFig1B$Insect))
+ddFig2B <- droplevels(ddFig2B[complete.cases(ddFig2B),])
+ddFig2B$Insect <- as.numeric(paste(ddFig2B$Insect))
 
-Fig1B <- ggplot(ddFig1B,
+Fig2B <- ggplot(ddFig2B,
        aes(x = Insect,
            y = TLKBmean)) +
   ylab('Telomere length (kb)') + 
-  xlab('Annual food availability') + 
+  xlab('Annual food availability') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 14), 
         axis.text.y = element_text(size = 14), 
         axis.title.y = element_text(size = 16,vjust=0.8),
         axis.title.x = element_text(size = 16)) +
-  stat_smooth(data=FlSAall,aes(x=Insect,y=TLKB),method=lm,col='black',se=F) +
+  stat_smooth(data=FlSAall,aes(x=Insect,y=TLKB),method=lm,col='black',se=T) +
   geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
   scale_colour_manual(values = wes_palette("Royal1")) +
-  annotate('text',x=8,y=12,label='B')
+  annotate('text',x=2,y=10,label='B')
 
 
-Fig1C <- ggplot(FlSAall,
-                aes(x = Condition,
-                    y = TLKB)) +
-    geom_point() +
-  ylab('Telomere length (kb)') + 
-  xlab('Body Condition') + 
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 14), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16)) +
-  stat_smooth(method=lm,col='black',se=F) +
-  scale_colour_manual(values = wes_palette("Royal1")) +
-  annotate('text',x=-2.5,y=15,label='C')
+multiplot(Fig2A,Fig2B)
 
-
-multiplot(Fig1A,Fig1B,Fig1C,layout=matrix(c(1,1,1,1,1,1,2,3,2,3), nrow=5, byrow=TRUE))
 
 ```
 
@@ -144,11 +223,13 @@ PAGEBREAK
 
 **Figure 2**
 
-```{r Figure 2}
+```{r Figure 3}
 
-t1 <- data.frame(with(FlSAall,flexsurvreg(Surv(Lifespan+1,Died)~Condition+TLKB+Insect, dist="lnorm"))$res)
+s1 <- with(FlSAall,flexsurvreg(Surv(Lifespan+1,Died)~TLKB+Insect, dist="lnorm"))
+t1 <- data.frame(s1$res)
 t1 <- t1[3:5,]
-rownames(t1) <- c('Body condition', 'Tel. length', 'Food av.')
+t1 <- t1[order(rownames(t1)),]
+rownames(t1) <- c('Food av.','Tel. length')
 
 Fig2A <- ggplot(t1,aes(x = rownames(t1),y = est)) +
   geom_point() + 
@@ -164,15 +245,15 @@ Fig2A <- ggplot(t1,aes(x = rownames(t1),y = est)) +
         legend.position = c(0.8,0.8),
         legend.title = element_text(size = 14),
         legend.text = element_text(size = 12)) +
-  geom_abline(intercept = 0,slope = 0,lty=2)
-
+  geom_abline(intercept = 0,slope = 0,lty=2) +
+  annotate('text',x=0.6,y=0.15,label='A')
 
 
 
 s1 <- survfit(Surv(time = Lifespan+1, event = Died)~TLF, data = FlSA)
 Fig2B <- ggsurv(s1,plot.cens=F) + 
   theme_classic() +
-  ylab('Proportion Survived') + 
+  ylab('Proportion survived') + 
   xlab('Age (years)') + 
   theme_classic() +
   theme(axis.text.x = element_text(size = 14), 
@@ -180,12 +261,12 @@ Fig2B <- ggsurv(s1,plot.cens=F) +
         axis.title.y = element_text(size = 16,vjust=0.8),
         axis.title.x = element_text(size = 16),
         legend.position = c(0.8,0.8),
-        legend.title = element_text(size = 14),
-        legend.text = element_text(size = 12)) +
+        legend.text = element_text(size = 12),
+        legend.title = element_blank()) +
   scale_colour_manual(name = 'TL',
                       values = c('darkred','red')) +
   guides(linetype=F) +
-  theme(legend.title = element_blank())
+  annotate('text',x=0.5,y=1.1,label='B')
 
 multiplot(Fig2A,Fig2B)
 

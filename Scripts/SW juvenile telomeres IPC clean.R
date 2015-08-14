@@ -3,33 +3,32 @@
 ## CLEAN THE DATA
 #################################################################################*
 
+#Average repeats of blood samples
 av <- ave(dd$TL,dd$BloodID)
 dd$TL <- av
 
 dd <- unique(dd)
 
+
+
+
 # Telomere data -----------------------------------------------------------
-
-
-#Add in some useful new TL variables
 
 dd$LogTL <- log(dd$TL)
 dd$TLKB <- dd$TL/1000
+mymed <- median(dd$TLKB,na.rm=T)
+dd$TLF <- ifelse(dd$TLKB > mymed,'Long telomeres','Short telomeres')
 
 
 # Weird variable names ----------------------------------------------------
 
-
-#Change names of weird database variables
 colnames(dd)[colnames(dd) == 'OccasionDate'] <- 'CatchDate'
-colnames(dd)[colnames(dd) == 'LastSighting'] <- 'DeathDate'
-
+colnames(dd)[colnames(dd) == 'MaxOfMaxOfSeenDate'] <- 'DeathDate'
+colnames(dd)[colnames(dd) == 'MinOfFieldPeriodID'] <- 'FieldPeriodID'
 
 
 # Catch Year, Catch month and death year ----------------------------------
 
-
-#Extract catch year, death year using substring
 dd$CatchYear <- as.numeric(substr(dd$CatchDate,7,10))
 dd$DeathYear <- as.numeric(substr(dd$DeathDate,7,10))
 
@@ -49,36 +48,39 @@ dd$Ageclass <- factor(dd$Ageclass,levels = c('CH','FL','FL','FL','SA','A'))
 
 dd$Age[dd$Ageclass != 'A'] <- 0
 
+dd$Agemonths <- ifelse(dd$Ageclass == 'CH',1,
+                       ifelse(dd$Ageclass == 'FL',6,
+                              ifelse(dd$Ageclass == 'SA',9,dd$Age*12)))
+
+#Delta age
+for(i in 1:nrow(dd))
+{
+  currentdata = subset(dd,BirdID == dd$BirdID[i])
+  dd$MeanAge[i] <- mean(currentdata$Age)
+  dd$DeltaAge[i] <- dd$Age[i]-dd$MeanAge[i]
+}
+
+
+
 # Survival and lifespan ---------------------------------------------------
 
-
-#Add some survival variables
 dd$RemainingLife <- dd$DeathYear-dd$CatchYear
 dd$SurvivedNext <- ifelse(dd$RemainingLife>0,1,0)
-
-
 dd$Lifespan <- dd$DeathYear-dd$LayYear
-
 dd$Died <- ifelse(dd$DeathYear<2013,1,0)
+
+
+
 
 
 # Sex ---------------------------------------------------------------------
 
-
-#Add in an easy to understand sex variable
 dd$Sex <- ifelse(dd$SexEstimate == 1,'Males','Females')
 
 
 
 
-
-
-
-
 # Tarsus ------------------------------------------------------------------
-
-
-#Combine Tarsus data into one column
 
 dd$Tarsus <- NA
 for(i in 1:nrow(dd))
@@ -96,21 +98,17 @@ dd$LeftTarsus <- NULL
 
 
 
-
 # TQ and insects ----------------------------------------------------------
 
 
 terr <- terr[complete.cases(terr),] #Get rid of blank rows
-#terr <- subset(terr,SummerIndex>0.9) #Get rid of winter seasons
+terr <- subset(terr,SummerIndex>0.9) #Get rid of winter seasons
 
-insects$Year <- as.numeric(substr(insects$SamplingDate,7,10))
+insects <- subset(insects,FieldPeriodID != 26)
 
-# taking average for year
-yearmean <- tapply(terr$TQcorrected,terr$Year,median)
-terrmean <- tapply(terr$TQcorrected,terr$TerritoryID,median)
-
-Iyearmean <- tapply(insects$InsectCount,insects$Year,mean)
-Iyearsd <- tapply(insects$InsectCount,insects$Year,sd)
+# take average for year
+yearmean <- tapply(terr$TQcorrected,terr$Year,mean)
+terrmean <- tapply(terr$TQcorrected,terr$TerritoryID,mean)
 
 dd$TQspace <- NA
 dd$TQtime <- NA
@@ -128,10 +126,10 @@ for(i in 1:nrow(dd))
     dd$TQspace[i] <- terrmean[names(terrmean) == dd$TerritoryID[i]]
   }
   
-  if(dd$LayYear[i] %in% names(Iyearmean))
+  if(dd$FieldPeriodID[i] %in% insects$FieldPeriodID)
   {
-    dd$Insect[i] <- Iyearmean[names(Iyearmean) == dd$LayYear[i]]  
-  }
+    dd$Insect[i] <- insects$MeanInsects[insects$FieldPeriodID == dd$FieldPeriodID[i]] 
+  } 
 }
 
 dd$InsectF <- ifelse(dd$Insect > 14, 'High','Low')
@@ -144,17 +142,12 @@ dd$TQtime <- log(dd$TQtime)
 
 dd <- droplevels(subset(subset(dd,TL>1000),TL<15000))
 dd <- subset(dd,BodyMass>11)
+dd <- subset(dd,Insect<8)
 
-
-#Telomere factor variable -----------------------------------------
-
-
-mymed <- median(dd$TLKB,na.rm=T)
-dd$TLF <- ifelse(dd$TLKB > mymed,'Long telomeres','Short telomeres')
 
 # Subset juveniles --------------------------------------------------------------
 
-#dd$LayYear <- factor(dd$LayYear)
+
 juv <- droplevels(subset(dd,Ageclass %in% c('CH','FL','SA')))
 
 
@@ -173,19 +166,21 @@ for(i in 1:nrow(juv))
   juv$NonHelper[i] <- nrow(subset(currentdata,Status %in% c('AB','ABX')))
 }
 
-#Get rid of weird group sizes
-juv$HelperC <- juv$Helper-juv$NonHelper
-juv$HelperF <- ifelse(juv$Helper==1,paste(juv$Helper, 'Helper'),paste(juv$Helper, 'Helpers'))
 
 
-# Subset chicks and other juvs -----------------------------------------------------------
+# Subset Fledglings and subadults -----------------------------------------------------------
+
+
+juv <- subset(juv,!is.na(Tarsus))
+juv <- subset(juv,!is.na(BodyMass))
 
 
 FlSA <- subset(juv,Ageclass!='CH')
-FlSA <- subset(FlSA,!is.na(Tarsus))
-FlSA <- subset(FlSA,!is.na(BodyMass))
-FlSA$Condition <- summary(lm(BodyMass~Tarsus+Sex,data=FlSA))$resid
+chicks <- subset(juv,Ageclass == 'CH')
+
+#FlSA$LayYear <- factor(FlSA$LayYear)
 FlSAall <- droplevels(FlSA[complete.cases(FlSA),])
+chickall <- droplevels(chicks[complete.cases(chicks),])
 
 
 # Get rid of stuff not to be used -----------------------------------------
@@ -194,22 +189,5 @@ rm(status,helpers,hatchdate)
 
 
 
-# Longitudinal telomere loss in adults ------------------------------------
-
-adults <- subset(dd,Ageclass=='A')
-
-FlSA$TLloss <- NA
-
-for(i in 1:nrow(FlSA))
-{
-  currentjuv <- FlSA$BirdID[i]
-  if(currentjuv %in% adults$BirdID)
-  {
-    currentdata <- subset(adults,BirdID==currentjuv)
-    youngest <- subset(currentdata,Age==min(currentdata$Age))
-    FlSA$TLloss[i] <- FlSA$TLKB[i]-youngest$TLKB[1]
-  }
-
-}
 
 
