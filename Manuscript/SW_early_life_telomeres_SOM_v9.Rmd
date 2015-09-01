@@ -36,12 +36,40 @@ opts_chunk$set(echo=FALSE,
 ```
 
 
-**Table S1** Model selection table for analysis of factors affecting early life telomere length in juvenile Seychelles warblers. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. i = intercept.
+**Table S1** Model selection table for analysis of factors affecting early life telomere length in Seychelles warbler chicks. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. i = intercept.
 
 ```{r Table S1}
 
 #Run the model
-lm1 <- lmer(TLKB ~ Agemonths + TQspace + Insect + GroupSize + Sex + Condition + Helper + (1|LayYear),
+lm1 <- lmer(TLKB ~ TQspace + Insect + NonHelper + Sex + BodyMass + Tarsus + Helper + (1|LayYear),
+            data = chickall,REML=FALSE)
+
+lm1 <- standardize(lm1)
+
+
+#Model averaging
+lm2 <- dredge(lm1)
+t1 <- as.matrix(subset(lm2, delta<=6))
+colnames(t1)[2:8] <- c('Sex', 'Body Mass','Helpers','Food av.','Non helpers','Tarsus length','TQ')
+
+tableS1 <- data.frame(Model = apply(t1,1,getterms,c(2:8)),t1[,c('df','AICc','delta','weight')])
+colnames(tableS1) <- c('Model','df','AICc', 'Delta AICc','Weight')
+rownames(tableS1) <- NULL
+tableS1$Model[tableS1$Model == ''] <- 'Null model'
+kable(tableS1,digits=3)
+
+```
+
+
+
+
+
+**Table S2** Model selection table for analysis of factors affecting early life telomere length in Seychelles warbler fledglings and subadults. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. i = intercept.
+
+```{r Table s2}
+
+#Run the model
+lm1 <- lmer(TLKB ~ TQspace + Insect + NonHelper + Sex + BodyMass + Tarsus + Helper + (1|LayYear),
             data = FlSAall,REML=FALSE)
 
 lm1 <- standardize(lm1)
@@ -50,20 +78,23 @@ lm1 <- standardize(lm1)
 #Model averaging
 lm2 <- dredge(lm1)
 t1 <- as.matrix(subset(lm2, delta<=6))
-colnames(t1)[2:7] <- c('Sex', 'Body condition','Group size','Helper','Food av.','TQ')
-getterms <- function(x)
-  {
-  temp <- c('i',names(which(!(is.na(x[2:7])))))
-  return(paste(temp,collapse = " + "))
-  }
+colnames(t1)[2:8] <- c('Sex', 'Body Mass','Helpers','Food av.','Non helpers','Tarsus length','TQ')
 
-tableS1 <- data.frame(Model = apply(t1,1,getterms),t1[,c('df','AICc','delta','weight')])
-colnames(tableS1) <- c('Model','df','AICc', 'Delta AICc','Weight')
-rownames(tableS1) <- NULL
-tableS1$Model[tableS1$Model == ''] <- 'Null model'
-kable(tableS1,digits=3)
+tables2 <- data.frame(Model = apply(t1,1,getterms,c(2:8)),t1[,c('df','AICc','delta','weight')])
+colnames(tables2) <- c('Model','df','AICc', 'Delta AICc','Weight')
+rownames(tables2) <- NULL
+tables2$Model[tables2$Model == ''] <- 'Null model'
+kable(tables2,digits=3)
 
 ```
+
+
+
+
+
+
+
+
 
 
 PAGEBREAK
@@ -111,32 +142,60 @@ PAGEBREAK
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 ```{r Figure S2,fig.width=4,fig.height=4}
+
+temp <- Loss
+levels(temp$Ageclass) <- c('Chicks', 'Fledglings','Subadults')
+
+ddFigS2 <- ddply(temp,
+                 .(Ageclass),
+                 summarise,
+                 TROCmean = mean(TROC),
+                 TROCse = se(TROC))
+
+FigS2 <- ggplot(ddFigS2,
+       aes(x = Ageclass,
+           y = TROCmean)) +
+  geom_pointrange(aes(min=TROCmean-TROCse,ymax=TROCmean+TROCse)) +
+  ylab('Corrected telomere loss') + 
+  xlab('') + 
+  theme_classic() +
+  ylim(0,0.002) +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16))
+
+FigS2
+
+
+```
+
+**Figure S2** Telomere loss (mean $\pm$ s.e.) in juvenile Seychelles warblers. Telomere loss a standardised and corrected value (see methods for details) based on rates of lost between the sampling event of birds as a juvnile, and the first available sampling as an adult. Values above zero indicate telomere shortening in early life.
+
+
+
+
+
+
+
+
+
+```{r Figure S3,fig.width=4,fig.height=4}
 
 
 temp <- FlSA
 
-ddFigS2 <- ddply(temp,
+ddFigS3 <- ddply(temp,
                  .(LayYear),
                  summarize,
                  TLKBmean = mean(TLKB),
                  TLKBse = se(TLKB))
 
-ddFigS2 <- ddFigS2[complete.cases(ddFigS2),]
-ddFigS2$LayYear <- as.numeric(paste(ddFigS2$LayYear))
+ddFigS3 <- ddFigS3[complete.cases(ddFigS3),]
+ddFigS3$LayYear <- as.numeric(paste(ddFigS3$LayYear))
 
-FigS2 <- ggplot(ddFigS2,
+FigS3 <- ggplot(ddFigS3,
        aes(x = LayYear,
            y = TLKBmean)) +
   geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
@@ -148,9 +207,9 @@ FigS2 <- ggplot(ddFigS2,
         axis.title.y = element_text(size = 16,vjust=0.8),
         axis.title.x = element_text(size = 16))
 
-FigS2
+FigS3
 
 ```
 
 
-**Figure S2** Cross-sectional juvenile telomere length (mean $\pm$ s.e.) across birth years in Seychelles warblers
+**Figure S3** Cross-sectional juvenile telomere length (mean $\pm$ s.e.) across birth years in Seychelles warblers
