@@ -1,0 +1,12 @@
+---
+output:
+  word_document:
+    fig_caption: yes
+    highlight: null
+---
+
+###A heading
+
+#####A subheading
+
+Some text

@@ -8,22 +8,16 @@ output: word_document
 
 
 
-```{r load and clean, include = F}
+```{r setup, include = F}
 
-#Set wd one level up
-setwd('..')
+rm(list=ls())
 
-
-#Load and clean data
-
-source('Scripts/SW juvenile telomeres IPC load.r')
-source('Scripts/SW juvenile telomeres IPC functions.r')
-source('Scripts/SW juvenile telomeres IPC clean.r')
-
+#Load knitr
+library(knitr)
 
 #Set some options
 options(na.action='na.fail')
-opts_knit$set(root.dir = getwd())
+opts_knit$set(root.dir = '..')
 opts_chunk$set(echo=FALSE,
                warning=FALSE,
                message=FALSE,
@@ -31,10 +25,19 @@ opts_chunk$set(echo=FALSE,
                fig.width= 4,
                fig.height= 8,
                fig.show='asis',
-               dev='png')
+               dev=c('png','pdf'))
 
 ```
 
+```{r load and clean, include = F}
+
+#Load and clean data
+source('Scripts/SW juvenile telomeres IPC load.r')
+source('Scripts/SW juvenile telomeres IPC functions.r')
+source('Scripts/SW juvenile telomeres IPC clean.r')
+
+
+```
 
 **Table S1** Model selection table for analysis of factors affecting early life telomere length in Seychelles warbler chicks. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. i = intercept.
 
@@ -61,7 +64,7 @@ kable(tableS1,digits=3)
 ```
 
 
-
+PAGEBREAK
 
 
 **Table S2** Model selection table for analysis of factors affecting early life telomere length in Seychelles warbler fledglings and subadults. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. i = intercept.
@@ -160,7 +163,6 @@ FigS2 <- ggplot(ddFigS2,
   ylab('Corrected telomere loss') + 
   xlab('') + 
   theme_classic() +
-  ylim(0,0.002) +
   theme(axis.text.x = element_text(size = 14), 
         axis.text.y = element_text(size = 14), 
         axis.title.y = element_text(size = 16,vjust=0.8),
@@ -171,45 +173,111 @@ FigS2
 
 ```
 
-**Figure S2** Telomere loss (mean $\pm$ s.e.) in juvenile Seychelles warblers. Telomere loss a standardised and corrected value (see methods for details) based on rates of lost between the sampling event of birds as a juvnile, and the first available sampling as an adult. Values above zero indicate telomere shortening in early life.
+**Figure S2** Longitudinal telomere loss (mean $\pm$ s.e.) in juvenile Seychelles warblers. Telomere loss a standardised and corrected value (see methods for details) based on rates of lost between the sampling event of birds as a juvnile, and the first available sampling as an adult. Values above zero indicate telomere shortening in early life.
 
 
 
 
+PAGEBREAK
 
 
 
+```{r Figure S3,fig.width=5,fig.height=9}
 
 
-```{r Figure S3,fig.width=4,fig.height=4}
+###########
+#Fig S3A
+
+temp <- subset(FlSAall,Ageclass == 'FL')
+
+#Run the model
+lm3 <- lmer(TLKB ~ TQspace + Insect + Sex + Tarsus + BodyMass + (1|LayYear),
+            data = temp,REML=FALSE)
+
+lm3 <- standardize(lm3)
 
 
-temp <- FlSA
+#Model averaging
+lm4 <- dredge(lm3)
+lmavg <- model.avg(lm4,subset = delta <=6)
+myimp <- importance(lmavg) #Relative importance of each explanatory variable
+  
 
-ddFigS3 <- ddply(temp,
-                 .(LayYear),
-                 summarize,
-                 TLKBmean = mean(TLKB),
-                 TLKBse = se(TLKB))
+#Put it all into a nice table
+table1 <- imptable(lmavg,myimp)
+table1 <- signif(table1,2)
 
-ddFigS3 <- ddFigS3[complete.cases(ddFigS3),]
-ddFigS3$LayYear <- as.numeric(paste(ddFigS3$LayYear))
 
-FigS3 <- ggplot(ddFigS3,
-       aes(x = LayYear,
-           y = TLKBmean)) +
-  geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
-  ylab('Telomere length (kb)') + 
-  xlab('Lay Year') + 
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 14), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16))
 
-FigS3
+#Sort out row/col names
+nams <- rownames(table1)
+nams[nams == 'c.Ageclass'] <- 'Age class'
+nams[nams == 'z.BodyMass'] <- 'Body mass'
+nams[nams == 'z.Tarsus'] <- 'Tarsus'
+nams[nams == 'z.NonHelper'] <- 'Non helpers'
+nams[nams == 'c.Sex'] <- 'Sex'
+nams[nams == 'z.Insect'] <- 'Food av.'
+nams[nams == 'z.TQspace'] <- 'TQ'
+nams[nams == 'z.Helper'] <- 'Helpers'
+
+
+rownames(table1) <- nams
+colnames(table1) <- c('Estimate','SE','2.5%','97.5%','RI')
+
+table1 <- data.frame(table1,myx=row.names(table1))
+
+FigS3A <- forestplot(table1) +
+  annotate('text',x=0.75,y=3,label='A')
+
+###########
+#Fig S3B
+
+temp <- subset(FlSAall,Ageclass == 'SA')
+
+#Run the model
+lm3 <- lmer(TLKB ~ TQspace + Insect + Sex + Tarsus + BodyMass + (1|LayYear),
+            data = temp,REML=FALSE)
+
+#lm3 <- standardize(lm3)
+
+
+#Model averaging
+lm4 <- dredge(lm3)
+lmavg <- model.avg(lm4,subset = delta <=6)
+myimp <- importance(lmavg) #Relative importance of each explanatory variable
+  
+
+#Put it all into a nice table
+table1 <- imptable(lmavg,myimp)
+table1 <- signif(table1,2)
+
+
+
+#Sort out row/col names
+nams <- rownames(table1)
+nams[nams == 'c.Ageclass'] <- 'Age class'
+nams[nams == 'z.BodyMass'] <- 'Body mass'
+nams[nams == 'z.Tarsus'] <- 'Tarsus'
+nams[nams == 'z.NonHelper'] <- 'Non helpers'
+nams[nams == 'c.Sex'] <- 'Sex'
+nams[nams == 'z.Insect'] <- 'Food av.'
+nams[nams == 'z.TQspace'] <- 'TQ'
+nams[nams == 'z.Helper'] <- 'Helpers'
+
+
+rownames(table1) <- nams
+colnames(table1) <- c('Estimate','SE','2.5%','97.5%','RI')
+
+table1 <- data.frame(table1,myx=row.names(table1))
+
+FigS3B <- forestplot(table1) +
+  annotate('text',x=0.75,y=3,label='B')
+
+
+multiplot(FigS3A,FigS3B)
 
 ```
 
 
-**Figure S3** Cross-sectional juvenile telomere length (mean $\pm$ s.e.) across birth years in Seychelles warblers
+**Figure S3** Factors affecting telomere length in Seychelles warbler fledglings **(A)** and subadults **(B)**. Points and error bars represent model averaged estimates and 95% confidence intervals for all explanatory terms used in a linear model with telomere length as the response variable. Numbers in brackets are the relative importance of each term in the top model set (see main text for details; Food av. = annual food availability, TQ = territory quality).
+

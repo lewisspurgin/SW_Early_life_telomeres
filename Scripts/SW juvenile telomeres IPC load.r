@@ -9,7 +9,6 @@ rm(list=ls())
 
 
 # Load relevant libraries -------------------------------------------------
-library(knitr)
 library(MuMIn)
 library(arm)
 #library(beepr)

@@ -432,7 +432,13 @@ ggsurv <- function(s, CI = 'def', plot.cens = T, surv.col = 'gg.def',
 #Round to 2 or 3 dp and keep trailing zeros
 round2 <- function(x)
   {
+  if(x < 0.01)
+  {
+    return('< 0.01')
+  } else
+  {
   sprintf(round(x,2), fmt="%.2f")
+  }
   }
 
 round3 <- function(x)

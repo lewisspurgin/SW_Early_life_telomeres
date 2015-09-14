@@ -10,16 +10,6 @@ dd$TL <- av
 dd <- unique(dd)
 
 
-
-
-# Telomere data -----------------------------------------------------------
-
-dd$LogTL <- log(dd$TL)
-dd$TLKB <- dd$TL/1000
-mymed <- median(dd$TLKB,na.rm=T)
-dd$TLF <- ifelse(dd$TLKB > mymed,'Long telomeres','Short telomeres')
-
-
 # Weird variable names ----------------------------------------------------
 
 colnames(dd)[colnames(dd) == 'OccasionDate'] <- 'CatchDate'
@@ -33,6 +23,42 @@ colnames(dd)[colnames(dd) == 'MinOfFieldPeriodID'] <- 'FieldPeriodID'
 dd$CatchYear <- as.numeric(substr(dd$CatchDate,7,10))
 dd$DeathYear <- as.numeric(substr(dd$DeathDate,7,10))
 dd$CatchDate <- as.Date(dd$CatchDate,"%d/%m/%Y")
+
+dd$Season <- ifelse(as.numeric(format(dd$CatchDate,'%m')) %in% c(4:10),
+                    'Summer','Winter')
+
+head(dd)
+# Tarsus ------------------------------------------------------------------
+
+dd$Tarsus <- NA
+for(i in 1:nrow(dd))
+{
+  ifelse(is.na(dd$RightTarsus[i]),
+         ifelse(is.na(dd$LeftTarsus[i]),
+                dd$Tarsus[i] <- NA,
+                dd$Tarsus[i] <- dd$LeftTarsus[i]),
+         dd$Tarsus[i] <- dd$RightTarsus[i])
+}
+
+dd$RightTarsus <- NULL
+dd$LeftTarsus <- NULL
+
+
+
+# Remove unwanted data/outliers ----------------------------------------------------
+
+
+dd <- droplevels(subset(subset(dd,TL>1000),TL<15000))
+dd <- subset(dd,BodyMass>5)
+dd <- subset(dd,Tarsus>17)
+
+
+# Telomere data -----------------------------------------------------------
+
+dd$TLKB <- dd$TL/1000
+dd$LogTL <- log(dd$TL)
+mymed <- mean(dd$TLKB,na.rm=T)
+dd$TLF <- ifelse(dd$TLKB > mymed,'Long telomeres','Short telomeres')
 
 
 
@@ -87,69 +113,7 @@ dd$Sex <- ifelse(dd$SexEstimate == 1,'Males','Females')
 
 
 
-# Tarsus ------------------------------------------------------------------
 
-dd$Tarsus <- NA
-for(i in 1:nrow(dd))
-{
-  ifelse(is.na(dd$RightTarsus[i]),
-         ifelse(is.na(dd$LeftTarsus[i]),
-                dd$Tarsus[i] <- NA,
-                dd$Tarsus[i] <- dd$LeftTarsus[i]),
-         dd$Tarsus[i] <- dd$RightTarsus[i])
-}
-
-dd$RightTarsus <- NULL
-dd$LeftTarsus <- NULL
-
-
-
-
-# TQ and insects ----------------------------------------------------------
-
-
-terr <- terr[complete.cases(terr),] #Get rid of blank rows
-terr <- subset(terr,SummerIndex>0.9) #Get rid of winter seasons
-
-insects <- subset(insects,FieldPeriodID != 26)
-
-# take average for year
-yearmean <- tapply(terr$TQcorrected,terr$Year,mean)
-terrmean <- tapply(terr$TQcorrected,terr$TerritoryID,mean)
-
-dd$TQspace <- NA
-dd$TQtime <- NA
-dd$Insect <- NA
-
-for(i in 1:nrow(dd))
-{
-  if(dd$LayYear[i] %in% names(yearmean))
-  {
-    dd$TQtime[i] <- yearmean[names(yearmean) == dd$LayYear[i]]
-  }
-  
-  if(dd$TerritoryID[i] %in% names(terrmean))
-  {
-    dd$TQspace[i] <- terrmean[names(terrmean) == dd$TerritoryID[i]]
-  }
-  
-  if(dd$FieldPeriodID[i] %in% insects$FieldPeriodID)
-  {
-    dd$Insect[i] <- insects$MeanInsects[insects$FieldPeriodID == dd$FieldPeriodID[i]] 
-  } 
-}
-
-dd$InsectF <- ifelse(dd$Insect > 14, 'High','Low')
-dd$TQspace <- log(dd$TQspace)
-dd$TQtime <- log(dd$TQtime)
-
-
-# Remove unwanted data ----------------------------------------------------
-
-
-dd <- droplevels(subset(subset(dd,TL>1000),TL<12000))
-#dd <- subset(dd,BodyMass>11)
-dd <- subset(dd,Insect<8)
 
 
 # Subset juveniles --------------------------------------------------------------
@@ -158,7 +122,14 @@ dd <- subset(dd,Insect<8)
 juv <- droplevels(subset(dd,Ageclass %in% c('CH','FL','OFL','SA')))
 adults <- droplevels(subset(dd,Ageclass == 'A'))
 
+juv$cenTL <- NA
 
+#Centre telomere length by birth year
+for(i in 1:nrow(juv))
+{
+  currentdata <- subset(juv,FieldPeriodID == FieldPeriodID[i])
+  juv$cenTL[i] <- (juv$TLKB[i] - mean(currentdata$TLKB))/sd(currentdata$TLKB)
+}
 
 # Helpers and social group size -------------------------------------------
 
@@ -174,6 +145,45 @@ for(i in 1:nrow(juv))
   juv$NonHelper[i] <- nrow(subset(currentdata,Status %in% c('AB','ABX')))
 }
 
+juv <- subset(juv,GroupSize>0)
+
+
+
+
+
+# TQ and insects ----------------------------------------------------------
+
+
+terr <- terr[complete.cases(terr),] #Get rid of blank rows
+
+
+insects <- subset(insects,FieldPeriodID != 26)
+insects$Insectcen <- (insects$MeanInsects-mean(insects$MeanInsects))/sd(insects$MeanInsects)
+
+# take average for year
+terrmean <- tapply(terr$TQcorrected,terr$TerritoryID,mean)
+
+juv$TQ <- NA
+juv$TQI <- NA
+juv$cenTQ <- NA
+juv$Insect <- NA
+
+for(i in 1:nrow(juv))
+{
+  if(juv$TerritoryID[i] %in% names(terrmean))
+  {
+    juv$TQ[i] <- terrmean[names(terrmean) == juv$TerritoryID[i]]
+    juv$TQI[i] <- juv$TQ[i]/juv$GroupSize[i]
+  }
+  
+  if(juv$FieldPeriodID[i] %in% insects$FieldPeriodID)
+  {
+    juv$Insect[i] <- insects$Insectcen[insects$FieldPeriodID == juv$FieldPeriodID[i]] 
+  } 
+}
+
+
+
 
 
 # Subset Fledglings and subadults -----------------------------------------------------------
@@ -182,16 +192,25 @@ xf <- subset(juv,Status == 'XF')
 
 juv <- subset(juv,!is.na(Tarsus))
 juv <- subset(juv,!is.na(BodyMass))
+juv <- subset(juv,Status!='XF')
+
+
+for(i in 1:nrow(juv))
+{
+  currentdata <- subset(juv,FieldPeriodID == juv$FieldPeriodID[i])
+  juv$cenTQ[i] <- (juv$TQ[i] - mean(currentdata$TQ))/sd(currentdata$TQ)
+  juv$cenTarsus[i] <- (juv$Tarsus[i] -  mean(currentdata$Tarsus))/sd(currentdata$Tarsus)
+  juv$cenHelper[i] <- (juv$Helper[i] -  mean(currentdata$Helper))/sd(currentdata$Helper)
+  juv$cenNonHelper[i] <- (juv$NonHelper[i] -  mean(currentdata$NonHelper))/sd(currentdata$NonHelper)
+}
 
 
 FlSA <- subset(juv,Ageclass!='CH')
 chicks <- subset(juv,Ageclass == 'CH')
-chicks <- subset(chicks,Status != 'XF')
 
-#FlSA$LayYear <- factor(FlSA$LayYear)
+juvall <- droplevels(juv[complete.cases(juv),])
 FlSAall <- droplevels(FlSA[complete.cases(FlSA),])
 chickall <- droplevels(chicks[complete.cases(chicks),])
-
 
 
 
@@ -232,3 +251,27 @@ Loss <- subset(subset(Loss,TROC > -0.005),TROC < 0.01)
 # Get rid of stuff not to be used -----------------------------------------
 
 rm(status,helpers,hatchdate,x1,x2,x3,x4)
+
+
+
+
+# Field period average data -----------------------------------------------
+
+juvall$SexN <- ifelse(juvall$Sex == 'Males',1,0)
+
+juvseason <- ddply(juvall,
+                   .(FieldPeriodID,Season),
+                   summarize,
+                   TLKBmean = mean(TLKB),
+                   TLKBse = se(TLKB),
+                   Tarsus = mean(SexN),
+                   Insect = mean(Insect),
+                   n = length(TLKB))
+
+loss.season <- ddply(Loss,
+                   .(FieldPeriodID,Season),
+                   summarize,
+                   TROCmean = mean(TROC),
+                   TROCse = se(TROC),
+                   Insect <- mean(Insect))
+loss.season <- loss.season[complete.cases(loss.season),]

@@ -1,12 +1,30 @@
 ---
-output: word_document
+output:
+  word_document:
+    reference_docx: myref.docx
 ---
-```{r setwd, include = F}
+```{r setup, include = F}
 
-#Set working directory up one level
-setwd('..')
+rm(list=ls())
 
+#Load knitr
+library(knitr)
 
+#Set some options
+options(na.action='na.fail')
+opts_knit$set(root.dir = '..')
+opts_chunk$set(echo=FALSE,
+               warning=FALSE,
+               message=FALSE,
+               fig.path='../Figures/',
+               fig.width= 4,
+               fig.height= 8,
+               fig.show='asis',
+               dev=c('png','pdf'))
+
+```
+
+```{r load and clean, include = F}
 
 #Load and clean data
 source('Scripts/SW juvenile telomeres IPC load.r')
@@ -14,29 +32,23 @@ source('Scripts/SW juvenile telomeres IPC functions.r')
 source('Scripts/SW juvenile telomeres IPC clean.r')
 
 
-#Set some options
-options(na.action='na.fail')
-opts_knit$set(root.dir = getwd())
-opts_chunk$set(echo=FALSE,
-               warning=FALSE,
-               message=FALSE,
-               fig.path='../Figures/',
-               fig.show='asis',
-               dev='png')
-
-
-
 ```
 
 **Figure Legends**
 
-**Figure 3** Telomere length and age in juvenile Seychelles warblers. Points and error bars represent mean and 95% confidence intervals, respectively.
+**Figure 1** Telomere length and age Seychelles warblers, based on cross-sectional **(A)** and longitudinal **(B)** data. Points and error bars represent mean and 95% confidence intervals, respectively. In **B**, telomere loss is a standardised and corrected rate (see methods for details) based on differences in telomere length between the sampling event of birds as a juvnile, and the first available sampling as an adult. Values above zero indicate telomere shortening in early life.
 
-**Figure 2** Factors affecting telomere length in Seychelles warbler chicks. **A** Model averaged estimates and 95% confidence intervals (points and error bars, respectively) for all explanatory terms used in a linear model with juvenile telomere length as the response variable. Numbers in brackets are the relative importance of each term in the top model set (see main text for details; Food av. = annual food availability, TQ = territory quality). **B** Presence/absence of helpers and **C** body mass in relation to raw telomere length. Points and error bars in **B** are mean $\pm$ 95% confidence interval telomere lengths for each group, and the line and shaded areas from **C** represent fitted values and 95% confidence limits from a linear regression.
+**Figure 2** Temporal variation in early-life telomere length in the Seychelles warbler based on cross-sectional **(A,B)** and longitudinal **(C,D)** data (see Figure 1 and main text for details). Points and error bars represent mean and standard error telomere length for each summer (blue) or winter (red) field season. In **A** and **C** points are ordered temporally, while in **B** and **D** telomere length/loss for each season is plotted against island-wide food availability. Lines and shaded areas represent fitted values and 95% confidence limits from a linear regression.
 
-**Figure 3** Factors affecting telomere length in juvenile Seychelles warblers. **A** Model averaged estimates and 95% confidence intervals (points and error bars, respectively) for all explanatory terms used in a linear model with juvenile telomere length as the response variable. Numbers in brackets are the relative importance of each term in the top model set (see main text for details; Food av. = annual food availability, TQ = territory quality). **B** Raw telomere length in relation to annual food availability Points and error bars in **B** are mean $\pm$ 95% confidence interval telomere lengths for each year (means are used for plotting purposes only), and the line and shaded areas represent fitted values and 95% confidence limits from a linear regression.
+**Figure 3** Factors affecting telomere length in Seychelles warbler chicks. **A** Model averaged estimates and 95% confidence intervals for all explanatory terms used in a linear model with telomere length as the response variable. Numbers in brackets are the relative importance of each term in the top model set (see main text for details; Food av. = annual food availability, TQ = territory quality). **B** Presence/absence of helpers, **C** sex and **D** tarsus length in relation to raw telomere length. Points and error bars in **B and C** are mean $\pm$ standard error telomere lengths for each group, and the line and shaded areas from **D** represent fitted values and 95% confidence limits from a linear regression.
 
-**Figure 4** Juvenile telomere length and survival in chick (**A,B**) and juvenile (**C,D**) Seychelles warblers. **A,C** Model averaged estimates and 95% confidence intervals (points and error bars, respectively) for all explanatory terms used in a parametric survival model (see main text for details). Food av = annual food availability, Tel. length = telomere length. **B,D** Kaplan-Meier curves showing the relationship between telomere length and survival. Telomere length was modelled as a covariate, but is binned into groups here for visualisation purposes (long and short = greater than or less than median telomere length, repectively).
+**Figure 4** Factors affecting telomere length in Seychelles warblers fledglings **(A)** and subadults **(B)**. Model averaged estimates and 95% confidence intervals for all explanatory terms used in a linear model with  telomere length as the response variable. Numbers in brackets are the relative importance of each term in the top model set (see main text for details; Food av. = annual food availability, TQ = territory quality).
+
+**Figure 5** Kaplan-Meier curves showing the relationship between telomere length and survival in chick (**A**) and juvenile (**B**) Seychelles warblers. Telomere length is binned into groups here for visualisation purposes only (long and short = greater than or less than median telomere length, repectively).
+
+
+
+
 
 
 
@@ -45,32 +57,84 @@ PAGEBREAK
 
 **Figure 1**
 
-
-```{r Figure 1,fig.width=5,fig.height=4}
+```{r Figure 1,fig.width=8,fig.height=9}
+######################
+#1A
+######################
 
 temp <- dd
+levels(temp$Ageclass) <- c('Chicks',rep('Fledglings',3),'Sub-adults','Adults')
 
-ddFig1 <- ddply(temp,
-                 .(AgemonthF),
+ddFig1A <- ddply(temp,
+                 .(Ageclass),
                  summarize,
                  TLKBmean = mean(TLKB),
-                 TLKBse = se(TLKB)*1.96)
+                 TLKBse = se(TLKB))
 
-Fig1 <- ggplot(ddFig1,
-       aes(x = AgemonthF,
+
+
+Fig1A <- ggplot(ddFig1A,
+       aes(x = Ageclass,
            y = TLKBmean)) +
-  ylab('Telomere length (kb)') + 
-  xlab('Age (months)') +
+  ylab('Corrected telomere loss') + 
+  xlab('') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 14), 
         axis.text.y = element_text(size = 14), 
         axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16)) +
-  geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse))
+        axis.title.x = element_text(size = 16),
+        legend.position = c(0.1,0.9),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15)) +
+  geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
+  annotate('text',label = 'A',x=0.5,y=6.2)
 
-Fig1
+
+
+
+
+######################
+#1B
+######################
+
+temp <- Loss
+levels(temp$Ageclass) <- c('Chicks','Fledglings','Sub-adults')
+
+ddFig1B <- ddply(temp,
+                 .(Ageclass),
+                 summarize,
+                 TROCmean = mean(TROC),
+                 TROCse = se(TROC))
+
+
+
+Fig1B <- ggplot(ddFig1B,
+       aes(x = Ageclass,
+           y = TROCmean)) +
+  ylab('Telomere length (kb)') + 
+  xlab('') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16),
+        legend.position = c(0.1,0.9),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15)) +
+  geom_pointrange(aes(ymin=TROCmean-TROCse,ymax=TROCmean+TROCse)) +
+  annotate('text',label = 'B',x=0.5,y=0.0018)
+
+multiplot(Fig1A,Fig1B)
 
 ```
+
+
+
+
+
+
+
+
 
 
 
@@ -78,20 +142,163 @@ PAGEBREAK
 
 **Figure 2**
 
-```{r Figure 2,fig.width=8,fig.height=9}
 
-###########
-#Fig 2A
 
-chickall <- subset(chickall,BodyMass>5)
+```{r Figure 2,fig.width=9,fig.height=9}
+
+ddFig2A <- ddply(juv,
+                 .(CatchYear,Season),
+                 summarize,
+                 TLKBmean = mean(TLKB),
+                 TLKBse = se(TLKB))
+ddFig2A <- ddFig2A[complete.cases(ddFig2A),]
+ddFig2A <- subset(ddFig2A,TLKBse < 4)
+
+Fig2A <- ggplot(ddFig2A,
+       aes(x = CatchYear,
+           y = TLKBmean,
+           col = Season)) +
+  ylab('Telomere length') + 
+  xlab('Year') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16),
+        legend.position = 'none') +
+  geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse),
+                  position = position_dodge(width = 1)) +
+  scale_color_manual(values = wes_palette("Royal1")) +
+  annotate('text',label = 'A',x=1995,y=10)
+
+
+
+####################
+
+temp <- juv
+temp$Insect <- factor(temp$Insect)
+
+ddFig2B <- ddply(temp,
+                 .(Insect,Season),
+                 summarize,
+                 TLKBmean = mean(TLKB),
+                 TLKBse = se(TLKB))
+ddFig2B$Insect <- as.numeric(paste(ddFig2B$Insect))
+ddFig2B <- ddFig2B[complete.cases(ddFig2B),]
+
+Fig2B <- ggplot(ddFig2B,
+       aes(x = Insect,
+           y = TLKBmean,
+           col = Season)) +
+  ylab('Telomere length') + 
+  xlab('Food availability') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16),
+        legend.position = 'none') +
+  geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
+  stat_smooth(method = 'lm',se=T,col = 'darkgrey') +
+  scale_color_manual(values = wes_palette("Royal1")) +
+  annotate('text',label = 'B',x=-1.5,y=8)
+
+################################
+
+
+
+ddFig2C <- ddply(Loss,
+                 .(CatchYear,Season),
+                 summarize,
+                 TROCmean = mean(TROC),
+                 TROCse = se(TROC))
+ddFig2C <- ddFig2C[complete.cases(ddFig2C),]
+ddFig2C <- subset(ddFig2C,TROCse < 4)
+
+Fig2C <- ggplot(ddFig2C,
+       aes(x = CatchYear,
+           y = TROCmean,
+           col = Season)) +
+  ylab('Corrected telomere loss') + 
+  xlab('Year') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16),
+        legend.position = 'none') +
+  geom_pointrange(aes(ymin=TROCmean-TROCse,ymax=TROCmean+TROCse),
+                  position = position_dodge(width = 1)) +
+  scale_color_manual(values = wes_palette("Royal1")) +
+  annotate('text',label = 'C',x=1995,y=0.009)
+
+
+
+####################################
+temp <- Loss
+temp$Insect <- factor(temp$Insect)
+
+ddFig2D <- ddply(temp,
+                 .(Insect,Season),
+                 summarise,
+                 TROCmean = mean(TROC),
+                 TROCse = se(TROC))
+ddFig2D$Insect <- as.numeric(paste(ddFig2D$Insect))
+ddFig2D <- ddFig2D[complete.cases(ddFig2D),]
+
+Fig2D <- ggplot(ddFig2D,
+       aes(x = Insect,
+           y = TROCmean,
+           col = Season)) +
+  geom_pointrange(aes(min=TROCmean-TROCse,ymax=TROCmean+TROCse)) +
+  ylab('Corrected telomere loss') + 
+  xlab('Food availability') + 
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16),
+        legend.position = 'none') +
+  stat_smooth(method = 'lm', se=T, col = 'darkgrey') +
+  scale_color_manual(values = wes_palette("Royal1")) +
+  annotate('text',label = 'D',x=-1.5,y=0.0075)
+
+multiplot(Fig2A,Fig2B,Fig2C,Fig2D,layout=matrix(1:4,2,2))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PAGEBREAK
+
+**Figure 3**
+
+```{r Figure 3,fig.width=8,fig.height=9}
+
+
+######################
+#3A
+######################
+
 #Run the model
-lm2 <- lmer(TLKB ~ TQspace + Insect + BodyMass+ Tarsus + NonHelper + Sex + Helper + (1|LayYear),
-            data = chickall,REML=FALSE)
-
-lm2 <- standardize(lm2)
-
+lm2 <- lm(cenTL ~ cenHelper + cenNonHelper + Sex + cenTarsus  + cenTQ,
+            data = chickall)
 
 #Model averaging
+
 lm3 <- dredge(lm2)
 lmavg <- model.avg(lm3,subset = delta <=6)
 myimp <- importance(lmavg) #Relative importance of each explanatory variable
@@ -104,153 +311,131 @@ table2 <- signif(table2,2)
 
 #Sort out row/col names
 nams <- rownames(table2)
-nams[nams == 'c.Ageclass'] <- 'Age class'
-nams[nams == 'z.BodyMass'] <- 'Body mass'
-nams[nams == 'z.Tarsus'] <- 'Tarsus'
-nams[nams == 'z.NonHelper'] <- 'Non helpers'
-nams[nams == 'c.Sex'] <- 'Sex'
-nams[nams == 'z.Insect'] <- 'Food av.'
-nams[nams == 'z.TQspace'] <- 'TQ'
-nams[nams == 'z.Helper'] <- 'Helpers'
+nams[nams == 'cenTarsus'] <- 'Tarsus'
+nams[nams == 'cenNonHelper'] <- 'Non helpers'
+nams[nams == 'SexMales'] <- 'Sex'
+nams[nams == 'cenTQ'] <- 'TQ'
+nams[nams == 'cenHelper'] <- 'Helpers'
 
 rownames(table2) <- nams
 colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
 
 table2 <- data.frame(table2,myx=row.names(table2))
 
-Fig2A <- forestplot(table2) +
-  annotate('text',x=0.75,y=4,label='A')
-
-######################################
-temp <- chickall
-temp$Helper <- ifelse(temp$Helper>0,'Present','Absent')
-
-
-ddFig2B <- ddply(temp,
-                 .(Helper),
-                 summarize,
-                 TLKBmean = mean(TLKB),
-                 TLKBse = 1.96*se(TLKB))
-
-Fig2B <- ggplot(ddFig2B,
-       aes(x = Helper,
-           y = TLKBmean)) +
-  ylab('Telomere length (kb)') + 
-  xlab('Helpers') +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 14), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16)) +
-  geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
-  scale_colour_manual(values = wes_palette("Royal1")) +
-  annotate('text',x=0.65,y=9,label='B')
-
-
-Fig2C <- ggplot(chickall,
-       aes(x = BodyMass,
-           y = TLKB)) +
-  ylab('Telomere length (kb)') + 
-  xlab('Body mass (g)') +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 14), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16)) +
-  geom_point() +
-  stat_smooth(method = 'lm',col = 'black') +
-  annotate('text',x=10.5,y=15,label='C')
-
-multiplot(Fig2A,Fig2B,Fig2C,layout=matrix(c(1,1,1,1,1,1,2,3,2,3), nrow=5, byrow=TRUE))
-
-
-```
-
-
-PAGEBREAK
-
-**Figure 3**
-
-```{r Figure 3,fig.width=5,fig.height=9}
-###########
-#Fig 3A
+Fig3A <- forestplot(table2) +
+  annotate('text',label = 'A',x=0.6,y=1.2)
 
 
 
-#Run the model
-lm3 <- lmer(TLKB ~ TQspace + Insect + NonHelper + Sex + Tarsus + BodyMass + Helper + (1|LayYear),
-            data = FlSAall,REML=FALSE)
+######################
+#3B
+######################
 
-lm3 <- standardize(lm3)
-
-
-#Model averaging
-lm4 <- dredge(lm3)
-lmavg <- model.avg(lm4,subset = delta <=6)
-myimp <- importance(lmavg) #Relative importance of each explanatory variable
-  
-
-#Put it all into a nice table
-table1 <- imptable(lmavg,myimp)
-table1 <- signif(table1,2)
-
-
-
-#Sort out row/col names
-nams <- rownames(table1)
-nams[nams == 'c.Ageclass'] <- 'Age class'
-nams[nams == 'z.BodyMass'] <- 'Body mass'
-nams[nams == 'z.Tarsus'] <- 'Tarsus'
-nams[nams == 'z.NonHelper'] <- 'Non helpers'
-nams[nams == 'c.Sex'] <- 'Sex'
-nams[nams == 'z.Insect'] <- 'Food av.'
-nams[nams == 'z.TQspace'] <- 'TQ'
-nams[nams == 'z.Helper'] <- 'Helpers'
-
-
-rownames(table1) <- nams
-colnames(table1) <- c('Estimate','SE','2.5%','97.5%','RI')
-
-table1 <- data.frame(table1,myx=row.names(table1))
-
-Fig3A <- forestplot(table1) +
-  annotate('text',x=0.75,y=2,label='A')
-
-
-######################################
-temp <- FlSAall
-temp$Insect <- factor(temp$Insect)
+temp <- chicks
 
 ddFig3B <- ddply(temp,
-                 .(Insect),
+                 .(Sex),
                  summarize,
                  TLKBmean = mean(TLKB),
-                 TLKBse = 1.96*se(TLKB))
-ddFig3B <- droplevels(ddFig3B[complete.cases(ddFig3B),])
-ddFig3B$Insect <- as.numeric(paste(ddFig3B$Insect))
+                 TLKBse = se(TLKB))
+
+
 
 Fig3B <- ggplot(ddFig3B,
-       aes(x = Insect,
+       aes(x = Sex,
            y = TLKBmean)) +
   ylab('Telomere length (kb)') + 
-  xlab('Annual food availability') +
+  xlab('') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16),
+        legend.position = c(0.1,0.9),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15)) +
+  geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
+  annotate('text',label = 'B',x=0.5,y=7)
+
+
+
+######################
+#3C
+######################
+
+temp <- chicks
+temp$HelperF <- ifelse(chicks$Helper>0,'Helpers present','Helpers absent')
+
+ddFig3C <- ddply(temp,
+                 .(HelperF),
+                 summarize,
+                 TLKBmean = mean(TLKB),
+                 TLKBse = se(TLKB))
+
+
+
+Fig3C <- ggplot(ddFig3C,
+       aes(x = HelperF,
+           y = TLKBmean)) +
+  ylab('Telomere length (kb)') + 
+  xlab('') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16),
+        legend.position = c(0.1,0.9),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15)) +
+  geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
+  annotate('text',label = 'C',x=0.5,y=8)
+
+
+
+######################
+#3D
+######################
+
+Fig3D <- ggplot(chicks,
+                aes(x = Tarsus,
+                    y = TLKB)) +
+  ylab('Telomere length (kb)') + 
+  xlab('Tarsus length (mm)') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 14), 
         axis.text.y = element_text(size = 14), 
         axis.title.y = element_text(size = 16,vjust=0.8),
         axis.title.x = element_text(size = 16)) +
-  stat_smooth(data=FlSAall,aes(x=Insect,y=TLKB),method=lm,col='black',se=T) +
-  geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
-  scale_colour_manual(values = wes_palette("Royal1")) +
-  annotate('text',x=2,y=10,label='B')
+  geom_point(size=3) +
+  stat_smooth(method = 'lm',col = 'black') +
+  scale_color_manual(values = wes_palette("Royal1")) +
+  annotate('text',label = 'D',x=19,y=15)
 
 
-multiplot(Fig3A,Fig3B)
+multiplot(Fig3A,Fig3B,Fig3C,Fig3D,layout=matrix(c(1:4), nrow=2, byrow=FALSE))
 
 
 ```
 
+
 PAGEBREAK
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -258,34 +443,141 @@ PAGEBREAK
 
 **Figure 4**
 
-```{r Figure 4,fig.height=8,fig.width=8}
-s1 <- with(subset(dd,Ageclass == 'FL'),flexsurvreg(Surv(Lifespan+1,Died)~TLKB, dist="lnorm"))
+```{r Figure 4,fig.width=5,fig.height=9}
 
-s1 <- with(chicks,flexsurvreg(Surv(Lifespan+1,Died)~TLKB+BodyMass+TLKB+Helper, dist="lnorm"))
-t1 <- data.frame(s1$res)
-t1 <- t1[3:5,]
-t1 <- t1[order(rownames(t1)),]
-rownames(t1) <- c('Body mass','Helper','Tel. length')
+######################
+#3A
+######################
+Fl <- subset(FlSAall,Ageclass == 'FL')
 
-Fig4A <- ggplot(t1,aes(x = rownames(t1),y = est)) +
-  geom_point() + 
-  geom_pointrange(aes(ymin = L95.,ymax = U95.)) +
-    theme_classic() +
-  ylab('Estimate') + 
-  xlab('') + 
+#Run the model
+lm2 <- lm(cenTL ~ cenHelper + cenNonHelper + Sex + cenTarsus  + cenTQ,
+            data = Fl)
+
+#Model averaging
+lm3 <- dredge(lm2)
+lmavg <- model.avg(lm3,subset = delta <=6)
+myimp <- importance(lmavg) #Relative importance of each explanatory variable
+  
+
+#Put it all into a nice table
+table2 <- imptable(lmavg,myimp)
+table2 <- signif(table2,2)
+
+
+nams <- rownames(table2)
+nams[nams == 'cenTarsus'] <- 'Tarsus'
+nams[nams == 'cenNonHelper'] <- 'Non helpers'
+nams[nams == 'SexMales'] <- 'Sex'
+nams[nams == 'cenTQ'] <- 'TQ'
+nams[nams == 'cenHelper'] <- 'Helpers'
+
+rownames(table2) <- nams
+colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
+
+table2 <- data.frame(table2,myx=row.names(table2))
+
+Fig4A <- forestplot(table2) +
+  annotate('text',label = 'A',x=0.6,y=0.8)
+
+
+######################
+#4B
+######################
+SA <- subset(FlSAall,Ageclass == 'SA')
+
+#Run the model
+lm2 <- lm(cenTL ~ cenHelper + cenNonHelper + Sex + cenTarsus  + cenTQ,
+            data = SA)
+
+
+#Model averaging
+lm4 <- dredge(lm2)
+lmavg <- model.avg(lm4,subset = delta <=6)
+myimp <- importance(lmavg) #Relative importance of each explanatory variable
+  
+
+#Put it all into a nice table
+table2 <- imptable(lmavg,myimp)
+table2 <- signif(table2,2)
+
+
+nams <- rownames(table2)
+nams[nams == 'cenTarsus'] <- 'Tarsus'
+nams[nams == 'cenNonHelper'] <- 'Non helpers'
+nams[nams == 'SexMales'] <- 'Sex'
+nams[nams == 'cenTQ'] <- 'TQ'
+nams[nams == 'cenHelper'] <- 'Helpers'
+
+rownames(table2) <- nams
+colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
+
+table2 <- data.frame(table2,myx=row.names(table2))
+
+Fig4B <- forestplot(table2) +
+  annotate('text',label = 'B',x=0.6,y=0.6)
+
+multiplot(Fig4A,Fig4B)
+
+
+```
+
+PAGEBREAK
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Figure 5**
+
+```{r Figure 5,fig.height=8,fig.width=5}
+
+s1 <- survfit(Surv(time = Lifespan+1, event = Died)~TLF, data = chicks)
+Fig5A <- ggsurv(s1,plot.cens=F) + 
   theme_classic() +
-  theme(axis.text.x = element_text(angle=90,size = 14), 
+  ylab('Proportion survived') + 
+  xlab('Age (years)') + 
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
         axis.text.y = element_text(size = 14), 
         axis.title.y = element_text(size = 16,vjust=0.8),
         axis.title.x = element_text(size = 16),
         legend.position = c(0.8,0.8),
-        legend.title = element_text(size = 14),
-        legend.text = element_text(size = 12)) +
-  geom_abline(intercept = 0,slope = 0,lty=2) +
-  annotate('text',x=0.6,y=0.4,label='A')
+        legend.text = element_text(size = 12),
+        legend.title = element_blank()) +
+  scale_colour_manual(name = 'TL',
+                      values = c('darkred','red')) +
+  guides(linetype=F) +
+  annotate('text',x=0.5,y=1.1,label='A')
 
-s2 <- survfit(Surv(time = Lifespan+1, event = Died)~TLF, data = chicks)
-Fig4B <- ggsurv(s2,plot.cens=F) + 
+
+###########################################
+
+
+s2 <- survfit(Surv(time = Lifespan+1, event = Died)~TLF, data = FlSAall)
+Fig5B <- ggsurv(s2,plot.cens=F) + 
   theme_classic() +
   ylab('Proportion survived') + 
   xlab('Age (years)') + 
@@ -302,56 +594,8 @@ Fig4B <- ggsurv(s2,plot.cens=F) +
   guides(linetype=F) +
   annotate('text',x=0.5,y=1.1,label='B')
 
-
-###########################################
-
-s2 <- with(FlSAall,flexsurvreg(Surv(Lifespan+1,Died)~TLKB+Insect, dist="lnorm"))
-t4 <- data.frame(s2$res)
-t4 <- t4[3:4,]
-t4 <- t4[order(rownames(t4)),]
-rownames(t4) <- c('Food av.','Tel. length')
-
-Fig4C <- ggplot(t4,aes(x = rownames(t4),y = est)) +
-  geom_point() + 
-  geom_pointrange(aes(ymin = L95.,ymax = U95.)) +
-    theme_classic() +
-  ylab('Estimate') + 
-  xlab('') + 
-  theme_classic() +
-  theme(axis.text.x = element_text(angle=90,size = 14), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16),
-        legend.position = c(0.8,0.8),
-        legend.title = element_text(size = 14),
-        legend.text = element_text(size = 12)) +
-  geom_abline(intercept = 0,slope = 0,lty=2) +
-  annotate('text',x=0.6,y=0.15,label='C')
-
-s4 <- survfit(Surv(time = Lifespan+1, event = Died)~TLF, data = FlSA)
-Fig4D <- ggsurv(s4,plot.cens=F) + 
-  theme_classic() +
-  ylab('Proportion survived') + 
-  xlab('Age (years)') + 
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 14), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16),
-        legend.position = c(0.8,0.8),
-        legend.text = element_text(size = 12),
-        legend.title = element_blank()) +
-  scale_colour_manual(name = 'TL',
-                      values = c('darkred','red')) +
-  guides(linetype=F) +
-  annotate('text',x=0.5,y=1.1,label='D')
-
-multiplot(Fig4A,Fig4B,Fig4C,Fig4D,layout=matrix(c(1:4), nrow=2, byrow=FALSE))
+multiplot(Fig5A,Fig5B)
 
 
 ```
-
-
-
-
 
