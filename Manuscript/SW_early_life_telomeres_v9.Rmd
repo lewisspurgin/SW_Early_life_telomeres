@@ -43,31 +43,33 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 
 ###Telomeres reveal complex silver spoon effects in a wild population
 
-Lewis G. Spurgin^1,2^,  Kat Bebbington^1^, Eleanor A. Fairfield^1^, Jan Komdeur^3^, Terry Burke^4^, Hannah, L. Dugdale^2^,  and David S. Richardson^1,5^.
+Lewis G. Spurgin^a,b^,  Kat Bebbington^a^, Eleanor A. Fairfield^a^, Jan Komdeur^c^, Terry Burke^d^, Hannah, L. Dugdale^c,d^,  and David S. Richardson^a,e,^.
 
-1. School of Biological Sciences, University of East Anglia, Norwich Research Park, NR4 7TJ, United Kingdom
-2. Department of Zoology, Edward Grey Institute, University of Oxford, Oxford, UK
-3. Behavioural Ecology and Self-organization Group, Centre for Ecological and Evolutionary Studies, University of Groningen, Groningen, The Netherlands
-4. Department of Animal and Plant Sciences, NERC Biomolecular Analysis Facility, University of Sheffield, Sheffield, UK
-5. Nature Seychelles, Roche Caiman, Mahé, Republic of Seychelles
+a. School of Biological Sciences, University of East Anglia, Norwich Research Park, NR4 7TJ, United Kingdom
+b. Department of Zoology, Edward Grey Institute, University of Oxford, Oxford, UK
+c. Behavioural Ecology and Self-organization Group, Centre for Ecological and Evolutionary Studies, University of Groningen, Groningen, The Netherlands
+d. Department of Animal and Plant Sciences, NERC Biomolecular Analysis Facility, University of Sheffield, Sheffield, UK
+e. Nature Seychelles, Roche Caiman, Mahé, Republic of Seychelles
 
 **Correspondence:** Lewis Spurgin: lewisspurgin@gmail.com; David Richardson: david.richardson@uea.ac.uk
 
-**Keywords:** Ageing; Life-history; Seychelles warbler; Telomeres
-
-
-
-
-PAGEBREAK
-
 ###Abstract
-Favourable conditions early in life can confer delayed survival advantages. These 'silver spoon effects' are most likely common in nature and are central to our understanding of life history evolution and population ecology. However, how silver spoon effects vary among individuals, populations and species remains poorly understood. Telomeres can act as biomarkers of cost in wild populations, and may provide insight into how silver spoon effects occur. Using a dataset spanning over a decade, we studied how telomere length links spatiotemporal variation in early-life conditions to survival to in the Seychelles warbler (*Acrocephalus sechellensis*). We show that early-life telomere length varies markedly across birth years, and that this variation is positively related to annual variation in food availability. We then show that having short telomeres as a juvenile is associated with reduced late life survival, but that this relationship was subject to strong cohort effects. Having short telomeres was associated with reduced late-life survival among individuals born in years where food was limited, but not among individuals born in years with high food availability. Our results suggest that telomeres can reveal hidden costs and complex silver spoon effects in wild populations.
+1. Favourable conditions early in life can confer delayed fitness advantages. However, the mechanistic basis of these 'silver spoon effects' remains poorly understood.  Telomeres - protective caps on the ends of chromosomes - shorten in response to early life stress, and early life telomere shortening can cause reduced later life survival. It is therefore possible that telomeres provide a 'missing link' between early life environmental variation and later life fitness.
 
+2. The prevalence and strength of silver spoon effects has pronounced consequences for individual fitness and population growth rates. Understanding the physiological and ecological links between early life experiences and later life survival is therefore fundamental to our understanding of life-history evolution and population ecology alike.
+
+3. We studied how telomere length links spatiotemporal variation in early-life conditions to survival in the Seychelles warbler (*Acrocephalus sechellensis*). The Seychelles warbler system is excellently suited to addressing this question, due to the excellent, long-term lonigtudinal data on survival and senescence. We combined this with cross-seciotnal and longitudinal telomere measurements taken from over 300 birds, and analyse how the variation in the early life environment within and across cohorts affects telomere length and survival.
+
+4. We show that early-life telomere length varies markedly across cohorts, and that this variation is positively related to annual variation in food availability. We then show that having short telomeres as a juvenile is associated with reduced late life survival, but that this relationship was subject to strong cohort effects. Having short telomeres was associated with reduced late-life survival among individuals born in years where food was limited, but not among individuals born in years with high food availability. 
+
+5. Our results show that telomeres can reveal hidden costs at the individual and cohort levels, and suggest that they may provide a link between early-life conditions and late-life survival in wild populations.
+
+**Keywords:** Ageing; Life-history; Seychelles warbler; Telomeres
 
 PAGEBREAK
 
 ###Introduction
-Being subject to favourable environmental conditions during development and growth can confer fitness advantages later in life (so called 'silver spoon effects') [@Grafen1988; @Monaghan2008]. There is now evidence that adult fitness can be affected by a range of early-life experiences, including variation in resource availability [@Hayward2013], population density [@Nussey2007] and natural or anthropogenic environmental disturbance [@Reid2003]. Understanding the causes and consequences of these early-life experiences is key to understanding many ecological and evolutionary  processes, including  patterns of natural and sexual selection,  population growth rates and even local extinction [@Coulson2001; @Roach2014]. Understanding silver spoon effects is therefore of central interest to ecologists, evolutionary biologists and conservationists.
+Being subject to favourable environmental conditions during development and growth can confer fitness advantages later in life (so called 'silver spoon effects') [@Grafen1988; @Monaghan2008]. There is now evidence that adult fitness can be affected by a range of early-life experiences, including variation in habitat quality and resource availability [@Madsen2000; @VandePol2006; @Hayward2013], population density [@Nussey2007;@Douhard2013] and natural or anthropogenic environmental disturbance [@Reid2003; @Cartwright2014]. Understanding the causes and consequences of these early-life experiences is key to understanding many ecological and evolutionary  processes, including  patterns of natural and sexual selection,  population growth rates and even local extinction [@Coulson2001; @Roach2014]. Understanding silver spoon effects is therefore of central interest to ecologists, evolutionary biologists and conservationists.
 
 While it is clear that silver spoon effects can occur, we have little understanding of how and under what conditions early-life environments will affect adult fitness. Because the phenotypic consequences of an adverse environment can depend on an individual's genetic or epigenetic makeup [@Hoffman2000; @Richards2006], the later-life consequences of a good/poor start are expected to vary among individuals, populations and species. Moreover, it is not always possible to fully quantify what constitutes a good or bad environment, and any 'hidden' environmental variation may obscure relationships relationships between the early-life conditions that are measured and adult phenotypes. Indeed, the pervasiveness of silver spoon effects varies between species [@Drummond2011], cohorts [@Reid2003] and sexes [@Wilkin2009]. In order to better understand the later-life consequences of early-life experiences, we therefore need to understand, or at least be able to measure, how the environment differentially affects individuals within a population.
 
@@ -75,13 +77,9 @@ A key process that has been associated with adult survival is the rate at which 
 
 There is evidence from a range of taxa that the greatest rate of telomere loss occurs in early life (e.g. [@Frenck1998; @Haussmann2003]), and that the extent of this telomere shortening is influenced by the conditions experienced early in life [@Nettle2015; @Reichert2015]. Importantly, early-life telomere dynamics are related to both short-term and late-life survival [@Heidinger2012; @Boonekamp2014], and to other parameters such as cognition [@Nettle2015a]. However, the extent to which telomeres provide a link between early-life conditions and late-life survival in the wild is very poorly understood. Moreover, how early life telomere dynamics vary over spatial and temporal scales is not known.
 
-The longitudinal study (since 1986) of the Seychelles warbler (*Acrocephalus sechellensis*) population on Cousin Island provides an excellent opportunity to assess the relationship between early-life environmental variation, telomere length and late-life fitness. Firstly, due to the isolated nature of the study population and intensive field monitoring, we have excellent survival data and sampling material spanning many years (see methods, below). Secondly, telomere length predicts survival independently of age in adult Seychelles warblers, suggesting that telomeres act as a biomarker of cost in this species [@Barrett2013a]. Finally, ecological conditions on Cousin are variable over space and time due to spatiotemporal variation in foliage cover and food availability [@VandeCrommenacker2011a].
+The longitudinal study (since 1986) of the Seychelles warbler (*Acrocephalus sechellensis*) population on Cousin Island provides an excellent model system for studying senescnece in the wild [@Hammers2015]. Specifically, it is ideally suited for assessing the relationship between early-life environmental variation, telomere length and late-life fitness. Firstly, due to the isolated nature of the study population and intensive field monitoring, we have excellent survival data and sampling material spanning many years (see methods, below). Secondly, telomere length predicts survival independently of age in adult Seychelles warblers, suggesting that telomeres act as a biomarker of cost in this species [@Barrett2013a]. Finally, ecological conditions on Cousin are variable over space and time due to spatiotemporal variation in foliage cover and food availability [@VandeCrommenacker2011a].
 
 In Seychelles warblers, oxidative stress is linked to natal territory quality [@VandeCrommenacker2011a], but neither natal territory quality nor natal local density are linked to early-life or adult survival [@Brouwer2006; @Hammers2013]. In this study we analyse patterns of early-life telomere length and subsequent survival to test the prediction that telomeres fill a missing link between early-life environmental variation and late-life fitness. Specifically we predict that: i) individuals raised in good quality conditions will have longer telomeres, and ii) having longer telomeres in early life is associated with greater short and long-term survival.
-
-
-
-
 
 
 ###Methods
@@ -145,51 +143,12 @@ Together, our results confirm that there is cohort-level variation in the relati
 Despite the promise of telomeres as biomarkers of cost, ecologists interested in understanding variation within populations are still left with the problem of identifying what explains individual-level variation in telomere length. Telomere length in juveniles will be the product of a range of factors, including inherited telomere length at birth [@Horn2011], age at sampling [@Heidinger2012], the early-life environment [@Boonekamp2014], and, potentially, individual quality. In the Seychelles warbler we do not yet know how these different factors contribute to within-cohort variation in telomere length. However, a previous study on the Seychelles warbler showed that maternal heterozygosity influences offspring survival in bad years, but not good years [@Brouwer2007]. This raises the possibility that in the Seychelles warbler there is variation in individual quality, and high quality individuals are better able to cope with early-life stress [@Brouwer2007]. Thus in the near future it will become possible to use telomeres to link genetic variation, inheritance, environmental variation and senescence in the Seychelles warbler and other long-term systems.
 
 
-
-
-
-
-###Ethics
-All research activities were approved by the ethics committee at the University of East Anglia, the Seychelles Department of Environment and the Seychelles Bureau of Standards (approval reference A0347).
-
-
-
-
-
 ###Data accessibility
 All data and scripts required to reproduce the analyses within this manuscript are available on GitHub (https://github.com/lewisspurgin/SW_Early_life_telomeres)
 
 
-
-
-
-###Competing interests
-There are no competing interests
-
-
-
-
-
-###Authors' contributions
-DSR developed the idea and obtained funding for the overall telomere project; DSR, JK, HLD and TB supervised the overall running of the overall Seychelles warbler project and contributed resources; HLD managed the longitudinal fitness database. EAF, KLB and LGS generated and processed the telomere data; LGS performed the analyses and wrote the manuscript, in discussion with DSR. All authors read and contributed to the manuscript.
-
-
-
-
-
-
 ###Acknowledgements
-Nature Seychelles facilitate the long-term Seychelles warbler project, allowing us to stay on Cousin Island, and providing accommodation and facilities during field work. The Seychelles Bureau of Standards and Department of Environment gave permission for sampling and fieldwork. Emma Barrett laid the foundations for this study, generating much of the telomere  data. We thank everyone who has helped in the field, and the current Seychelles warbler research group for useful discussions.
-
-
-
-
-
-###Funding
-This work was funded by two Natural Environment Research Council (NERC) grants to DSR (NE/F02083X/1 and NE/K005502/1) on which JK, TB and HLD were project partners. HLD was funded by a NERC fellowship.
-
-
-
+Nature Seychelles facilitate the long-term Seychelles warbler project, allowing us to stay on Cousin Island, and providing accommodation and facilities during field work. The Seychelles Bureau of Standards and Department of Environment gave permission for sampling and fieldwork. Emma Barrett laid the foundations for this study, generating much of the telomere data. We thank everyone who has helped in the field, and the current Seychelles warbler research group for useful discussions. This work was funded by two Natural Environment Research Council (NERC) grants to DSR (NE/F02083X/1 and NE/K005502/1) on which JK, TB and HLD were project partners. HLD was funded by a NERC fellowship.
 
 
 ###References
