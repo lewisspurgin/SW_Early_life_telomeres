@@ -58,11 +58,9 @@ baselineimp <- function(mymodel,n.permutations = 1000)
 #Get terms
 getterms <- function(x,cols)
 {
-  temp <- c('i',names(which(!(is.na(x[cols])))))
-  return(paste(temp,collapse = " + "))
+  temp <- which(!(is.na(x[cols])))
+  return(paste(names(temp),collapse = " + "))
 }
-
-
 
 
 

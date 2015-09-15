@@ -39,27 +39,35 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 
 ```
 
-**Table S1** Model selection table for analysis of factors affecting early life telomere length in Seychelles warbler chicks. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. i = intercept.
+**Table S1** Model selection table for analysis of factors affecting early life telomere length in Seychelles warbler chicks. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here.
 
 ```{r Table S1}
 
 #Run the model
-lm1 <- lmer(TLKB ~ TQspace + Insect + NonHelper + Sex + BodyMass + Tarsus + Helper + (1|LayYear),
-            data = chickall,REML=FALSE)
-
-lm1 <- standardize(lm1)
+lm1 <- lm(cenTL ~ cenHelper + cenNonHelper + Sex + cenTarsus  + cenTQ,
+            data = chickall)
 
 
 #Model averaging
 lm2 <- dredge(lm1)
 t1 <- as.matrix(subset(lm2, delta<=6))
-colnames(t1)[2:8] <- c('Sex', 'Body Mass','Helpers','Food av.','Non helpers','Tarsus length','TQ')
 
-tableS1 <- data.frame(Model = apply(t1,1,getterms,c(2:8)),t1[,c('df','AICc','delta','weight')])
+#Sort out row/col names
+nams <- colnames(t1)
+nams[nams == 'cenTarsus'] <- 'Tarsus'
+nams[nams == 'cenNonHelper'] <- 'Non helpers'
+nams[nams == 'SexMales'] <- 'Sex'
+nams[nams == 'cenTQ'] <- 'TQ'
+nams[nams == 'cenHelper'] <- 'Helpers'
+
+colnames(t1) <- nams
+
+tableS1 <- data.frame(Model = apply(t1,1,getterms,c(2:6)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
 colnames(tableS1) <- c('Model','df','AICc', 'Delta AICc','Weight')
 rownames(tableS1) <- NULL
 tableS1$Model[tableS1$Model == ''] <- 'Null model'
-kable(tableS1,digits=3)
+tableS1[,3:5] <- lapply(tableS1[,3:5],as.numeric)
+kable(tableS1,digits=2)
 
 ```
 
@@ -67,217 +75,73 @@ kable(tableS1,digits=3)
 PAGEBREAK
 
 
-**Table S2** Model selection table for analysis of factors affecting early life telomere length in Seychelles warbler fledglings and subadults. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. i = intercept.
+**Table S2** Model selection table for analysis of factors affecting early life telomere length in Seychelles warbler fledglings. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here.
 
-```{r Table s2}
-
-#Run the model
-lm1 <- lmer(TLKB ~ TQspace + Insect + NonHelper + Sex + BodyMass + Tarsus + Helper + (1|LayYear),
-            data = FlSAall,REML=FALSE)
-
-lm1 <- standardize(lm1)
-
-
-#Model averaging
-lm2 <- dredge(lm1)
-t1 <- as.matrix(subset(lm2, delta<=6))
-colnames(t1)[2:8] <- c('Sex', 'Body Mass','Helpers','Food av.','Non helpers','Tarsus length','TQ')
-
-tables2 <- data.frame(Model = apply(t1,1,getterms,c(2:8)),t1[,c('df','AICc','delta','weight')])
-colnames(tables2) <- c('Model','df','AICc', 'Delta AICc','Weight')
-rownames(tables2) <- NULL
-tables2$Model[tables2$Model == ''] <- 'Null model'
-kable(tables2,digits=3)
-
-```
-
-
-
-
-
-
-
-
-
-
-PAGEBREAK
-
-```{r Figure S1,fig.width=4,fig.height=4}
-
-
-temp <- dd
-
-ddFigS1 <- ddply(dd,
-                 .(Age),
-                 summarize,
-                 TLKBmean = mean(TLKB),
-                 TLKBse = se(TLKB))
-
-ddFigS1 <- ddFigS1[complete.cases(ddFigS1),]
-ddFigS1 <- subset(ddFigS1,Age<14)
-
-FigS1 <- ggplot(ddFigS1,
-       aes(x = Age,
-           y = TLKBmean)) +
-  geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
-  ylab('Telomere length (kb)') + 
-  xlab('Age') + 
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 14), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16))
-
-FigS1
-
-```
-
-
-**Figure S1** Cross-sectional telomere length (mean $\pm$ s.e.) in relation to age in Seychelles warblers.
-
-PAGEBREAK
-
-
-
-
-
-
-
-
-
-```{r Figure S2,fig.width=4,fig.height=4}
-
-temp <- Loss
-levels(temp$Ageclass) <- c('Chicks', 'Fledglings','Subadults')
-
-ddFigS2 <- ddply(temp,
-                 .(Ageclass),
-                 summarise,
-                 TROCmean = mean(TROC),
-                 TROCse = se(TROC))
-
-FigS2 <- ggplot(ddFigS2,
-       aes(x = Ageclass,
-           y = TROCmean)) +
-  geom_pointrange(aes(min=TROCmean-TROCse,ymax=TROCmean+TROCse)) +
-  ylab('Corrected telomere loss') + 
-  xlab('') + 
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 14), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16))
-
-FigS2
-
-
-```
-
-**Figure S2** Longitudinal telomere loss (mean $\pm$ s.e.) in juvenile Seychelles warblers. Telomere loss a standardised and corrected value (see methods for details) based on rates of lost between the sampling event of birds as a juvnile, and the first available sampling as an adult. Values above zero indicate telomere shortening in early life.
-
-
-
-
-PAGEBREAK
-
-
-
-```{r Figure S3,fig.width=5,fig.height=9}
-
-
-###########
-#Fig S3A
+```{r Table S2}
 
 temp <- subset(FlSAall,Ageclass == 'FL')
 
 #Run the model
-lm3 <- lmer(TLKB ~ TQspace + Insect + Sex + Tarsus + BodyMass + (1|LayYear),
-            data = temp,REML=FALSE)
-
-lm3 <- standardize(lm3)
+lm1 <- lm(cenTL ~ cenHelper + cenNonHelper + Sex + cenTarsus  + cenTQ,
+            data = temp)
 
 
 #Model averaging
-lm4 <- dredge(lm3)
-lmavg <- model.avg(lm4,subset = delta <=6)
-myimp <- importance(lmavg) #Relative importance of each explanatory variable
-  
-
-#Put it all into a nice table
-table1 <- imptable(lmavg,myimp)
-table1 <- signif(table1,2)
-
-
+lm2 <- dredge(lm1)
+t1 <- as.matrix(subset(lm2, delta<=6))
 
 #Sort out row/col names
-nams <- rownames(table1)
-nams[nams == 'c.Ageclass'] <- 'Age class'
-nams[nams == 'z.BodyMass'] <- 'Body mass'
-nams[nams == 'z.Tarsus'] <- 'Tarsus'
-nams[nams == 'z.NonHelper'] <- 'Non helpers'
-nams[nams == 'c.Sex'] <- 'Sex'
-nams[nams == 'z.Insect'] <- 'Food av.'
-nams[nams == 'z.TQspace'] <- 'TQ'
-nams[nams == 'z.Helper'] <- 'Helpers'
+nams <- colnames(t1)
+nams[nams == 'cenTarsus'] <- 'Tarsus'
+nams[nams == 'cenNonHelper'] <- 'Non helpers'
+nams[nams == 'SexMales'] <- 'Sex'
+nams[nams == 'cenTQ'] <- 'TQ'
+nams[nams == 'cenHelper'] <- 'Helpers'
 
+colnames(t1) <- nams
 
-rownames(table1) <- nams
-colnames(table1) <- c('Estimate','SE','2.5%','97.5%','RI')
-
-table1 <- data.frame(table1,myx=row.names(table1))
-
-FigS3A <- forestplot(table1) +
-  annotate('text',x=0.75,y=3,label='A')
-
-###########
-#Fig S3B
-
-temp <- subset(FlSAall,Ageclass == 'SA')
-
-#Run the model
-lm3 <- lmer(TLKB ~ TQspace + Insect + Sex + Tarsus + BodyMass + (1|LayYear),
-            data = temp,REML=FALSE)
-
-#lm3 <- standardize(lm3)
-
-
-#Model averaging
-lm4 <- dredge(lm3)
-lmavg <- model.avg(lm4,subset = delta <=6)
-myimp <- importance(lmavg) #Relative importance of each explanatory variable
-  
-
-#Put it all into a nice table
-table1 <- imptable(lmavg,myimp)
-table1 <- signif(table1,2)
-
-
-
-#Sort out row/col names
-nams <- rownames(table1)
-nams[nams == 'c.Ageclass'] <- 'Age class'
-nams[nams == 'z.BodyMass'] <- 'Body mass'
-nams[nams == 'z.Tarsus'] <- 'Tarsus'
-nams[nams == 'z.NonHelper'] <- 'Non helpers'
-nams[nams == 'c.Sex'] <- 'Sex'
-nams[nams == 'z.Insect'] <- 'Food av.'
-nams[nams == 'z.TQspace'] <- 'TQ'
-nams[nams == 'z.Helper'] <- 'Helpers'
-
-
-rownames(table1) <- nams
-colnames(table1) <- c('Estimate','SE','2.5%','97.5%','RI')
-
-table1 <- data.frame(table1,myx=row.names(table1))
-
-FigS3B <- forestplot(table1) +
-  annotate('text',x=0.75,y=3,label='B')
-
-
-multiplot(FigS3A,FigS3B)
+tableS2 <- data.frame(Model = apply(t1,1,getterms,c(2:6)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+colnames(tableS2) <- c('Model','df','AICc', 'Delta AICc','Weight')
+rownames(tableS2) <- NULL
+tableS2$Model[tableS2$Model == ''] <- 'Null model'
+tableS2[,3:5] <- lapply(tableS2[,3:5],as.numeric)
+kable(tableS2,digits=2)
 
 ```
 
 
-**Figure S3** Factors affecting telomere length in Seychelles warbler fledglings **(A)** and subadults **(B)**. Points and error bars represent model averaged estimates and 95% confidence intervals for all explanatory terms used in a linear model with telomere length as the response variable. Numbers in brackets are the relative importance of each term in the top model set (see main text for details; Food av. = annual food availability, TQ = territory quality).
 
+
+**Table S3** Model selection table for analysis of factors affecting early life telomere length in Seychelles warbler sub-adults Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here.
+
+```{r Table S3}
+
+temp <- subset(FlSAall,Ageclass == 'SA')
+
+#Run the model
+lm1 <- lm(cenTL ~ cenHelper + cenNonHelper + Sex + cenTarsus  + cenTQ,
+            data = temp)
+
+
+#Model averaging
+lm2 <- dredge(lm1)
+t1 <- as.matrix(subset(lm2, delta<=6))
+
+#Sort out row/col names
+nams <- colnames(t1)
+nams[nams == 'cenTarsus'] <- 'Tarsus'
+nams[nams == 'cenNonHelper'] <- 'Non helpers'
+nams[nams == 'SexMales'] <- 'Sex'
+nams[nams == 'cenTQ'] <- 'TQ'
+nams[nams == 'cenHelper'] <- 'Helpers'
+
+colnames(t1) <- nams
+
+tableS3 <- data.frame(Model = apply(t1,1,getterms,c(2:6)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+colnames(tableS3) <- c('Model','df','AICc', 'Delta AICc','Weight')
+rownames(tableS3) <- NULL
+tableS3$Model[tableS3$Model == ''] <- 'Null model'
+tableS3[,3:5] <- lapply(tableS3[,3:5],as.numeric)
+kable(tableS3,digits=2)
+
+```

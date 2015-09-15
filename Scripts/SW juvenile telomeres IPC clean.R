@@ -57,8 +57,6 @@ dd <- subset(dd,Tarsus>17)
 
 dd$TLKB <- dd$TL/1000
 dd$LogTL <- log(dd$TL)
-mymed <- mean(dd$TLKB,na.rm=T)
-dd$TLF <- ifelse(dd$TLKB > mymed,'Long telomeres','Short telomeres')
 
 
 
@@ -130,6 +128,10 @@ for(i in 1:nrow(juv))
   currentdata <- subset(juv,FieldPeriodID == FieldPeriodID[i])
   juv$cenTL[i] <- (juv$TLKB[i] - mean(currentdata$TLKB))/sd(currentdata$TLKB)
 }
+
+mymed <- mean(juv$cenTL,na.rm=T)
+juv$TLF <- ifelse(juv$cenTL > mymed,'Long telomeres','Short telomeres')
+
 
 # Helpers and social group size -------------------------------------------
 
@@ -243,9 +245,15 @@ Loss <- data.frame(x4,
                    TimeDiff = as.numeric(x2$CatchDate-x4$CatchDate),
                    D=(rho*xx1)-xx2)
 Loss$TROC <- with(Loss,D/TimeDiff)
+for(i in 1:nrow(Loss))
+{
+  currentdata <- Loss[Loss$FieldPeriodID == Loss$FieldPeriodID[i],]
+  Loss$cenTROC[i] <- (Loss$TROC[i]-mean(currentdata$TROC)/sd(currentdata$TROC))
+}
 
-Loss <- subset(subset(Loss,TROC > -0.005),TROC < 0.01)
-
+Loss <- Loss[!(is.na(Loss$cenTROC)),]
+Loss <- subset(subset(Loss,TROC > -0.01),TROC < 0.01)
+Loss <- subset(Loss,TimeDiff<1500)
 
 
 # Get rid of stuff not to be used -----------------------------------------
@@ -257,21 +265,27 @@ rm(status,helpers,hatchdate,x1,x2,x3,x4)
 
 # Field period average data -----------------------------------------------
 
-juvall$SexN <- ifelse(juvall$Sex == 'Males',1,0)
-
-juvseason <- ddply(juvall,
+juvseason <- ddply(juv,
                    .(FieldPeriodID,Season),
                    summarize,
                    TLKBmean = mean(TLKB),
                    TLKBse = se(TLKB),
-                   Tarsus = mean(SexN),
+                   Tarsus = mean(Tarsus),
                    Insect = mean(Insect),
+                   Lifespan = mean(RemainingLife),
+                   Lifespanse = se(RemainingLife),
+                   CatchYear = mean(CatchYear),
                    n = length(TLKB))
+juvseason$cenTL <- juvseason$TLKBmean-mean(juvseason$TLKBmean)
+juvseason <- subset(juvseason,n>2)
 
 loss.season <- ddply(Loss,
                    .(FieldPeriodID,Season),
                    summarize,
                    TROCmean = mean(TROC),
                    TROCse = se(TROC),
-                   Insect <- mean(Insect))
-loss.season <- loss.season[complete.cases(loss.season),]
+                   Insect = mean(Insect),
+                   Lifespan = mean(RemainingLife),
+                   Lifespanse = se(RemainingLife),
+                   n = length(TROC),
+                   CatchYear = mean(CatchYear))
