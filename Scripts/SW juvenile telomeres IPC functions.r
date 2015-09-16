@@ -440,9 +440,15 @@ round2 <- function(x)
   }
 
 round3 <- function(x)
+{
+  if(x < 0.001)
   {
-  sprintf(round(x,3), fmt="%.3f")
+    return('< 0.001')
+  } else
+  {
+    sprintf(round(x,3), fmt="%.3f")
   }
+}
 
 
 

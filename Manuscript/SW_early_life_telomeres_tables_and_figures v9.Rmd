@@ -38,13 +38,13 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 
 **Figure 1** Telomere length (mean $\pm$ s.e.) and age Seychelles warblers, based on cross-sectional **(A)** and longitudinal **(B)** data. In **B**, telomere loss is a standardised and corrected rate (see methods for details) based on the difference in telomere length from the sample taken from birds in their first year of life, and the first available sampling as an adult. Values above zero indicate telomere shortening in early life.
 
-**Figure 2** Temporal variation in early-life telomere dynamics in the Seychelles warbler based on cross-sectional **(A,B)** and longitudinal **(C,D)** data (see Fig. 1 and main text for details). Points and error bars represent mean and standard error telomere length for all birds born in each summer (blue) or winter (red) breeding season. In **A** and **C** points are ordered temporally, while in **B** and **D** telomere length/loss for each season is plotted against island-wide food availability. Lines and shaded areas represent fitted values and 95% confidence limits from a linear regression.
+**Figure 2** Temporal variation in early-life telomere dynamics in the Seychelles warbler based on cross-sectional **(A)** and longitudinal **(B)** data (see Fig. 1 and main text for details). Points and error bars represent mean and standard error telomere length for all birds born in each summer (black) or winter (grey) breeding season, in relation to island-wide food availability. Trend lines represent fitted values from a linear regression.
 
 **Figure 3** Factors affecting telomere length in Seychelles warbler chicks. **A** Model averaged estimates and 95% confidence intervals for all explanatory terms used in a linear model with telomere length as the response variable. Numbers in brackets are the relative importance of each term in the top model set (see main text for details; TQ = territory quality). **B** Presence/absence of helpers and **c** tarsus length in relation to raw telomere length. Points and error bars in **B** are mean $\pm$ s.e., and the line and shaded areas from **C** represent fitted values and 95% confidence limits from a linear regression.
 
 **Figure 4** Factors affecting telomere length in Seychelles warblers fledglings **(A)** and subadults **(B)**. Points and error bars represent model averaged estimates and 95% confidence intervals for all explanatory terms used in a linear model with  telomere length as the response variable. Numbers in brackets are the relative importance of each term in the top model set (see main text for details; TQ = territory quality).
 
-**Figure 5** Temporal variation in early-life telomere dynamics and lifespan in the Seychelles warbler, based on cross-sectional **(A)** and longitudinal **(B)** data (see Fig. 1 and main text for details). Points and error bars represent means and $\pm$ s.e., respectively. 
+**Figure 5** Temporal, cohort-level variation in early-life telomere dynamics and lifespan in the Seychelles warbler, based on cross-sectional **(A)** and longitudinal **(B)** data (see Fig. 1 and main text for details). Points and error bars represent means and $\pm$ s.e., respectively, of all birds born in each summer (black) or winter (grey) breeding season. 
 
 **Figure 6** Kaplan-Meier curves showing the relationship between telomere length and survival in chick (**A**), fledgling  (**B**) and sub-adult (**C**) Seychelles warblers. Telomere length is binned into groups here for visualisation purposes only (long and short = greater than or less than median telomere length, repectively).
 
@@ -59,7 +59,7 @@ PAGEBREAK
 
 **Figure 1**
 
-```{r Figure 1,fig.width=6,fig.height=9}
+```{r Figure 1,fig.width=5,fig.height=9}
 ######################
 #1A
 ######################
@@ -89,7 +89,7 @@ Fig1A <- ggplot(ddFig1A,
         legend.title = element_blank(),
         legend.text = element_text(size = 15)) +
   geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
-  annotate('text',label = 'A',x=0.5,y=6.2)
+  annotate('text',label = 'A',x=0.6,y=6.2)
 
 
 
@@ -124,7 +124,7 @@ Fig1B <- ggplot(ddFig1B,
         legend.title = element_blank(),
         legend.text = element_text(size = 15)) +
   geom_pointrange(aes(ymin=TROCmean-TROCse,ymax=TROCmean+TROCse)) +
-  annotate('text',label = 'B',x=0.5,y=0.0018)
+  annotate('text',label = 'B',x=0.6,y=0.0018)
 
 multiplot(Fig1A,Fig1B)
 
@@ -146,30 +146,11 @@ PAGEBREAK
 
 
 
-```{r Figure 2,fig.width=9,fig.height=9}
-
-Fig2A <- ggplot(juvseason,
-       aes(x = CatchYear,
-           y = TLKBmean,
-           col = Season)) +
-  ylab('Telomere length') + 
-  xlab('Year') +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 14), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16),
-        legend.position = 'none') +
-  geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse),
-                  position = position_dodge(width = 0.2)) +
-  scale_color_manual(values = wes_palette("Royal1")) +
-  annotate('text',label = 'A',x=1995,y=10)
-
-
+```{r Figure 2,fig.width=5,fig.height=9}
 
 ####################
 
-Fig2B <- ggplot(juvseason,
+Fig2A <- ggplot(juvseason,
        aes(x = Insect,
            y = TLKBmean,
            col = Season)) +
@@ -182,36 +163,17 @@ Fig2B <- ggplot(juvseason,
         axis.title.x = element_text(size = 16),
         legend.position = 'none') +
   geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
-  stat_smooth(method = 'lm',se=T,col = 'darkgrey') +
-  scale_color_manual(values = wes_palette("Royal1")) +
-  annotate('text',label = 'B',x=-1.5,y=8)
+  stat_smooth(method = 'lm',se = F,col = 'black') +
+  scale_color_manual(values = c('black',grey(0.4))) +
+  annotate('text',label = 'A',x=-1.5,y=8)
 
 ################################
 
 
 temp <- loss.season[complete.cases(loss.season),]
 
-Fig2C <- ggplot(temp,
-       aes(x = CatchYear,
-           y = TROCmean,
-           col = Season)) +
-  ylab('Corrected telomere loss') + 
-  xlab('Year') +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 14), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16),
-        legend.position = 'none') +
-  geom_pointrange(aes(ymin=TROCmean-TROCse,ymax=TROCmean+TROCse),
-                  position = position_dodge(width = 0.2)) +
-  scale_color_manual(values = wes_palette("Royal1")) +
-  annotate('text',label = 'C',x=1995,y=0.005)
-
-
-
 ####################################
-Fig2D <- ggplot(temp,
+Fig2B <- ggplot(temp,
        aes(x = Insect,
            y = TROCmean,
            col = Season)) +
@@ -224,11 +186,11 @@ Fig2D <- ggplot(temp,
         axis.title.y = element_text(size = 16,vjust=0.8),
         axis.title.x = element_text(size = 16),
         legend.position = 'none') +
-  stat_smooth(method = 'lm', se=T, col = 'darkgrey') +
-  scale_color_manual(values = wes_palette("Royal1")) +
-  annotate('text',label = 'D',x=-1.5,y=0.0075)
+  stat_smooth(method = 'lm',se = F,  col = 'black') +
+  scale_color_manual(values = c('black',grey(0.4))) +
+  annotate('text',label = 'B',x=-1.5,y=0.0075)
 
-multiplot(Fig2A,Fig2B,Fig2C,Fig2D,layout=matrix(1:4,2,2))
+multiplot(Fig2A,Fig2B)
 
 ```
 
@@ -340,8 +302,8 @@ Fig3C <- ggplot(chicks,
         axis.title.y = element_text(size = 16,vjust=0.8),
         axis.title.x = element_text(size = 16)) +
   geom_point(size=3) +
-  stat_smooth(method = 'lm',col = 'black') +
-  scale_color_manual(values = wes_palette("Royal1")) +
+  stat_smooth(method = 'lm',se = F,col = 'black') +
+  scale_color_manual(values = c('black',grey(0.4))) +
   annotate('text',label = 'C',x=19,y=15)
 
 
@@ -484,7 +446,7 @@ Fig5A <- ggplot(juvseason,
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
         legend.position = 'none') +
-  scale_color_manual(values = wes_palette("Royal1")) +
+  scale_color_manual(values = c('black',grey(0.4))) +
   annotate('text',x=2.5,y=12.5,label='A')
 
 
@@ -506,8 +468,8 @@ Fig5B <- ggplot(loss.season,
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
         legend.position = 'none') +
-  scale_color_manual(values = wes_palette("Royal1")) +
-  stat_smooth(method = 'lm',col = 'darkgrey',fullrange = T) +
+  scale_color_manual(values = c('black',grey(0.4))) +
+  stat_smooth(method = 'lm',se = F,col = 'black',fullrange = T) +
   annotate('text',x=-0.004,y=14,label='B')
 
 
@@ -554,7 +516,7 @@ Fig6A <- ggsurv(s1,plot.cens=F) +
         legend.text = element_text(size = 12),
         legend.title = element_blank()) +
   scale_colour_manual(name = 'TL',
-                      values = c('darkred','red')) +
+                      values = c('black',grey(0.4))) +
   guides(linetype=F) +
   annotate('text',x=0.5,y=1.1,label='A')
 
@@ -574,7 +536,7 @@ Fig6B <- ggsurv(s2,plot.cens=F) +
         legend.text = element_text(size = 12),
         legend.title = element_blank()) +
   scale_colour_manual(name = 'TL',
-                      values = c('darkred','red')) +
+                      values = c('black',grey(0.4))) +
   guides(linetype=F) +
   annotate('text',x=0.5,y=1.1,label='B')
 
@@ -594,7 +556,7 @@ Fig6C <- ggsurv(s2,plot.cens=F) +
         legend.text = element_text(size = 12),
         legend.title = element_blank()) +
   scale_colour_manual(name = 'TL',
-                      values = c('darkred','red')) +
+                      values = c('black',grey(0.4))) +
   guides(linetype=F) +
   annotate('text',x=0.5,y=1.1,label='C')
 

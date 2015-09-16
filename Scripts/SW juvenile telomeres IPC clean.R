@@ -279,6 +279,11 @@ juvseason <- ddply(juv,
 juvseason$cenTL <- juvseason$TLKBmean-mean(juvseason$TLKBmean)
 juvseason <- subset(juvseason,n>2)
 
+chickseason <- aggregate(TLKB~Insect,mean,data=chickall)
+flseason <- aggregate(TLKB~Insect,mean,data=subset(FlSAall,Ageclass == 'FL'))
+saseason <- aggregate(TLKB~Insect,mean,data=subset(FlSAall,Ageclass == 'SA')) 
+                      
+
 loss.season <- ddply(Loss,
                    .(FieldPeriodID,Season),
                    summarize,
