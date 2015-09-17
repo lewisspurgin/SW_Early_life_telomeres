@@ -1,5 +1,7 @@
 ---
-output: word_document
+output:
+  word_document:
+    reference_docx: myref.docx
 ---
 
 ###Supplementary information for Spurgin *et al.* "Telomeres reveal complex silver spoon effects in a wild population"
