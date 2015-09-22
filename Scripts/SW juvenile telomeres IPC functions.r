@@ -79,11 +79,10 @@ correctedimp <- function(importance,baselineimportance)
 
 
 
-
 #Combine summary table from modelavereging with relative importance values
 #to produce a publication-ready table
 imptable <- function(modelavg,imp)
-{  temp <- cbind(summary(modelavg)$coefmat[,1:2],confint(modelavg))
+{  temp <- cbind(summary(modelavg)$coefmat.subset[,1:2],confint(modelavg))
    temp <- temp[rownames(temp) != '(Intercept)',]
    temp <- cbind(temp,rep(NA,nrow(temp)))
    colnames(temp)[5] <- 'imp'
@@ -192,25 +191,25 @@ pganchor <- local({
     }
   }
 })
-
-knit_hooks$set( anchor = function(before, options, envir) {
-  if ( before ) {
-    sprintf('<a name="%s"/>\n', options$label )
-  }
-})
-
-knit_hooks$set( echo.label = function(before, options, envir) {
-  if ( before ) {
-    sprintf('> %s', options$label )
-  }
-})
-
-knit_hooks$set( pgbreak = function(before, options, envir) {
-  if ( !before ) {
-    pganchor();
-  }
-})
-
+# 
+# knit_hooks$set( anchor = function(before, options, envir) {
+#   if ( before ) {
+#     sprintf('<a name="%s"/>\n', options$label )
+#   }
+# })
+# 
+# knit_hooks$set( echo.label = function(before, options, envir) {
+#   if ( before ) {
+#     sprintf('> %s', options$label )
+#   }
+# })
+# 
+# knit_hooks$set( pgbreak = function(before, options, envir) {
+#   if ( !before ) {
+#     pganchor();
+#   }
+# })
+# 
 
 
 
@@ -439,9 +438,9 @@ round2 <- function(x)
   }
   }
 
-round3 <- function(x)
+round3 <- function(x,lessthan = T)
 {
-  if(x < 0.001)
+  if(lessthan == T && x < 0.001)
   {
     return('< 0.001')
   } else

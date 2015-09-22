@@ -252,8 +252,8 @@ for(i in 1:nrow(Loss))
 }
 
 Loss <- Loss[!(is.na(Loss$cenTROC)),]
-Loss <- subset(subset(Loss,TROC > -0.01),TROC < 0.01)
-Loss <- subset(Loss,TimeDiff<1500)
+Loss <- subset(subset(Loss,TROC > -0.01),TROC < 0.02)
+Loss <- subset(subset(Loss,TimeDiff<1500),TimeDiff>365)
 
 
 # Get rid of stuff not to be used -----------------------------------------
@@ -279,10 +279,49 @@ juvseason <- ddply(juv,
 juvseason$cenTL <- juvseason$TLKBmean-mean(juvseason$TLKBmean)
 juvseason <- subset(juvseason,n>2)
 
-chickseason <- aggregate(TLKB~Insect,mean,data=chickall)
-flseason <- aggregate(TLKB~Insect,mean,data=subset(FlSAall,Ageclass == 'FL'))
-saseason <- aggregate(TLKB~Insect,mean,data=subset(FlSAall,Ageclass == 'SA')) 
-                      
+chickseason <- ddply(chicks,
+                   .(FieldPeriodID,Season),
+                   summarize,
+                   TLKBmean = mean(TLKB),
+                   TLKBse = se(TLKB),
+                   Tarsus = mean(Tarsus),
+                   Insect = mean(Insect),
+                   Lifespan = mean(RemainingLife),
+                   Lifespanse = se(RemainingLife),
+                   CatchYear = mean(CatchYear),
+                   n = length(TLKB))
+chickseason$cenTL <- chickseason$TLKBmean-mean(chickseason$TLKBmean)
+chickseason <- subset(chickseason,n>2)
+
+
+flseason <- ddply(subset(FlSA,Ageclass == 'FL'),
+                     .(FieldPeriodID,Season),
+                     summarize,
+                     TLKBmean = mean(TLKB),
+                     TLKBse = se(TLKB),
+                     Tarsus = mean(Tarsus),
+                     Insect = mean(Insect),
+                     Lifespan = mean(RemainingLife),
+                     Lifespanse = se(RemainingLife),
+                     CatchYear = mean(CatchYear),
+                     n = length(TLKB))
+flseason$cenTL <- flseason$TLKBmean-mean(flseason$TLKBmean)
+flseason <- subset(flseason,n>2)
+
+saseason <- ddply(subset(FlSA,Ageclass == 'SA'),
+                  .(FieldPeriodID,Season),
+                  summarize,
+                  TLKBmean = mean(TLKB),
+                  TLKBse = se(TLKB),
+                  Tarsus = mean(Tarsus),
+                  Insect = mean(Insect),
+                  Lifespan = mean(RemainingLife),
+                  Lifespanse = se(RemainingLife),
+                  CatchYear = mean(CatchYear),
+                  n = length(TLKB))
+saseason$cenTL <- saseason$TLKBmean-mean(saseason$TLKBmean)
+saseason <- subset(saseason,n>2)
+           
 
 loss.season <- ddply(Loss,
                    .(FieldPeriodID,Season),
@@ -294,3 +333,4 @@ loss.season <- ddply(Loss,
                    Lifespanse = se(RemainingLife),
                    n = length(TROC),
                    CatchYear = mean(CatchYear))
+loss.season <- subset(loss.season,TROCse<0.005)
