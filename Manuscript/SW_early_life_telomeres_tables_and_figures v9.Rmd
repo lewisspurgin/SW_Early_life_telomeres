@@ -36,17 +36,15 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 
 **Figure Legends**
 
-**Figure 1** Telomere length (mean $\pm$ s.e.) and age Seychelles warblers, based on cross-sectional **(A)** and longitudinal **(B)** data. In **B**, telomere loss is a standardised and corrected rate (see methods for details) based on the difference in telomere length from the sample taken from birds in their first year of life, and the first available sampling as an adult. Values above zero indicate telomere shortening in early life.
+**Figure 1** Telomere length (mean $\pm$ s.e.) and age in Seychelles warblers, based on cross-sectional **(A)** and longitudinal **(B)** data. In **B**, telomere loss is a standardised and corrected rate (see methods for details) based on the difference in telomere length from the sample taken from birds in their first year of life, and the first available sample as an adult. Values above zero indicate telomere shortening in early life.
 
-**Figure 2** Temporal variation in early-life telomere dynamics in the Seychelles warbler based on cross-sectional **(A)** and longitudinal **(B)** data (see Fig. 1 and main text for details). Points and error bars represent mean and standard error telomere length for all birds born in each main (black) or minor (grey) breeding season, in relation to island-wide food availability. Trend lines represent fitted values from a linear regression.
+**Figure 2** Temporal variation in early-life telomere dynamics in the Seychelles warbler based on cross-sectional **(A)** and longitudinal **(B)** data (see Fig. 1 and main text for details). Points and error bars represent mean and standard error telomere length for all birds born in each main (black) or minor (grey) breeding season, in relation to island-wide food availability. Lines and shaded areas represent fitted values and 95% confidence limits from a linear regression.
 
-**Figure 3** Factors affecting telomere length in Seychelles warbler chicks. **A** Model averaged estimates and 95% confidence intervals for all explanatory terms used in a linear model with telomere length as the response variable. Numbers in brackets are the relative importance of each term in the top model set (see main text for details; TQ = territory quality). **B** Presence/absence of helpers and **c** tarsus length in relation to raw telomere length. Points and error bars in **B** are mean $\pm$ s.e., and the line and shaded areas from **C** represent fitted values and 95% confidence limits from a linear regression.
+**Figure 3** Factors affecting early-life telomere length in Seychelles warblers at the individual level, within seasons. **A** Model averaged estimates and 95% confidence intervals for alxplanatory terms used in a linear model with telomere length as the response variable. Numbers in brackets are the relative importance of each term in the top model set (see main text for details; TQ = territory quality). **B** Presence/absence of helpers and **c** tarsus length in relation to raw telomere length in nestlings (black, solid lines) and fledglings (grey, dashed lines). Points and error bars in **B** are mean $\pm$ s.e., and the line and shaded areas from **C** represent fitted values and 95% confidence limits from a linear regression.
 
-**Figure 4** Factors affecting telomere length in Seychelles warblers fledglings **(A)** and subadults **(B)**. Points and error bars represent model averaged estimates and 95% confidence intervals for all explanatory terms used in a linear model with  telomere length as the response variable. Numbers in brackets are the relative importance of each term in the top model set (see main text for details; TQ = territory quality).
+**Figure 4** Temporal, cohort-level variation in early-life telomere dynamics and lifespan in the Seychelles warbler, based on cross-sectional **(A)** and longitudinal **(B)** data (see Fig. 1 and main text for details). Points and error bars represent means and $\pm$ s.e., respectively, of all birds born in each main (black) or minor (grey) breeding season. Lines and shaded areas represent fitted values and 95% confidence limits from a linear regression.
 
-**Figure 5** Temporal, cohort-level variation in early-life telomere dynamics and lifespan in the Seychelles warbler, based on cross-sectional **(A)** and longitudinal **(B)** data (see Fig. 1 and main text for details). Points and error bars represent means and $\pm$ s.e., respectively, of all birds born in each main (black) or minor (grey) breeding season. 
-
-**Figure 6** Kaplan-Meier curves showing the relationship between telomere length and survival in chick (**A**), fledgling  (**B**) and sub-adult (**C**) Seychelles warblers. Telomere length is binned into groups here for visualisation purposes only (long and short = greater than or less than median telomere length, repectively).
+**Figure 5** Kaplan-Meier curves showing the relationship between telomere length and survival for individual Seychelles warblers measured as chicks (**A**), and fledglings  (**B**). Telomere length is binned into groups here for visualisation purposes only (long and short = greater than or less than median telomere length, repectively).
 
 
 
@@ -64,11 +62,8 @@ PAGEBREAK
 #1A
 ######################
 
-temp <- dd
-levels(temp$Ageclass) <- c('Chicks',rep('Fledglings',3),'Sub-adults','Adults')
-
-ddFig1A <- ddply(temp,
-                 .(Ageclass),
+ddFig1A <- ddply(dd,
+                 .(Fledged),
                  summarize,
                  TLKBmean = mean(TLKB),
                  TLKBse = se(TLKB))
@@ -76,7 +71,7 @@ ddFig1A <- ddply(temp,
 
 
 Fig1A <- ggplot(ddFig1A,
-       aes(x = Ageclass,
+       aes(x = Fledged,
            y = TLKBmean)) +
   ylab('Telomere length (kb)') + 
   xlab('') +
@@ -99,11 +94,8 @@ Fig1A <- ggplot(ddFig1A,
 #1B
 ######################
 
-temp <- Loss
-levels(temp$Ageclass) <- c('Chicks','Fledglings','Sub-adults')
-
-ddFig1B <- ddply(temp,
-                 .(Ageclass),
+ddFig1B <- ddply(Loss,
+                 .(Fledged),
                  summarize,
                  TROCmean = mean(TROC),
                  TROCse = se(TROC))
@@ -111,7 +103,7 @@ ddFig1B <- ddply(temp,
 
 
 Fig1B <- ggplot(ddFig1B,
-       aes(x = Ageclass,
+       aes(x = Fledged,
            y = TROCmean)) +
   ylab('Corrected telomere loss') + 
   xlab('') +
@@ -163,7 +155,7 @@ Fig2A <- ggplot(juvseason,
         axis.title.x = element_text(size = 16),
         legend.position = 'none') +
   geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
-  stat_smooth(method = 'lm',se = F,col = 'black') +
+  stat_smooth(method = 'lm',se = T,col = 'black') +
   scale_color_manual(values = c('black',grey(0.4))) +
   annotate('text',label = 'A',x=-1.5,y=8)
 
@@ -186,7 +178,7 @@ Fig2B <- ggplot(temp,
         axis.title.y = element_text(size = 16,vjust=0.8),
         axis.title.x = element_text(size = 16),
         legend.position = 'none') +
-  stat_smooth(method = 'lm',se = F,  col = 'black') +
+  stat_smooth(method = 'lm',se = T,  col = 'black') +
   scale_color_manual(values = c('black',grey(0.4))) +
   annotate('text',label = 'B',x=-1.5,y=0.0075)
 
@@ -221,8 +213,8 @@ PAGEBREAK
 ######################
 
 #Run the model
-lm2 <- lm(cenTL ~ cenHelper + cenNonHelper + Sex + cenTarsus  + cenTQ,
-            data = chickall)
+lm2 <- lm(cenTL ~ Fledged*(cenHelper + cenNonHelper + Sex + cenTarsus  + cenTQ),
+            data = juvall)
 
 #Model averaging
 
@@ -243,14 +235,22 @@ nams[nams == 'cenNonHelper'] <- 'Non helpers'
 nams[nams == 'SexMales'] <- 'Sex'
 nams[nams == 'cenTQ'] <- 'TQ'
 nams[nams == 'cenHelper'] <- 'Helpers'
+nams[nams == 'cenHelper:FledgedFledglings'] <- 'Ageclass x Helpers'
+nams[nams == 'cenNonHelper:FledgedFledglings'] <- 'Ageclass x Non helpers'
+nams[nams == 'cenTarsus:FledgedFledglings'] <- 'Ageclass x Tarsus'
+nams[nams == 'cenTQ:FledgedFledglings'] <- 'Ageclass x TQ'
+nams[nams == 'FledgedFledglings:SexMales'] <- 'Ageclass x Sex'
+nams[nams == 'FledgedFledglings'] <- 'Ageclass'
 
 rownames(table2) <- nams
 colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
 
+
 table2 <- data.frame(table2,myx=row.names(table2))
 
 Fig3A <- forestplot(table2) +
-  annotate('text',label = 'A',x=0.6,y=0.6)
+  ylim(c(-1,1)) +
+  annotate('text',label = 'A',x=0.6,y=1)
 
 
 
@@ -258,11 +258,11 @@ Fig3A <- forestplot(table2) +
 #3B
 ######################
 
-temp <- chicks
-temp$HelperF <- ifelse(chicks$Helper>0,'Helpers present','Helpers absent')
+temp <- juv
+temp$HelperF <- ifelse(juv$Helper>0,'Helpers present','Helpers absent')
 
 ddFig3B <- ddply(temp,
-                 .(HelperF),
+                 .(HelperF,Fledged),
                  summarize,
                  TLKBmean = mean(TLKB),
                  TLKBse = se(TLKB))
@@ -271,7 +271,9 @@ ddFig3B <- ddply(temp,
 
 Fig3B <- ggplot(ddFig3B,
        aes(x = HelperF,
-           y = TLKBmean)) +
+           y = TLKBmean,
+           col = Fledged,
+           lty = Fledged)) +
   ylab('Telomere length (kb)') + 
   xlab('') +
   theme_classic() +
@@ -279,10 +281,12 @@ Fig3B <- ggplot(ddFig3B,
         axis.text.y = element_text(size = 14), 
         axis.title.y = element_text(size = 16,vjust=0.8),
         axis.title.x = element_text(size = 16),
-        legend.position = c(0.1,0.9),
+        legend.position = 'none',
         legend.title = element_blank(),
         legend.text = element_text(size = 15)) +
-  geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
+  geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse),
+                  position = position_dodge(width = 0.2)) +
+  scale_color_manual(values = c('black',grey(0.4))) +
   annotate('text',label = 'B',x=0.5,y=8)
 
 
@@ -291,18 +295,21 @@ Fig3B <- ggplot(ddFig3B,
 #3C
 ######################
 
-Fig3C <- ggplot(chicks,
+Fig3C <- ggplot(juv,
                 aes(x = Tarsus,
-                    y = TLKB)) +
+                    y = TLKB,
+                    col=Fledged,
+                    lty = Fledged)) +
   ylab('Telomere length (kb)') + 
   xlab('Tarsus length (mm)') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 14), 
         axis.text.y = element_text(size = 14), 
         axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16)) +
+        axis.title.x = element_text(size = 16),
+        legend.position = 'none') +
   geom_point(size=3) +
-  stat_smooth(method = 'lm',se = F,col = 'black') +
+  stat_smooth(method = 'lm',se = T) +
   scale_color_manual(values = c('black',grey(0.4))) +
   annotate('text',label = 'C',x=19,y=15)
 
@@ -310,128 +317,22 @@ Fig3C <- ggplot(chicks,
 multiplot(Fig3A,Fig3B,Fig3C,layout=matrix(c(1,1,2,3),2,2,byrow=TRUE))
 
 
+
+
+
 ```
 
 
 PAGEBREAK
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
 **Figure 4**
 
-```{r Figure 4,fig.width=5,fig.height=9}
-
-######################
-#3A
-######################
-Fl <- subset(FlSAall,Ageclass == 'FL')
-
-#Run the model
-lm2 <- lm(cenTL ~ cenHelper + cenNonHelper + Sex + cenTarsus  + cenTQ,
-            data = Fl)
-
-#Model averaging
-lm3 <- dredge(lm2)
-lmavg <- model.avg(lm3,subset = delta <=6)
-myimp <- importance(lmavg) #Relative importance of each explanatory variable
-  
-
-#Put it all into a nice table
-table2 <- imptable(lmavg,myimp)
-table2 <- signif(table2,2)
+```{r Figure 4,fig.height=8,fig.width=4}
 
 
-nams <- rownames(table2)
-nams[nams == 'cenTarsus'] <- 'Tarsus'
-nams[nams == 'cenNonHelper'] <- 'Non helpers'
-nams[nams == 'SexMales'] <- 'Sex'
-nams[nams == 'cenTQ'] <- 'TQ'
-nams[nams == 'cenHelper'] <- 'Helpers'
-
-rownames(table2) <- nams
-colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
-
-table2 <- data.frame(table2,myx=row.names(table2))
-
-Fig4A <- forestplot(table2) +
-  annotate('text',label = 'A',x=0.6,y=0.8)
-
-
-######################
-#4B
-######################
-SA <- subset(FlSAall,Ageclass == 'SA')
-
-#Run the model
-lm2 <- lm(cenTL ~ cenHelper + cenNonHelper + Sex + cenTarsus  + cenTQ,
-            data = SA)
-
-
-#Model averaging
-lm4 <- dredge(lm2)
-lmavg <- model.avg(lm4,subset = delta <=6)
-myimp <- importance(lmavg) #Relative importance of each explanatory variable
-  
-
-#Put it all into a nice table
-table2 <- imptable(lmavg,myimp)
-table2 <- signif(table2,2)
-
-
-nams <- rownames(table2)
-nams[nams == 'cenTarsus'] <- 'Tarsus'
-nams[nams == 'cenNonHelper'] <- 'Non helpers'
-nams[nams == 'SexMales'] <- 'Sex'
-nams[nams == 'cenTQ'] <- 'TQ'
-nams[nams == 'cenHelper'] <- 'Helpers'
-
-rownames(table2) <- nams
-colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
-
-table2 <- data.frame(table2,myx=row.names(table2))
-
-Fig4B <- forestplot(table2) +
-  annotate('text',label = 'B',x=0.6,y=0.6)
-
-multiplot(Fig4A,Fig4B)
-
-
-```
-
-PAGEBREAK
-
-
-
-
-
-
-
-
-**Figure 5**
-
-```{r Figure 5,fig.height=8,fig.width=4}
-
-
-Fig5A <- ggplot(juvseason,
+Fig4A <- ggplot(juvseason,
                 aes(x = TLKBmean,
                     y = Lifespan,
                     col = Season)) +
@@ -447,13 +348,12 @@ Fig5A <- ggplot(juvseason,
         axis.title.x = element_text(size = 14),
         legend.position = 'none') +
   scale_color_manual(values = c('black',grey(0.4))) +
-  annotate('text',x=2.5,y=12.5,label='A')
+  annotate('text',x=2.5,y=10,label='A')
 
 
 
 
-
-Fig5B <- ggplot(loss.season,
+Fig4B <- ggplot(loss.season,
                 aes(x = TROCmean,
                     y = Lifespan,
                     col = Season)) +
@@ -469,11 +369,11 @@ Fig5B <- ggplot(loss.season,
         axis.title.x = element_text(size = 14),
         legend.position = 'none') +
   scale_color_manual(values = c('black',grey(0.4))) +
-  stat_smooth(method = 'lm',se = F,col = 'black',fullrange = T) +
-  annotate('text',x=-0.004,y=14,label='B')
+  stat_smooth(method = 'lm',se = T,col = 'black',fullrange = T) +
+  annotate('text',x=-0.004,y=12.5,label='B')
 
 
-multiplot(Fig5A,Fig5B)
+multiplot(Fig4A,Fig4B)
 
 ```
 
@@ -498,15 +398,16 @@ PAGEBREAK
 
 
 
-**Figure 6**
+**Figure 5**
 
-```{r Figure 6,fig.height=9,fig.width=4}
+```{r Figure 5,fig.height=8,fig.width=4}
 
 s1 <- survfit(Surv(time = Lifespan+1, event = Died)~TLF, data = chicks)
-Fig6A <- ggsurv(s1,plot.cens=F) + 
+Fig5A <- ggsurv(s1,plot.cens=F) + 
   theme_classic() +
   ylab('Proportion survived') + 
   xlab('Age (years)') + 
+  xlim(c(0,15)) +
   theme_classic() +
   theme(axis.text.x = element_text(size = 14), 
         axis.text.y = element_text(size = 14), 
@@ -522,11 +423,12 @@ Fig6A <- ggsurv(s1,plot.cens=F) +
 
 
 ###########################################
-s2 <- survfit(Surv(time = Lifespan+1, event = Died)~TLF, data = subset(FlSAall,Ageclass == 'FL'))
-Fig6B <- ggsurv(s2,plot.cens=F) + 
+s2 <- survfit(Surv(time = Lifespan+1, event = Died)~TLF, data = FlSAall)
+Fig5B <- ggsurv(s2,plot.cens=F) + 
   theme_classic() +
   ylab('Proportion survived') + 
   xlab('Age (years)') + 
+  xlim(c(0,15)) +
   theme_classic() +
   theme(axis.text.x = element_text(size = 14), 
         axis.text.y = element_text(size = 14), 
@@ -540,27 +442,7 @@ Fig6B <- ggsurv(s2,plot.cens=F) +
   guides(linetype=F) +
   annotate('text',x=0.5,y=1.1,label='B')
 
-###########################################
-
-s2 <- survfit(Surv(time = Lifespan+1, event = Died)~TLF, data = subset(FlSAall,Ageclass == 'SA'))
-Fig6C <- ggsurv(s2,plot.cens=F) + 
-  theme_classic() +
-  ylab('Proportion survived') + 
-  xlab('Age (years)') + 
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 14), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16),
-        legend.position = 'none',
-        legend.text = element_text(size = 12),
-        legend.title = element_blank()) +
-  scale_colour_manual(name = 'TL',
-                      values = c('black',grey(0.4))) +
-  guides(linetype=F) +
-  annotate('text',x=0.5,y=1.1,label='C')
-
-multiplot(Fig6A,Fig6B,Fig6C)
+multiplot(Fig5A,Fig5B)
 
 
 ```

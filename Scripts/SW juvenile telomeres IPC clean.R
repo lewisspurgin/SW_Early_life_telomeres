@@ -70,7 +70,10 @@ dd$Age <- dd$CatchYear-dd$LayYear
 dd <- droplevels(dd[dd$Ageclass != '',])
 levels(dd$Ageclass) <- c('A','CH','FL','FL','FL','SA')
 dd$Ageclass <- factor(dd$Ageclass,levels = c('CH','FL','FL','FL','SA','A'))
-
+dd$Fledged <- ifelse(dd$Ageclass == 'CH','Nestlings',
+                     ifelse(dd$Ageclass == 'A','Adults',
+                            'Fledglings'))
+dd$Fledged <- factor(dd$Fledged,levels = c('Nestlings','Fledglings','Adults'))
 
 
 dd$Agemonths <- ifelse(dd$Ageclass == 'CH',1,
@@ -206,6 +209,8 @@ for(i in 1:nrow(juv))
   juv$cenNonHelper[i] <- (juv$NonHelper[i] -  mean(currentdata$NonHelper))/sd(currentdata$NonHelper)
 }
 
+juv <- subset(juv,cenTQ<4)
+
 
 FlSA <- subset(juv,Ageclass!='CH')
 chicks <- subset(juv,Ageclass == 'CH')
@@ -277,7 +282,7 @@ juvseason <- ddply(juv,
                    CatchYear = mean(CatchYear),
                    n = length(TLKB))
 juvseason$cenTL <- juvseason$TLKBmean-mean(juvseason$TLKBmean)
-juvseason <- subset(juvseason,n>2)
+juvseason <- subset(juvseason,n>5)
 
 chickseason <- ddply(chicks,
                    .(FieldPeriodID,Season),
@@ -291,10 +296,10 @@ chickseason <- ddply(chicks,
                    CatchYear = mean(CatchYear),
                    n = length(TLKB))
 chickseason$cenTL <- chickseason$TLKBmean-mean(chickseason$TLKBmean)
-chickseason <- subset(chickseason,n>2)
+chickseason <- subset(chickseason,n>5)
 
 
-flseason <- ddply(subset(FlSA,Ageclass == 'FL'),
+flseason <- ddply(FlSA,
                      .(FieldPeriodID,Season),
                      summarize,
                      TLKBmean = mean(TLKB),
@@ -306,22 +311,7 @@ flseason <- ddply(subset(FlSA,Ageclass == 'FL'),
                      CatchYear = mean(CatchYear),
                      n = length(TLKB))
 flseason$cenTL <- flseason$TLKBmean-mean(flseason$TLKBmean)
-flseason <- subset(flseason,n>2)
-
-saseason <- ddply(subset(FlSA,Ageclass == 'SA'),
-                  .(FieldPeriodID,Season),
-                  summarize,
-                  TLKBmean = mean(TLKB),
-                  TLKBse = se(TLKB),
-                  Tarsus = mean(Tarsus),
-                  Insect = mean(Insect),
-                  Lifespan = mean(RemainingLife),
-                  Lifespanse = se(RemainingLife),
-                  CatchYear = mean(CatchYear),
-                  n = length(TLKB))
-saseason$cenTL <- saseason$TLKBmean-mean(saseason$TLKBmean)
-saseason <- subset(saseason,n>2)
-           
+flseason <- subset(flseason,n>5)
 
 loss.season <- ddply(Loss,
                    .(FieldPeriodID,Season),

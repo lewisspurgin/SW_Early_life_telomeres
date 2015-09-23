@@ -46,8 +46,8 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 ```{r Table S1}
 
 #Run the model
-lm1 <- lm(cenTL ~ cenHelper + cenNonHelper + Sex + cenTarsus  + cenTQ,
-            data = chickall)
+lm1 <- lm(cenTL ~ Fledged*(cenHelper + cenNonHelper + Sex + cenTarsus  + cenTQ),
+            data = juvall)
 
 
 #Model averaging
@@ -61,89 +61,21 @@ nams[nams == 'cenNonHelper'] <- 'Non helpers'
 nams[nams == 'SexMales'] <- 'Sex'
 nams[nams == 'cenTQ'] <- 'TQ'
 nams[nams == 'cenHelper'] <- 'Helpers'
+nams[nams == 'cenHelper:Fledged'] <- 'Ageclass x Helpers'
+nams[nams == 'cenNonHelper:Fledged'] <- 'Ageclass x Non helpers'
+nams[nams == 'cenTarsus:Fledged'] <- 'Ageclass x Tarsus'
+nams[nams == 'cenTQ:Fledged'] <- 'Ageclass x TQ'
+nams[nams == 'Fledged:SexMales'] <- 'Ageclass x Sex'
+nams[nams == 'Fledged'] <- 'Ageclass'
+
 
 colnames(t1) <- nams
 
-tableS1 <- data.frame(Model = apply(t1,1,getterms,c(2:6)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+tableS1 <- data.frame(Model = apply(t1,1,getterms,c(2:12)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
 colnames(tableS1) <- c('Model','df','AICc', 'Delta AICc','Weight')
 rownames(tableS1) <- NULL
 tableS1$Model[tableS1$Model == ''] <- 'Null model'
 tableS1[,3:5] <- lapply(tableS1[,3:5],as.numeric)
 kable(tableS1,digits=2)
-
-```
-
-
-PAGEBREAK
-
-
-**Table S2** Model selection table for analysis of factors affecting early life telomere length in Seychelles warbler fledglings. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here.
-
-```{r Table S2}
-
-temp <- subset(FlSAall,Ageclass == 'FL')
-
-#Run the model
-lm1 <- lm(cenTL ~ cenHelper + cenNonHelper + Sex + cenTarsus  + cenTQ,
-            data = temp)
-
-
-#Model averaging
-lm2 <- dredge(lm1)
-t1 <- as.matrix(subset(lm2, delta<=6))
-
-#Sort out row/col names
-nams <- colnames(t1)
-nams[nams == 'cenTarsus'] <- 'Tarsus'
-nams[nams == 'cenNonHelper'] <- 'Non helpers'
-nams[nams == 'SexMales'] <- 'Sex'
-nams[nams == 'cenTQ'] <- 'TQ'
-nams[nams == 'cenHelper'] <- 'Helpers'
-
-colnames(t1) <- nams
-
-tableS2 <- data.frame(Model = apply(t1,1,getterms,c(2:6)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
-colnames(tableS2) <- c('Model','df','AICc', 'Delta AICc','Weight')
-rownames(tableS2) <- NULL
-tableS2$Model[tableS2$Model == ''] <- 'Null model'
-tableS2[,3:5] <- lapply(tableS2[,3:5],as.numeric)
-kable(tableS2,digits=2)
-
-```
-
-
-
-
-**Table S3** Model selection table for analysis of factors affecting early life telomere length in Seychelles warbler sub-adults Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here.
-
-```{r Table S3}
-
-temp <- subset(FlSAall,Ageclass == 'SA')
-
-#Run the model
-lm1 <- lm(cenTL ~ cenHelper + cenNonHelper + Sex + cenTarsus  + cenTQ,
-            data = temp)
-
-
-#Model averaging
-lm2 <- dredge(lm1)
-t1 <- as.matrix(subset(lm2, delta<=6))
-
-#Sort out row/col names
-nams <- colnames(t1)
-nams[nams == 'cenTarsus'] <- 'Tarsus'
-nams[nams == 'cenNonHelper'] <- 'Non helpers'
-nams[nams == 'SexMales'] <- 'Sex'
-nams[nams == 'cenTQ'] <- 'TQ'
-nams[nams == 'cenHelper'] <- 'Helpers'
-
-colnames(t1) <- nams
-
-tableS3 <- data.frame(Model = apply(t1,1,getterms,c(2:6)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
-colnames(tableS3) <- c('Model','df','AICc', 'Delta AICc','Weight')
-rownames(tableS3) <- NULL
-tableS3$Model[tableS3$Model == ''] <- 'Null model'
-tableS3[,3:5] <- lapply(tableS3[,3:5],as.numeric)
-kable(tableS3,digits=2)
 
 ```
