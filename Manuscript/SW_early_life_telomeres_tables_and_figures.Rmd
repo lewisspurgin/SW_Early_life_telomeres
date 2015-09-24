@@ -17,8 +17,6 @@ opts_chunk$set(echo=FALSE,
                warning=FALSE,
                message=FALSE,
                fig.path='../Figures/',
-               fig.width= 4,
-               fig.height= 8,
                fig.show='asis',
                dev=c('png','pdf'))
 
@@ -40,11 +38,11 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 
 **Figure 2** Temporal variation in early-life telomere dynamics in the Seychelles warbler based on cross-sectional **(A)** and longitudinal **(B)** data (see Fig. 1 and main text for details). Points and error bars represent mean and standard error telomere length for all birds born in each main (black) or minor (grey) breeding season, in relation to island-wide food availability. Lines and shaded areas represent fitted values and 95% confidence limits from a linear regression.
 
-**Figure 3** Factors affecting early-life telomere length in Seychelles warblers at the individual level, within seasons. **A** Model averaged estimates and 95% confidence intervals for alxplanatory terms used in a linear model with telomere length as the response variable. Numbers in brackets are the relative importance of each term in the top model set (see main text for details; TQ = territory quality). **B** Presence/absence of helpers and **c** tarsus length in relation to raw telomere length in nestlings (black, solid lines) and fledglings (grey, dashed lines). Points and error bars in **B** are mean $\pm$ s.e., and the line and shaded areas from **C** represent fitted values and 95% confidence limits from a linear regression.
+**Figure 3** Factors affecting early-life telomere length in Seychelles warblers at the individual level, within seasons. **A** Model averaged estimates and 95% confidence intervals for explanatory terms used in a linear model with telomere length as the response variable. Numbers in brackets are the relative importance of each term in the top model set (see main text for details; TQ = territory quality). **B** Presence/absence of helpers and **c** tarsus length in relation to raw telomere length in nestlings (black, solid lines) and fledglings (grey, dashed lines). Points and error bars in **B** are mean $\pm$ s.e., and the line and shaded areas from **C** represent fitted values and 95% confidence limits from a linear regression.
 
 **Figure 4** Temporal, cohort-level variation in early-life telomere dynamics and lifespan in the Seychelles warbler, based on cross-sectional **(A)** and longitudinal **(B)** data (see Fig. 1 and main text for details). Points and error bars represent means and $\pm$ s.e., respectively, of all birds born in each main (black) or minor (grey) breeding season. Lines and shaded areas represent fitted values and 95% confidence limits from a linear regression.
 
-**Figure 5** Kaplan-Meier curves showing the relationship between telomere length and survival for individual Seychelles warblers measured as chicks (**A**), and fledglings  (**B**). Telomere length is binned into groups here for visualisation purposes only (long and short = greater than or less than median telomere length, repectively).
+**Figure 5** Kaplan-Meier curves showing the relationship between telomere length and survival for individual Seychelles warblers measured as chicks (**A**), and fledglings  (**B**). Telomere length is binned into groups here for visualisation purposes only (long and short = greater than or less than median telomere length, respectively).
 
 
 
@@ -57,7 +55,7 @@ PAGEBREAK
 
 **Figure 1**
 
-```{r Figure 1,fig.width=5,fig.height=9}
+```{r Figure 1,fig.width=4,fig.height=8}
 ######################
 #1A
 ######################
@@ -138,7 +136,7 @@ PAGEBREAK
 
 
 
-```{r Figure 2,fig.width=5,fig.height=9}
+```{r Figure 2,fig.width=4,fig.height=8}
 
 ####################
 
@@ -146,7 +144,7 @@ Fig2A <- ggplot(juvseason,
        aes(x = Insect,
            y = TLKBmean,
            col = Season)) +
-  ylab('Telomere length') + 
+  ylab('Telomere length (kb)') + 
   xlab('Food availability') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 14), 
@@ -298,7 +296,7 @@ Fig3B <- ggplot(ddFig3B,
 Fig3C <- ggplot(juv,
                 aes(x = Tarsus,
                     y = TLKB,
-                    col=Fledged,
+                    col = Fledged,
                     lty = Fledged)) +
   ylab('Telomere length (kb)') + 
   xlab('Tarsus length (mm)') +

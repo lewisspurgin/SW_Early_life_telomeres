@@ -41,7 +41,7 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 
 ```
 
-**Table S1** Model selection table for analysis of factors affecting early life telomere length in Seychelles warbler chicks. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here.
+**Table S1** Model selection table for analysis of factors affecting early life telomere length in Seychelles warblers. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here.
 
 ```{r Table S1}
 
