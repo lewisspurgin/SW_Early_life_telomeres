@@ -13,12 +13,9 @@ library(knitr)
 #Set some options
 options(na.action='na.fail')
 opts_knit$set(root.dir = '..')
-opts_chunk$set(echo=FALSE,
-               warning=FALSE,
+opts_chunk$set(include=FALSE,
                message=FALSE,
-               fig.path='../Figures/',
-               fig.show='asis',
-               dev=c('png','pdf'))
+               fig.show='hide')
 
 ```
 
@@ -34,28 +31,18 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 
 **Figure Legends**
 
-**Figure 1** Telomere length (mean $\pm$ s.e.) and age in Seychelles warblers, based on cross-sectional **(A)** and longitudinal **(B)** data. In **B**, telomere loss is a standardised and corrected rate (see methods for details) based on the difference in telomere length from the sample taken from birds in their first year of life, and the first available sample as an adult. Values above zero indicate telomere shortening in early life.
+**Figure 1** Telomere length (mean $\pm$ s.e.) in relation to age in Seychelles warblers, based on cross-sectional **(A)** and longitudinal **(B)** data. In **B**, telomere loss is a standardised and corrected rate (see Methods for details) based on the difference in telomere length in the sample taken from birds in their first year of life, and the first available sample as an adult. Values above zero indicate telomere shortening in early life.
 
-**Figure 2** Temporal variation in early-life telomere dynamics in the Seychelles warbler based on cross-sectional **(A)** and longitudinal **(B)** data (see Fig. 1 and main text for details). Points and error bars represent mean and standard error telomere length for all birds born in each main (black) or minor (grey) breeding season, in relation to island-wide food availability. Lines and shaded areas represent fitted values and 95% confidence limits from a linear regression.
+**Figure 2** Temporal variation in early-life telomere dynamics in the Seychelles warbler based on cross-sectional **(A)** and longitudinal **(B)** data (see Fig. 1 and main text for details). Points and error bars represent mean and standard error of telomere length for all birds born in each main (black) or minor (grey) breeding season, in relation to island-wide food availability in that season. Lines and shaded areas represent fitted values and 95% confidence limits from a linear regression.
 
-**Figure 3** Factors affecting early-life telomere length in Seychelles warblers at the individual level, within seasons. **A** Model averaged estimates and 95% confidence intervals for explanatory terms used in a linear model with telomere length as the response variable. Numbers in brackets are the relative importance of each term in the top model set (see main text for details; TQ = territory quality). **B** Presence/absence of helpers and **c** tarsus length in relation to raw telomere length in nestlings (black, solid lines) and fledglings (grey, dashed lines). Points and error bars in **B** are mean $\pm$ s.e., and the line and shaded areas from **C** represent fitted values and 95% confidence limits from a linear regression.
+**Figure 3** Factors affecting early-life telomere length in Seychelles warblers at the individual level, within seasons. **A** Model averaged estimates and 95% confidence intervals for explanatory terms used in a linear model with telomere length as the response variable. Numbers in brackets are the relative importance of each term in the top model set (see main text for details; TQ = territory quality). **B,C** Raw telomere length Presence/absence of helpers (**B**) and tarsus length (**C**) in nestlings (black, solid lines) and fledglings (grey, dashed lines). Points and error bars in **B** are means $\pm$ s.e., and the line and shaded areas in **C** represent fitted values and 95% confidence limits from a linear regression.
 
-**Figure 4** Temporal, cohort-level variation in early-life telomere dynamics and lifespan in the Seychelles warbler, based on cross-sectional **(A)** and longitudinal **(B)** data (see Fig. 1 and main text for details). Points and error bars represent means and $\pm$ s.e., respectively, of all birds born in each main (black) or minor (grey) breeding season. Lines and shaded areas represent fitted values and 95% confidence limits from a linear regression.
+**Figure 4** Temporal, cohort-level variation in lifespan in relation to early-life telomere dynamics in the Seychelles warbler, based on cross-sectional **(A)** and longitudinal **(B)** data (see Fig. 1 and main text for details). Points and error bars represent means and $\pm$ s.e., respectively, of all birds born in each main (black, solid lines) or minor (grey, dashed lines) breeding season. Lines and shaded areas represent fitted values and 95% confidence limits from a linear regression.
 
-**Figure 5** Kaplan-Meier curves showing the relationship between telomere length and survival for individual Seychelles warblers measured as chicks (**A**), and fledglings  (**B**). Telomere length is binned into groups here for visualisation purposes only (long and short = greater than or less than median telomere length, respectively).
-
-
+**Figure 5** Kaplan-Meier curves showing the relationship between survival and telomere length for individual Seychelles warblers measured as chicks (**A**), and fledglings  (**B**). Telomere length is binned into groups here for visualisation purposes only (long and short = greater than or less than median telomere length, respectively).
 
 
-
-
-
-
-PAGEBREAK
-
-**Figure 1**
-
-```{r Figure 1,fig.width=4,fig.height=8}
+```{r Figure 1}
 ######################
 #1A
 ######################
@@ -116,27 +103,18 @@ Fig1B <- ggplot(ddFig1B,
   geom_pointrange(aes(ymin=TROCmean-TROCse,ymax=TROCmean+TROCse)) +
   annotate('text',label = 'B',x=0.6,y=0.0018)
 
+
+pdf('Figures/Figure 1.pdf',
+    width = 4,
+    height = 8,
+    paper = 'a4')
 multiplot(Fig1A,Fig1B)
+dev.off()
 
 ```
 
 
-
-
-
-
-
-
-
-
-
-PAGEBREAK
-
-**Figure 2**
-
-
-
-```{r Figure 2,fig.width=4,fig.height=8}
+```{r Figure 2}
 
 ####################
 
@@ -154,7 +132,7 @@ Fig2A <- ggplot(juvseason,
         legend.position = 'none') +
   geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
   stat_smooth(method = 'lm',se = T,col = 'black') +
-  scale_color_manual(values = c('black',grey(0.4))) +
+  scale_color_manual(values = c('black',grey(0.5))) +
   annotate('text',label = 'A',x=-1.5,y=8)
 
 ################################
@@ -177,33 +155,21 @@ Fig2B <- ggplot(temp,
         axis.title.x = element_text(size = 16),
         legend.position = 'none') +
   stat_smooth(method = 'lm',se = T,  col = 'black') +
-  scale_color_manual(values = c('black',grey(0.4))) +
+  scale_color_manual(values = c('black',grey(0.5))) +
   annotate('text',label = 'B',x=-1.5,y=0.0075)
 
+pdf('Figures/Figure 2.pdf',
+    width = 4,
+    height = 8,
+    paper = 'a4')
 multiplot(Fig2A,Fig2B)
+dev.off()
 
 ```
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-PAGEBREAK
-
-**Figure 3**
-
-```{r Figure 3,fig.width=9,fig.height=9}
+```{r Figure 3}
 
 
 ######################
@@ -284,7 +250,7 @@ Fig3B <- ggplot(ddFig3B,
         legend.text = element_text(size = 15)) +
   geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse),
                   position = position_dodge(width = 0.2)) +
-  scale_color_manual(values = c('black',grey(0.4))) +
+  scale_color_manual(values = c('black',grey(0.5))) +
   annotate('text',label = 'B',x=0.5,y=8)
 
 
@@ -308,24 +274,21 @@ Fig3C <- ggplot(juv,
         legend.position = 'none') +
   geom_point(size=3) +
   stat_smooth(method = 'lm',se = T) +
-  scale_color_manual(values = c('black',grey(0.4))) +
+  scale_color_manual(values = c('black',grey(0.5))) +
   annotate('text',label = 'C',x=19,y=15)
 
-
+pdf('Figures/Figure 3.pdf',
+    width = 8,
+    height = 8,
+    paper = 'a4')
 multiplot(Fig3A,Fig3B,Fig3C,layout=matrix(c(1,1,2,3),2,2,byrow=TRUE))
-
+dev.off()
 
 
 
 
 ```
 
-
-PAGEBREAK
-
-
-
-**Figure 4**
 
 ```{r Figure 4,fig.height=8,fig.width=4}
 
@@ -345,7 +308,8 @@ Fig4A <- ggplot(juvseason,
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
         legend.position = 'none') +
-  scale_color_manual(values = c('black',grey(0.4))) +
+  scale_color_manual(values = c('black',grey(0.5))) +
+  stat_smooth(method = 'lm',se = T,col = 'black',fullrange = T) +
   annotate('text',x=2.5,y=10,label='A')
 
 
@@ -366,42 +330,24 @@ Fig4B <- ggplot(loss.season,
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
         legend.position = 'none') +
-  scale_color_manual(values = c('black',grey(0.4))) +
+  scale_color_manual(values = c('black',grey(0.5))) +
   stat_smooth(method = 'lm',se = T,col = 'black',fullrange = T) +
   annotate('text',x=-0.004,y=12.5,label='B')
 
-
+pdf('Figures/Figure 4.pdf',
+    width = 4,
+    height = 8,
+    paper = 'a4')
 multiplot(Fig4A,Fig4B)
+dev.off()
 
 ```
 
 
-PAGEBREAK
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-**Figure 5**
-
 ```{r Figure 5,fig.height=8,fig.width=4}
 
 s1 <- survfit(Surv(time = Lifespan+1, event = Died)~TLF, data = chicks)
-Fig5A <- ggsurv(s1,plot.cens=F) + 
+Fig5A <- ggsurv(s1,plot.cens=F,lty.est=c(1,2)) + 
   theme_classic() +
   ylab('Proportion survived') + 
   xlab('Age (years)') + 
@@ -411,18 +357,16 @@ Fig5A <- ggsurv(s1,plot.cens=F) +
         axis.text.y = element_text(size = 14), 
         axis.title.y = element_text(size = 16,vjust=0.8),
         axis.title.x = element_text(size = 16),
-        legend.position = c(0.8,0.8),
-        legend.text = element_text(size = 12),
-        legend.title = element_blank()) +
+        legend.position = 'none') +
   scale_colour_manual(name = 'TL',
-                      values = c('black',grey(0.4))) +
-  guides(linetype=F) +
+                      values = c('black',grey(0.5))) +
+  guides(colour=F) +
   annotate('text',x=0.5,y=1.1,label='A')
 
 
 ###########################################
 s2 <- survfit(Surv(time = Lifespan+1, event = Died)~TLF, data = FlSAall)
-Fig5B <- ggsurv(s2,plot.cens=F) + 
+Fig5B <- ggsurv(s2,plot.cens=F,lty.est=c(1,2)) + 
   theme_classic() +
   ylab('Proportion survived') + 
   xlab('Age (years)') + 
@@ -432,15 +376,18 @@ Fig5B <- ggsurv(s2,plot.cens=F) +
         axis.text.y = element_text(size = 14), 
         axis.title.y = element_text(size = 16,vjust=0.8),
         axis.title.x = element_text(size = 16),
-        legend.position = 'none',
-        legend.text = element_text(size = 12),
-        legend.title = element_blank()) +
+        legend.position = 'none') +
   scale_colour_manual(name = 'TL',
-                      values = c('black',grey(0.4))) +
-  guides(linetype=F) +
+                      values = c('black',grey(0.5))) +
+  guides(colour=F) +
   annotate('text',x=0.5,y=1.1,label='B')
 
+pdf('Figures/Figure 5.pdf',
+    width = 4,
+    height = 8,
+    paper = 'a4')
 multiplot(Fig5A,Fig5B)
+dev.off()
 
 
 ```
