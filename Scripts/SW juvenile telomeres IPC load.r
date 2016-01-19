@@ -18,7 +18,7 @@ library(survival)
 library(flexsurv)
 
 # Load data ---------------------------------------------------------------
-dd <- read.csv('Data/SW TL main data for analysis 2.csv') #main dataset
+dd <- read.csv('Data/TL2 output 15 Dec 2015.csv') #main dataset
 terr <- read.csv('Data/SW TL all territories.csv')
 status <- read.csv('Data/SW TL all breedstatus.csv')
 insects <- read.csv('Data/Insects.csv')

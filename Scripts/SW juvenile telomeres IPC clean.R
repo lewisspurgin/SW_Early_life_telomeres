@@ -1,13 +1,11 @@
 #################################################################################*
 ## Early life telomere dynamics and late-life fitness in a wild bird population
 ## CLEAN THE DATA
-#################################################################################*
-
-
+#################################################################################
 #Average repeats of blood samples
-av <- ave(dd$TL,c(dd$BloodID,dd$Status))
+av <- ave(dd$TL,c(dd$BloodID,dd$Status,dd$PlateID))
 dd$TL <- av
-dd <- unique(dd)
+dd <- dd[!(duplicated(dd$BloodID)),]
 
 
 # Weird variable names ----------------------------------------------------
@@ -27,7 +25,7 @@ dd$CatchDate <- as.Date(dd$CatchDate,"%d/%m/%Y")
 dd$Season <- ifelse(as.numeric(format(dd$CatchDate,'%m')) %in% c(4:10),
                     'Summer','Winter')
 
-head(dd)
+
 # Tarsus ------------------------------------------------------------------
 
 dd$Tarsus <- NA
@@ -48,7 +46,7 @@ dd$LeftTarsus <- NULL
 # Remove unwanted data/outliers ----------------------------------------------------
 
 
-dd <- droplevels(subset(subset(dd,TL>1000),TL<15000))
+dd <- droplevels(subset(subset(dd,TL>1000),TL<30000))
 dd <- subset(dd,BodyMass>5)
 dd <- subset(dd,Tarsus>17)
 
@@ -56,7 +54,7 @@ dd <- subset(dd,Tarsus>17)
 # Telomere data -----------------------------------------------------------
 
 dd$TLKB <- dd$TL/1000
-dd$LogTL <- log(dd$TL)
+dd$LogTL <- log10(dd$TL)
 
 
 
@@ -132,8 +130,8 @@ for(i in 1:nrow(juv))
   juv$cenTL[i] <- (juv$TLKB[i] - mean(currentdata$TLKB))/sd(currentdata$TLKB)
 }
 
-mymed <- mean(juv$cenTL,na.rm=T)
-juv$TLF <- ifelse(juv$cenTL > mymed,'Long telomeres','Short telomeres')
+mymed <- mean(juv$TLKB,na.rm=T)
+juv$TLF <- ifelse(juv$TLKB > mymed,'Long telomeres','Short telomeres')
 
 
 # Helpers and social group size -------------------------------------------
@@ -228,7 +226,7 @@ x2 <- merge(adults,x1)
 x2 <- x2[!(duplicated(x2$BirdID)),]
 
 
-x3 <- aggregate(TLKB~BirdID,juv,max)
+x3 <- aggregate(CatchDate~BirdID,juv,min)
 x4 <- merge(x3,juv)
 x4 <- x4[!(duplicated(x4$BirdID)),]
 
@@ -256,11 +254,6 @@ for(i in 1:nrow(Loss))
   Loss$cenTROC[i] <- (Loss$TROC[i]-mean(currentdata$TROC)/sd(currentdata$TROC))
 }
 
-Loss <- Loss[!(is.na(Loss$cenTROC)),]
-Loss <- subset(subset(Loss,TROC > -0.01),TROC < 0.02)
-Loss <- subset(subset(Loss,TimeDiff<1500),TimeDiff>365)
-
-
 # Get rid of stuff not to be used -----------------------------------------
 
 rm(status,helpers,hatchdate,x1,x2,x3,x4)
@@ -273,8 +266,8 @@ rm(status,helpers,hatchdate,x1,x2,x3,x4)
 juvseason <- ddply(juv,
                    .(FieldPeriodID,Season),
                    summarize,
-                   TLKBmean = mean(TLKB),
-                   TLKBse = se(TLKB),
+                   TLKBmean = mean(LogTL),
+                   TLKBse = se(LogTL),
                    Tarsus = mean(Tarsus),
                    Insect = mean(Insect),
                    Lifespan = mean(RemainingLife),
@@ -323,4 +316,4 @@ loss.season <- ddply(Loss,
                    Lifespanse = se(RemainingLife),
                    n = length(TROC),
                    CatchYear = mean(CatchYear))
-loss.season <- subset(loss.season,TROCse<0.005)
+loss.season <- subset(loss.season,TROCse<0.01)

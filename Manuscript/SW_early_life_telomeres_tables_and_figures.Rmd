@@ -43,87 +43,53 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 
 
 ```{r Figure 1}
-######################
-#1A
-######################
-
-ddFig1A <- ddply(dd,
-                 .(Fledged),
-                 summarize,
-                 TLKBmean = mean(TLKB),
-                 TLKBse = se(TLKB))
 
 
+####################
+temp <- subset(juvseason,Season == 'Summer')
+temp <- subset(temp,FieldPeriodID != 27)
 
-Fig1A <- ggplot(ddFig1A,
-       aes(x = Fledged,
-           y = TLKBmean)) +
-  ylab('Telomere length (kb)') + 
-  xlab('') +
+
+Fig1 <- ggplot(temp,
+       aes(x = CatchYear,
+           y = TLKBmean,
+           col = Season)) +
+  ylab('Log telomere length (kb)') + 
+  xlab('Lay Year') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 14), 
         axis.text.y = element_text(size = 14), 
         axis.title.y = element_text(size = 16,vjust=0.8),
         axis.title.x = element_text(size = 16),
-        legend.position = c(0.1,0.9),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 15)) +
+        legend.position = 'none') +
   geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
-  annotate('text',label = 'A',x=0.6,y=6.2)
+  geom_line()+
+  scale_color_manual(values = c('black',grey(0.5))) 
 
-
-
-
-
-######################
-#1B
-######################
-
-ddFig1B <- ddply(Loss,
-                 .(Fledged),
-                 summarize,
-                 TROCmean = mean(TROC),
-                 TROCse = se(TROC))
-
-
-
-Fig1B <- ggplot(ddFig1B,
-       aes(x = Fledged,
-           y = TROCmean)) +
-  ylab('Corrected telomere loss') + 
-  xlab('') +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 14), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16),
-        legend.position = c(0.1,0.9),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 15)) +
-  geom_pointrange(aes(ymin=TROCmean-TROCse,ymax=TROCmean+TROCse)) +
-  annotate('text',label = 'B',x=0.6,y=0.0018)
-
+################################
 
 pdf('Figures/Figure 1.pdf',
-    width = 4,
-    height = 8,
+    width = 6,
+    height = 4,
     paper = 'a4')
-multiplot(Fig1A,Fig1B)
+Fig1
 dev.off()
 
 ```
 
 
+
+
 ```{r Figure 2}
 
-####################
 
-Fig2A <- ggplot(juvseason,
-       aes(x = Insect,
-           y = TLKBmean,
+####################
+Fig1 <- ggplot(dd,
+       aes(x = Fledged,
+           y = LogTL,
            col = Season)) +
   ylab('Telomere length (kb)') + 
-  xlab('Food availability') +
+  xlab('Lay Year') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 14), 
         axis.text.y = element_text(size = 14), 
@@ -131,38 +97,16 @@ Fig2A <- ggplot(juvseason,
         axis.title.x = element_text(size = 16),
         legend.position = 'none') +
   geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
-  stat_smooth(method = 'lm',se = T,col = 'black') +
-  scale_color_manual(values = c('black',grey(0.5))) +
-  annotate('text',label = 'A',x=-1.5,y=8)
+  geom_line()+
+  scale_color_manual(values = c('black',grey(0.5))) 
 
 ################################
 
-
-temp <- loss.season[complete.cases(loss.season),]
-
-####################################
-Fig2B <- ggplot(temp,
-       aes(x = Insect,
-           y = TROCmean,
-           col = Season)) +
-  geom_pointrange(aes(min=TROCmean-TROCse,ymax=TROCmean+TROCse)) +
-  ylab('Corrected telomere loss') + 
-  xlab('Food availability') + 
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 14), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16),
-        legend.position = 'none') +
-  stat_smooth(method = 'lm',se = T,  col = 'black') +
-  scale_color_manual(values = c('black',grey(0.5))) +
-  annotate('text',label = 'B',x=-1.5,y=0.0075)
-
-pdf('Figures/Figure 2.pdf',
-    width = 4,
-    height = 8,
+pdf('Figures/Figure 1.pdf',
+    width = 6,
+    height = 4,
     paper = 'a4')
-multiplot(Fig2A,Fig2B)
+Fig1
 dev.off()
 
 ```
@@ -172,18 +116,18 @@ dev.off()
 ```{r Figure 3}
 
 
-######################
-#3A
-######################
+#####################
 
 #Run the model
-lm2 <- lm(cenTL ~ Fledged*(cenHelper + cenNonHelper + Sex + cenTarsus  + cenTQ),
-            data = juvall)
+lm2 <- lmer(LogTL ~ Fledged + Tarsus + Helper + GroupSize + Sex +Tarsus + BodyMass  + cenTQ  + (1|LayYear) + (1|PlateID),
+            data = juv,
+            REML = FALSE)
 
 #Model averaging
 
 lm3 <- dredge(lm2)
-lmavg <- model.avg(lm3,subset = delta <=6)
+lm3 <- subset(lm3,delta <=6)
+lmavg <- model.avg(lm3,fit=T)
 myimp <- importance(lmavg) #Relative importance of each explanatory variable
   
 
@@ -212,76 +156,15 @@ colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
 
 table2 <- data.frame(table2,myx=row.names(table2))
 
-Fig3A <- forestplot(table2) +
-  ylim(c(-1,1)) +
-  annotate('text',label = 'A',x=0.6,y=1)
+Fig3 <- forestplot(table2) +
+  annotate('text',label = 'A',x=0.6,y=0.1)
 
 
-
-######################
-#3B
-######################
-
-temp <- juv
-temp$HelperF <- ifelse(juv$Helper>0,'Helpers present','Helpers absent')
-
-ddFig3B <- ddply(temp,
-                 .(HelperF,Fledged),
-                 summarize,
-                 TLKBmean = mean(TLKB),
-                 TLKBse = se(TLKB))
-
-
-
-Fig3B <- ggplot(ddFig3B,
-       aes(x = HelperF,
-           y = TLKBmean,
-           col = Fledged,
-           lty = Fledged)) +
-  ylab('Telomere length (kb)') + 
-  xlab('') +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 14), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16),
-        legend.position = 'none',
-        legend.title = element_blank(),
-        legend.text = element_text(size = 15)) +
-  geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse),
-                  position = position_dodge(width = 0.2)) +
-  scale_color_manual(values = c('black',grey(0.5))) +
-  annotate('text',label = 'B',x=0.5,y=8)
-
-
-
-######################
-#3C
-######################
-
-Fig3C <- ggplot(juv,
-                aes(x = Tarsus,
-                    y = TLKB,
-                    col = Fledged,
-                    lty = Fledged)) +
-  ylab('Telomere length (kb)') + 
-  xlab('Tarsus length (mm)') +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 14), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16),
-        legend.position = 'none') +
-  geom_point(size=3) +
-  stat_smooth(method = 'lm',se = T) +
-  scale_color_manual(values = c('black',grey(0.5))) +
-  annotate('text',label = 'C',x=19,y=15)
-
-pdf('Figures/Figure 3.pdf',
+pdf('Figures/Figure 2.pdf',
     width = 8,
     height = 8,
     paper = 'a4')
-multiplot(Fig3A,Fig3B,Fig3C,layout=matrix(c(1,1,2,3),2,2,byrow=TRUE))
+Fig3
 dev.off()
 
 
@@ -290,64 +173,10 @@ dev.off()
 ```
 
 
-```{r Figure 4,fig.height=8,fig.width=4}
+```{r Figure 3,fig.height=8,fig.width=4}
 
-
-Fig4A <- ggplot(juvseason,
-                aes(x = TLKBmean,
-                    y = Lifespan,
-                    col = Season)) +
-  geom_pointrange(aes(ymin=Lifespan-Lifespanse,ymax=Lifespan+Lifespanse)) +
-  geom_errorbarh(aes(xmin = TLKBmean-TLKBse,xmax = TLKBmean+TLKBse)) +
-  theme_classic() +
-  ylab('Remaining life') + 
-  xlab('Telomere length (kb)') + 
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        legend.position = 'none') +
-  scale_color_manual(values = c('black',grey(0.5))) +
-  stat_smooth(method = 'lm',se = T,col = 'black',fullrange = T) +
-  annotate('text',x=2.5,y=10,label='A')
-
-
-
-
-Fig4B <- ggplot(loss.season,
-                aes(x = TROCmean,
-                    y = Lifespan,
-                    col = Season)) +
-  geom_pointrange(aes(ymin=Lifespan-Lifespanse,ymax=Lifespan+Lifespanse)) +
-  geom_errorbarh(aes(xmin = TROCmean-TROCse,xmax = TROCmean+TROCse)) +
-  theme_classic() +
-  ylab('Remaining life') + 
-  xlab('Corrected telomere loss') + 
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 11), 
-        axis.text.y = element_text(size = 11), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        legend.position = 'none') +
-  scale_color_manual(values = c('black',grey(0.5))) +
-  stat_smooth(method = 'lm',se = T,col = 'black',fullrange = T) +
-  annotate('text',x=-0.004,y=12.5,label='B')
-
-pdf('Figures/Figure 4.pdf',
-    width = 4,
-    height = 8,
-    paper = 'a4')
-multiplot(Fig4A,Fig4B)
-dev.off()
-
-```
-
-
-```{r Figure 5,fig.height=8,fig.width=4}
-
-s1 <- survfit(Surv(time = Lifespan+1, event = Died)~TLF, data = chicks)
-Fig5A <- ggsurv(s1,plot.cens=F,lty.est=c(1,2)) + 
+s1 <- survfit(Surv(time = Lifespan+1, event = Died)~TLF, data = chickall)
+Fig3A <- ggsurv(s1,plot.cens=F,lty.est=c(1,2)) + 
   theme_classic() +
   ylab('Proportion survived') + 
   xlab('Age (years)') + 
@@ -366,7 +195,7 @@ Fig5A <- ggsurv(s1,plot.cens=F,lty.est=c(1,2)) +
 
 ###########################################
 s2 <- survfit(Surv(time = Lifespan+1, event = Died)~TLF, data = FlSAall)
-Fig5B <- ggsurv(s2,plot.cens=F,lty.est=c(1,2)) + 
+Fig3B <- ggsurv(s2,plot.cens=F,lty.est=c(1,2)) + 
   theme_classic() +
   ylab('Proportion survived') + 
   xlab('Age (years)') + 
@@ -382,13 +211,12 @@ Fig5B <- ggsurv(s2,plot.cens=F,lty.est=c(1,2)) +
   guides(colour=F) +
   annotate('text',x=0.5,y=1.1,label='B')
 
-pdf('Figures/Figure 5.pdf',
+pdf('Figures/Figure 3.pdf',
     width = 4,
     height = 8,
     paper = 'a4')
-multiplot(Fig5A,Fig5B)
+multiplot(Fig3A,Fig3B)
 dev.off()
-
 
 ```
 
