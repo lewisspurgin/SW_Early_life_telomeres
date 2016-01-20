@@ -2,10 +2,14 @@
 ## Early life telomere dynamics and late-life fitness in a wild bird population
 ## CLEAN THE DATA
 #################################################################################
+
+#Only use Ellie's samples
+dd0 <- subset(dd0,Whodunnit == 'EAF')
+
 #Average repeats of blood samples
-av <- ave(dd$TL,c(dd$BloodID,dd$Status,dd$PlateID))
-dd$TL <- av
-dd <- dd[!(duplicated(dd$BloodID)),]
+av <- ave(dd0$TL,c(dd0$BloodID,dd0$Status,dd0$PlateID))
+dd0$TL <- av
+dd <- dd0[!(duplicated(dd0$BloodID)),]
 
 
 # Weird variable names ----------------------------------------------------
@@ -84,16 +88,6 @@ dd$AgemonthF <- factor(dd$AgemonthF,levels = c('<1','1-9','9-12','>12'))
 
 dd <- subset(dd,Agemonths>0)
 
-#Delta age
-for(i in 1:nrow(dd))
-{
-  currentdata = subset(dd,BirdID == dd$BirdID[i])
-  dd$MeanAge[i] <- mean(currentdata$Age)
-  dd$DeltaAge[i] <- dd$Age[i]-dd$MeanAge[i]
-}
-
-
-
 # Survival and lifespan ---------------------------------------------------
 
 dd$RemainingLife <- dd$DeathYear-dd$CatchYear
@@ -121,9 +115,10 @@ dd$Sex <- ifelse(dd$SexEstimate == 1,'Males','Females')
 juv <- droplevels(subset(dd,Ageclass %in% c('CH','FL','OFL','SA')))
 adults <- droplevels(subset(dd,Ageclass == 'A'))
 
-juv$cenTL <- NA
+
 
 #Centre telomere length by birth year
+juv$cenTL <- NA
 for(i in 1:nrow(juv))
 {
   currentdata <- subset(juv,FieldPeriodID == FieldPeriodID[i])
@@ -191,13 +186,14 @@ for(i in 1:nrow(juv))
 
 # Subset Fledglings and subadults -----------------------------------------------------------
 
-xf <- subset(juv,Status == 'XF')
 
+
+#Get rid of NAs and cross-fostered birds
 juv <- subset(juv,!is.na(Tarsus))
 juv <- subset(juv,!is.na(BodyMass))
 juv <- subset(juv,Status!='XF')
 
-
+#Calculate mean-centred variables within field periods
 for(i in 1:nrow(juv))
 {
   currentdata <- subset(juv,FieldPeriodID == juv$FieldPeriodID[i])
@@ -207,9 +203,9 @@ for(i in 1:nrow(juv))
   juv$cenNonHelper[i] <- (juv$NonHelper[i] -  mean(currentdata$NonHelper))/sd(currentdata$NonHelper)
 }
 
-juv <- subset(juv,cenTQ<4)
+juv <- juv[!(is.na(juv$cenTQ)),]
 
-
+#Subsetting
 FlSA <- subset(juv,Ageclass!='CH')
 chicks <- subset(juv,Ageclass == 'CH')
 
@@ -221,11 +217,13 @@ chickall <- droplevels(chicks[complete.cases(chicks),])
 
 # Look at telomere loss ---------------------------------------------------
 
+
+#Get earliest catch for each adult
 x1 <- aggregate(CatchDate~BirdID,adults,min)
 x2 <- merge(adults,x1)
 x2 <- x2[!(duplicated(x2$BirdID)),]
 
-
+#Get earliest catch for each juvenile
 x3 <- aggregate(CatchDate~BirdID,juv,min)
 x4 <- merge(x3,juv)
 x4 <- x4[!(duplicated(x4$BirdID)),]
@@ -233,26 +231,24 @@ x4 <- x4[!(duplicated(x4$BirdID)),]
 x2 <- x2[x2$BirdID %in% x4$BirdID,]
 x4 <- x4[x4$BirdID %in% x2$BirdID,]
 
-x3 <- x3[order(x3$BirdID),]
+x3 <- x2[order(x2$BirdID),]
 x4 <- x4[order(x4$BirdID),]
 
+
+#Apply Verhulst's correction for regresison to the mean
 xx1 <- x4$TLKB-mean(x4$TLKB)
 xx2 <- x2$TLKB-mean(x2$TLKB)          
-         
 rho <- cor(x4$TLKB,x2$TLKB)
 
-(rho*xx1)-xx2
-
+#Creat data frame with TROC
 Loss <- data.frame(x4,
                    Loss = x4$TL-x2$TL,
                    TimeDiff = as.numeric(x2$CatchDate-x4$CatchDate),
                    D=(rho*xx1)-xx2)
 Loss$TROC <- with(Loss,D/TimeDiff)
-for(i in 1:nrow(Loss))
-{
-  currentdata <- Loss[Loss$FieldPeriodID == Loss$FieldPeriodID[i],]
-  Loss$cenTROC[i] <- (Loss$TROC[i]-mean(currentdata$TROC)/sd(currentdata$TROC))
-}
+
+#Restrict to brids with sample within 2 years
+Loss <- subset(Loss,TimeDiff<(365*2))
 
 # Get rid of stuff not to be used -----------------------------------------
 
@@ -261,7 +257,7 @@ rm(status,helpers,hatchdate,x1,x2,x3,x4)
 
 
 
-# Field period average data -----------------------------------------------
+# Field period average data for plots -----------------------------------------------
 
 juvseason <- ddply(juv,
                    .(FieldPeriodID,Season),
@@ -272,48 +268,6 @@ juvseason <- ddply(juv,
                    Insect = mean(Insect),
                    Lifespan = mean(RemainingLife),
                    Lifespanse = se(RemainingLife),
-                   CatchYear = mean(CatchYear),
+                   LayYear = mean(CatchYear),
                    n = length(TLKB))
-juvseason$cenTL <- juvseason$TLKBmean-mean(juvseason$TLKBmean)
 juvseason <- subset(juvseason,n>5)
-
-chickseason <- ddply(chicks,
-                   .(FieldPeriodID,Season),
-                   summarize,
-                   TLKBmean = mean(TLKB),
-                   TLKBse = se(TLKB),
-                   Tarsus = mean(Tarsus),
-                   Insect = mean(Insect),
-                   Lifespan = mean(RemainingLife),
-                   Lifespanse = se(RemainingLife),
-                   CatchYear = mean(CatchYear),
-                   n = length(TLKB))
-chickseason$cenTL <- chickseason$TLKBmean-mean(chickseason$TLKBmean)
-chickseason <- subset(chickseason,n>5)
-
-
-flseason <- ddply(FlSA,
-                     .(FieldPeriodID,Season),
-                     summarize,
-                     TLKBmean = mean(TLKB),
-                     TLKBse = se(TLKB),
-                     Tarsus = mean(Tarsus),
-                     Insect = mean(Insect),
-                     Lifespan = mean(RemainingLife),
-                     Lifespanse = se(RemainingLife),
-                     CatchYear = mean(CatchYear),
-                     n = length(TLKB))
-flseason$cenTL <- flseason$TLKBmean-mean(flseason$TLKBmean)
-flseason <- subset(flseason,n>5)
-
-loss.season <- ddply(Loss,
-                   .(FieldPeriodID,Season),
-                   summarize,
-                   TROCmean = mean(TROC),
-                   TROCse = se(TROC),
-                   Insect = mean(Insect),
-                   Lifespan = mean(RemainingLife),
-                   Lifespanse = se(RemainingLife),
-                   n = length(TROC),
-                   CatchYear = mean(CatchYear))
-loss.season <- subset(loss.season,TROCse<0.01)

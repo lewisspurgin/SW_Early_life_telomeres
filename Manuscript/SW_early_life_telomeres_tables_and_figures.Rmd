@@ -42,37 +42,65 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 **Figure 5** Kaplan-Meier curves showing the relationship between survival and telomere length for individual Seychelles warblers measured as chicks (**A**), and fledglings  (**B**). Telomere length is binned into groups here for visualisation purposes only (long and short = greater than or less than median telomere length, respectively).
 
 
+
 ```{r Figure 1}
 
-
-####################
-temp <- subset(juvseason,Season == 'Summer')
-temp <- subset(temp,FieldPeriodID != 27)
+temp <- dd
+temp <- subset(temp,Age<14)
 
 
-Fig1 <- ggplot(temp,
-       aes(x = CatchYear,
-           y = TLKBmean,
-           col = Season)) +
+
+ddFig1A <- ddply(temp,
+                 .(Age),
+                 summarize,
+                 TL = mean(LogTL),
+                 TLse = se(LogTL),
+                 n = length(LogTL))
+
+Fig1A <- ggplot(ddFig1A,
+       aes(x = Age,
+           y = TL)) +
   ylab('Log telomere length (kb)') + 
-  xlab('Lay Year') +
+  xlab('Age (years)') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 14), 
         axis.text.y = element_text(size = 14), 
         axis.title.y = element_text(size = 16,vjust=0.8),
         axis.title.x = element_text(size = 16),
         legend.position = 'none') +
-  geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
+  geom_pointrange(aes(ymax=TL+TLse,ymin=TL-TLse))+
   geom_line()+
-  scale_color_manual(values = c('black',grey(0.5))) 
+  annotate('text',label = paste0('(',ddFig1A$n,')'),x = ddFig1A$Age,y = 3.3,size=3)+
+  annotate('text',label='A',x = 0,y = 3.8)
+ 
+
+
+####################
+ss <- table(juv$Fledged)
+
+Fig1B <- ggplot(juv,
+       aes(x = Fledged,
+           y = LogTL)) +
+  ylab('Telomere length (kb)') + 
+  xlab('') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16),
+        legend.position = 'none') +
+  geom_boxplot(notch=T)+
+  scale_color_manual(values = c('black',grey(0.5))) +
+  annotate('text',label = paste0('(',ss,')'),x = c(1:2),y = 2.85)+
+  annotate('text',label='B',x = 0.5,y = 4.5)
 
 ################################
 
 pdf('Figures/Figure 1.pdf',
-    width = 6,
-    height = 4,
-    paper = 'a4')
-Fig1
+    width = 9,
+    height = 3,
+    paper = 'a4r')
+multiplot(Fig1A,Fig1B,layout = matrix(c(1,1,1,1,2,2,2),nrow=1))
 dev.off()
 
 ```
@@ -84,11 +112,15 @@ dev.off()
 
 
 ####################
-Fig1 <- ggplot(dd,
-       aes(x = Fledged,
-           y = LogTL,
-           col = Season)) +
-  ylab('Telomere length (kb)') + 
+temp <- subset(juvseason,Season == 'Summer')
+temp <- subset(temp,FieldPeriodID != 27)
+
+ss <- temp$n
+
+Fig2 <- ggplot(temp,
+       aes(x = LayYear,
+           y = TLKBmean) +
+  ylab('Log telomere length (kb)') + 
   xlab('Lay Year') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 14), 
@@ -98,18 +130,47 @@ Fig1 <- ggplot(dd,
         legend.position = 'none') +
   geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
   geom_line()+
-  scale_color_manual(values = c('black',grey(0.5))) 
+  annotate('text',label=paste0('(',ss,')'),x = temp$LayYear,y = 3.4,size = 4)
 
 ################################
 
-pdf('Figures/Figure 1.pdf',
-    width = 6,
+pdf('Figures/Figure 2.pdf',
+    width = 8,
     height = 4,
-    paper = 'a4')
-Fig1
+    paper = 'a4r')
+Fig2
 dev.off()
 
+adults2 <- subset(adults,Age>0)
+
+mymean <- tapply(adults2$LogTL,adults2$CatchYear,mean)
+myse <- tapply(adults2$LogTL,adults2$CatchYear,se)
+myn <- tapply(adults2$LogTL,adults2$CatchYear,length)
+
+ddFig2B <- data.frame(TL = mymean, TLse = myse, n = myn,LayYear = as.numeric(names(mymean)))
+
+ddFig2B <- subset(ddFig2B,n>5)
+
+ss <- ddFig2B$n
+
+Fig2 <- ggplot(ddFig2B,
+       aes(x = LayYear,
+           y = TL)) +
+  ylab('Log telomere length (kb)') + 
+  xlab('Lay Year') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16),
+        legend.position = 'none') +
+  geom_pointrange(aes(ymin=TL-TLse,ymax=TL+TLse)) +
+  geom_line()+
+  annotate('text',label=paste0('(',ss,')'),x = ddFig2B$LayYear,y = 3.3,size = 4)
+
 ```
+
+
 
 
 
@@ -117,9 +178,11 @@ dev.off()
 
 
 #####################
+#3A
+#####################
 
 #Run the model
-lm2 <- lmer(LogTL ~ Fledged + Tarsus + Helper + GroupSize + Sex +Tarsus + BodyMass  + cenTQ  + (1|LayYear) + (1|PlateID),
+lm2 <- lmer(LogTL ~ Fledged + Tarsus + Helper + NonHelper + Sex + Tarsus + BodyMass  + cenTQ  + Season + (1|LayYear) + (1|PlateID) + (1|BirdID),
             data = juv,
             REML = FALSE)
 
@@ -138,17 +201,14 @@ table2 <- signif(table2,2)
 
 #Sort out row/col names
 nams <- rownames(table2)
-nams[nams == 'cenTarsus'] <- 'Tarsus'
-nams[nams == 'cenNonHelper'] <- 'Non helpers'
+nams[nams == 'NonHelper'] <- 'Non helpers'
 nams[nams == 'SexMales'] <- 'Sex'
 nams[nams == 'cenTQ'] <- 'TQ'
-nams[nams == 'cenHelper'] <- 'Helpers'
-nams[nams == 'cenHelper:FledgedFledglings'] <- 'Ageclass x Helpers'
-nams[nams == 'cenNonHelper:FledgedFledglings'] <- 'Ageclass x Non helpers'
-nams[nams == 'cenTarsus:FledgedFledglings'] <- 'Ageclass x Tarsus'
-nams[nams == 'cenTQ:FledgedFledglings'] <- 'Ageclass x TQ'
-nams[nams == 'FledgedFledglings:SexMales'] <- 'Ageclass x Sex'
-nams[nams == 'FledgedFledglings'] <- 'Ageclass'
+nams[nams == 'Helper'] <- 'Helpers'
+nams[nams == 'BodyMass'] <- 'Body mass'
+nams[nams == 'FledgedFledglings'] <- 'Age class'
+nams[nams == 'SeasonWinter'] <- 'Season'
+
 
 rownames(table2) <- nams
 colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
@@ -156,67 +216,143 @@ colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
 
 table2 <- data.frame(table2,myx=row.names(table2))
 
-Fig3 <- forestplot(table2) +
-  annotate('text',label = 'A',x=0.6,y=0.1)
+Fig3A <- forestplot(table2)
+
+#####################
+#3B
+#####################
+
+#Run the model
+lm2 <- lmer(TROC ~ Fledged + Tarsus + Helper + NonHelper + Sex + Tarsus + BodyMass  + cenTQ  + Season + LogTL + (1|LayYear),
+            data = Loss,
+            REML = FALSE)
+
+#Model averaging
+
+lm3 <- dredge(lm2)
+lm3 <- subset(lm3,delta <=6)
+lmavg <- model.avg(lm3,fit=T)
+myimp <- importance(lmavg) #Relative importance of each explanatory variable
+  
+
+#Put it all into a nice table
+table2 <- imptable(lmavg,myimp)
+table2 <- signif(table2,2)
 
 
-pdf('Figures/Figure 2.pdf',
-    width = 8,
-    height = 8,
-    paper = 'a4')
-Fig3
-dev.off()
+#Sort out row/col names
+nams <- rownames(table2)
+nams[nams == 'NonHelper'] <- 'Non helpers'
+nams[nams == 'SexMales'] <- 'Sex'
+nams[nams == 'cenTQ'] <- 'TQ'
+nams[nams == 'Helper'] <- 'Helpers'
+nams[nams == 'BodyMass'] <- 'Body mass'
+nams[nams == 'FledgedFledglings'] <- 'Age class'
+nams[nams == 'SeasonWinter'] <- 'Season'
+nams[nams == 'LogTL'] <- 'Initial TL'
+
+
+rownames(table2) <- nams
+colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
+
+
+table2 <- data.frame(table2,myx=row.names(table2))
+
+Fig3B <- forestplot(table2)
 
 
 
 
-```
 
 
-```{r Figure 3,fig.height=8,fig.width=4}
-
-s1 <- survfit(Surv(time = Lifespan+1, event = Died)~TLF, data = chickall)
-Fig3A <- ggsurv(s1,plot.cens=F,lty.est=c(1,2)) + 
-  theme_classic() +
-  ylab('Proportion survived') + 
-  xlab('Age (years)') + 
-  xlim(c(0,15)) +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 14), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16),
-        legend.position = 'none') +
-  scale_colour_manual(name = 'TL',
-                      values = c('black',grey(0.5))) +
-  guides(colour=F) +
-  annotate('text',x=0.5,y=1.1,label='A')
 
 
-###########################################
-s2 <- survfit(Surv(time = Lifespan+1, event = Died)~TLF, data = FlSAall)
-Fig3B <- ggsurv(s2,plot.cens=F,lty.est=c(1,2)) + 
-  theme_classic() +
-  ylab('Proportion survived') + 
-  xlab('Age (years)') + 
-  xlim(c(0,15)) +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 14), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16),
-        legend.position = 'none') +
-  scale_colour_manual(name = 'TL',
-                      values = c('black',grey(0.5))) +
-  guides(colour=F) +
-  annotate('text',x=0.5,y=1.1,label='B')
 
 pdf('Figures/Figure 3.pdf',
-    width = 4,
+    width = 7,
     height = 8,
     paper = 'a4')
 multiplot(Fig3A,Fig3B)
 dev.off()
 
+
+
+
 ```
 
+
+
+
+```{r Figure 4}
+
+ss <- c(tapply(juv$LogTL,list(juv$Season,juv$Fledged),length))
+
+Fig4A <- ggplot(juv,
+       aes(x = Fledged,
+           y = LogTL,
+           fill=Season)) +
+  ylab('Telomere length (kb)') + 
+  xlab('') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16),
+        legend.position = 'none') +
+  geom_boxplot(notch=F)+
+  scale_fill_manual(values = c('white',grey(0.5))) +
+  annotate('text',label='A',x = 0.5,y = 4.5) +
+  annotate('text',label = paste0('(',ss,')'),x=c(0.8,1.2,1.8,2.2),y = 2.8)
+
+Fig4B <- ggplot(juv,
+       aes(x = Tarsus,
+           y = LogTL,
+           col = Fledged)) +
+  ylab('Telomere length (kb)') + 
+  xlab('') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16),
+        legend.position = 'none') +
+  geom_point()+
+  scale_colour_manual(values = c('black',grey(0.5))) +
+  annotate('text',label='B',x = 17.5,y = 4.5) +
+  stat_smooth(method = 'lm')
+
+
+pdf('Figures/Figure 4.pdf',
+    width = 4,
+    height = 8,
+    paper = 'a4')
+multiplot(Fig4A,Fig4B)
+dev.off()
+
+```
+
+```{r Figure 5}
+s1 <- survfit(Surv(time = Lifespan+1, event = Died)~TLF, data = juv)
+Fig5 <- ggsurv(s1,plot.cens=F,lty.est=c(1,2)) + 
+  theme_classic() +
+  ylab('Proportion survived') + 
+  xlab('Age (years)') + 
+  xlim(c(0,15)) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16),
+        legend.position = 'none') +
+  scale_colour_manual(name = 'TL',
+                      values = c('black',grey(0.5))) +
+  guides(colour=F)
+
+pdf('Figures/Figure 5.pdf',
+    width = 4,
+    height = 4,
+    paper = 'a4')
+Fig5
+dev.off()
+
+```
