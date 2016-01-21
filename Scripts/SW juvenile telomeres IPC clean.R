@@ -267,7 +267,7 @@ juvseason <- ddply(juv,
                    Tarsus = mean(Tarsus),
                    Insect = mean(Insect),
                    Lifespan = mean(RemainingLife),
-                   Lifespanse = se(RemainingLife),
                    LayYear = mean(CatchYear),
-                   n = length(TLKB))
+                   n = length(TLKB),
+                   TQ = mean(TQ))
 juvseason <- subset(juvseason,n>5)
