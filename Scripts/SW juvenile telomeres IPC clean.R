@@ -50,7 +50,7 @@ dd$LeftTarsus <- NULL
 # Remove unwanted data/outliers ----------------------------------------------------
 
 
-dd <- droplevels(subset(subset(dd,TL>1000),TL<30000))
+dd <- droplevels(subset(subset(dd,TL>50),TL<30000))
 dd <- subset(dd,BodyMass>5)
 dd <- subset(dd,Tarsus>17)
 
@@ -65,8 +65,7 @@ dd$LogTL <- log10(dd$TL)
 
 # Age data ----------------------------------------------------------------
 
-dd$Age <- dd$CatchYear-dd$LayYear
-
+dd$Age <- (dd$CatchYear-dd$LayYear)+1
 
 #Sort out and order ageclass levels
 dd <- droplevels(dd[dd$Ageclass != '',])
@@ -79,24 +78,26 @@ dd$Fledged <- factor(dd$Fledged,levels = c('Nestlings','Fledglings','Adults'))
 
 
 dd$Agemonths <- ifelse(dd$Ageclass == 'CH',1,
-                       ifelse(dd$Ageclass == 'FL',3,
-                              ifelse(dd$Ageclass == 'SA',9,dd$Age*12)))
-dd$AgemonthF <- ifelse(dd$Ageclass == 'CH','<1',
-                       ifelse(dd$Ageclass == 'FL','1-9',
-                              ifelse(dd$Ageclass == 'SA','9-12','>12')))
-dd$AgemonthF <- factor(dd$AgemonthF,levels = c('<1','1-9','9-12','>12'))
+                       ifelse(dd$Ageclass == 'FL',6,
+                              ifelse(dd$Ageclass == 'SA',10,dd$Age*12)))
 
 dd <- subset(dd,Agemonths>0)
+
+dd$Age[dd$Fledged != 'Adults'] <- 1
 
 # Survival and lifespan ---------------------------------------------------
 
 dd$RemainingLife <- dd$DeathYear-dd$CatchYear
-dd$SurvivedNext <- ifelse(dd$RemainingLife>0,1,0)
-dd$Lifespan <- dd$DeathYear-dd$LayYear
+dd$SurvivedNext <- ifelse(dd$RemainingLife>1,1,0)
+dd$Lifespan <- (dd$DeathYear-dd$LayYear)+1
 dd$Died <- ifelse(dd$DeathYear<2013,1,0)
 
 
 
+# Exclude winter seasons and early years ----------------------------------
+
+dd <- subset(dd,LayYear>1997)
+dd <- subset(dd,Season == 'Summer')
 
 
 # Sex ---------------------------------------------------------------------
@@ -119,16 +120,22 @@ adults <- droplevels(subset(dd,Ageclass == 'A'))
 
 #Centre telomere length by birth year
 juv$cenTL <- NA
+juv$cohortTL <- NA
 for(i in 1:nrow(juv))
 {
   currentdata <- subset(juv,FieldPeriodID == FieldPeriodID[i])
-  juv$cenTL[i] <- (juv$TLKB[i] - mean(currentdata$TLKB))/sd(currentdata$TLKB)
+  juv$cenTL[i] <- (juv$LogTL[i] - mean(currentdata$LogTL))/sd(currentdata$LogTL)
+  juv$cohortTL[i] <- mean(currentdata$LogTL)
 }
 
-mymed <- mean(juv$TLKB,na.rm=T)
-juv$TLF <- ifelse(juv$TLKB > mymed,'Long telomeres','Short telomeres')
+mymed <- median(juv$cenTL,na.rm=T)
+juv$cenTLF <- ifelse(juv$cenTL < mymed,'Short telomeres','Long telomeres')
+
+mymed <- median(juv$cohortTL,na.rm=T)
+juv$coTLF <- ifelse(juv$cohortTL < mymed,'Short telomeres','Long telomeres')
 
 
+rm(mymed)
 # Helpers and social group size -------------------------------------------
 
 status <- subset(status,BreedGroupID %in% juv$BreedGroupID)
@@ -144,7 +151,7 @@ for(i in 1:nrow(juv))
 }
 
 juv <- subset(juv,GroupSize>0)
-
+juv$Helper[juv$Helper>1] <- 1
 
 
 
@@ -153,31 +160,47 @@ juv <- subset(juv,GroupSize>0)
 
 
 terr <- terr[complete.cases(terr),] #Get rid of blank rows
-
+subset(terr,FieldPeriodID == 105)
 
 insects <- subset(insects,FieldPeriodID != 26)
-insects$Insectcen <- (insects$MeanInsects-mean(insects$MeanInsects))/sd(insects$MeanInsects)
-
-# take average for year
-terrmean <- tapply(terr$TQcorrected,terr$TerritoryID,mean)
 
 juv$TQ <- NA
 juv$TQI <- NA
 juv$cenTQ <- NA
 juv$Insect <- NA
+juv$Density <- NA
 
 for(i in 1:nrow(juv))
 {
-  if(juv$TerritoryID[i] %in% names(terrmean))
+  if(juv$TerritoryID[i] %in% terr$TerritoryID)
   {
-    juv$TQ[i] <- terrmean[names(terrmean) == juv$TerritoryID[i]]
+    cd <- subset(terr,TerritoryID == juv$TerritoryID[i])
+    if(juv$FieldPeriodID[i] %in% cd$FieldPeriodID)
+    {
+      juv$TQ[i] <- log10(subset(cd,FieldPeriodID == juv$FieldPeriodID[i])$TQcorrected)
+    } else
+    {
+      juv$TQ[i] <- log10(mean(cd$TQcorrected))
+    }
     juv$TQI[i] <- juv$TQ[i]/juv$GroupSize[i]
+    
   }
+  
+  
   
   if(juv$FieldPeriodID[i] %in% insects$FieldPeriodID)
   {
-    juv$Insect[i] <- insects$Insectcen[insects$FieldPeriodID == juv$FieldPeriodID[i]] 
-  } 
+    juv$Insect[i] <- insects$MeanInsects[insects$FieldPeriodID == juv$FieldPeriodID[i]] 
+  }
+  
+  
+  
+  if(juv$FieldPeriodID[i] %in% dens$FieldPeriodID)
+  {
+    juv$Density[i] <- dens$PsizeFP[dens$FieldPeriodID == juv$FieldPeriodID[i]] 
+  }
+  
+  
 }
 
 
@@ -191,19 +214,9 @@ for(i in 1:nrow(juv))
 #Get rid of NAs and cross-fostered birds
 juv <- subset(juv,!is.na(Tarsus))
 juv <- subset(juv,!is.na(BodyMass))
+juv <- subset(juv,!is.na(TQ))
 juv <- subset(juv,Status!='XF')
 
-#Calculate mean-centred variables within field periods
-for(i in 1:nrow(juv))
-{
-  currentdata <- subset(juv,FieldPeriodID == juv$FieldPeriodID[i])
-  juv$cenTQ[i] <- (juv$TQ[i] - mean(currentdata$TQ))/sd(currentdata$TQ)
-  juv$cenTarsus[i] <- (juv$Tarsus[i] -  mean(currentdata$Tarsus))/sd(currentdata$Tarsus)
-  juv$cenHelper[i] <- (juv$Helper[i] -  mean(currentdata$Helper))/sd(currentdata$Helper)
-  juv$cenNonHelper[i] <- (juv$NonHelper[i] -  mean(currentdata$NonHelper))/sd(currentdata$NonHelper)
-}
-
-juv <- juv[!(is.na(juv$cenTQ)),]
 
 #Subsetting
 FlSA <- subset(juv,Ageclass!='CH')
@@ -218,15 +231,17 @@ chickall <- droplevels(chicks[complete.cases(chicks),])
 # Look at telomere loss ---------------------------------------------------
 
 
-#Get earliest catch for each adult
-x1 <- aggregate(CatchDate~BirdID,adults,min)
-x2 <- merge(adults,x1)
-x2 <- x2[!(duplicated(x2$BirdID)),]
-
 #Get earliest catch for each juvenile
 x3 <- aggregate(CatchDate~BirdID,juv,min)
 x4 <- merge(x3,juv)
 x4 <- x4[!(duplicated(x4$BirdID)),]
+
+#Get earliest subsetquent catch
+laters <- subset(dd,!(BloodID %in% x4$BloodID))
+x1 <- aggregate(CatchDate~BirdID,laters,min)
+x2 <- merge(laters,x1)
+x2 <- x2[!(duplicated(x2$BirdID)),]
+
 
 x2 <- x2[x2$BirdID %in% x4$BirdID,]
 x4 <- x4[x4$BirdID %in% x2$BirdID,]
@@ -242,13 +257,22 @@ rho <- cor(x4$TLKB,x2$TLKB)
 
 #Creat data frame with TROC
 Loss <- data.frame(x4,
-                   Loss = x4$TL-x2$TL,
-                   TimeDiff = as.numeric(x2$CatchDate-x4$CatchDate),
+                   Loss = x4$LogTL-x2$LogTL,
+                   LogTL1 = x2$LogTL,
+                   Agemonths1 = x2$Agemonths,
+                   TimeDiff = as.numeric(x2$CatchDate-x4$CatchDate)/365,
+                   RemainingLife2 = x2$RemainingLife,
                    D=(rho*xx1)-xx2)
-Loss$TROC <- with(Loss,D/TimeDiff)
+Loss$TROC <- with(Loss,Loss/TimeDiff)
 
-#Restrict to brids with sample within 2 years
-Loss <- subset(Loss,TimeDiff<(365*2))
+#Restrict to brids with sample within 5 years
+Loss <- subset(Loss,TimeDiff<5.5)
+
+#Calculate body condition
+Loss$Condition <- lm(BodyMass~Tarsus, data=Loss)$residuals
+
+#Remove outliers
+Loss <- subset(subset(Loss,TROC> -10),TROC < 10)
 
 # Get rid of stuff not to be used -----------------------------------------
 
@@ -259,15 +283,21 @@ rm(status,helpers,hatchdate,x1,x2,x3,x4)
 
 # Field period average data for plots -----------------------------------------------
 
-juvseason <- ddply(juv,
+juvseason <- ddply(FlSA,
                    .(FieldPeriodID,Season),
                    summarize,
-                   TLKBmean = mean(LogTL),
-                   TLKBse = se(LogTL),
-                   Tarsus = mean(Tarsus),
-                   Insect = mean(Insect),
-                   Lifespan = mean(RemainingLife),
+                   TL = median(LogTL),
+                   TLse = se(LogTL),
+                   Helper = mean(Helper),
+                   Insect = median(Insect),
+                   Density = mean(Density),
+                   Lifespan = median(RemainingLife),
                    LayYear = mean(CatchYear),
+                   Age = mean(Agemonths),
                    n = length(TLKB),
                    TQ = mean(TQ))
-juvseason <- subset(juvseason,n>5)
+juvseason <- subset(juvseason,n>4)
+
+
+juv9 <- subset(juv,LayYear<2009)
+juv13 <- subset(juv,LayYear<2013)

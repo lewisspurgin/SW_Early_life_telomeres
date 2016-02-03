@@ -292,7 +292,7 @@ forestplot <- function(mytable)
           axis.title.y = element_text(size = 16,vjust=0.8),
           axis.title.x = element_text(size = 16)) +
     geom_abline(slope=0,intercept=0,lty=2) +
-    annotate('text',x=mytable$myx,y=min(mytable$X2.5)*1.1,label=paste('(',mytable$RI,')',sep=''))
+    annotate('text',x=mytable$myx,y=min(mytable$X2.5)*1.2,label=paste('(',mytable$RI,')',sep=''))
     
 }
 
@@ -427,11 +427,11 @@ ggsurv <- function(s, CI = 'def', plot.cens = T, surv.col = 'gg.def',
 
 
 #Round to 2 or 3 dp and keep trailing zeros
-round2 <- function(x)
+round2 <- function(x,lessthan=F)
   {
-  if(x < 0.01)
+  if(lessthan == T && x < 0.01)
   {
-    return('< 0.01')
+      return('< 0.01')
   } else
   {
   sprintf(round(x,2), fmt="%.2f")

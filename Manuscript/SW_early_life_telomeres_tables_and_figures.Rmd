@@ -31,161 +31,196 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 
 **Figure Legends**
 
-**Figure 1** Telomere length (mean $\pm$ s.e.) in relation to age in Seychelles warblers, based on cross-sectional **(A)** and longitudinal **(B)** data. In **B**, telomere loss is a standardised and corrected rate (see Methods for details) based on the difference in telomere length in the sample taken from birds in their first year of life, and the first available sample as an adult. Values above zero indicate telomere shortening in early life.
+**Figure 1** Telomere length in relation to age in Seychelles warblers. **(A)** Mean  ($\pm$ s.e.) age for all birds. **(B)** Notched boxplot of telomere length at different age classes within the first year of life. Sample sizes for each group are provided in brackets.
 
-**Figure 2** Temporal variation in early-life telomere dynamics in the Seychelles warbler based on cross-sectional **(A)** and longitudinal **(B)** data (see Fig. 1 and main text for details). Points and error bars represent mean and standard error of telomere length for all birds born in each main (black) or minor (grey) breeding season, in relation to island-wide food availability in that season. Lines and shaded areas represent fitted values and 95% confidence limits from a linear regression.
+**Figure 2** Temporal variation in early-life telomere length in the Seychelles warbler based on cross-sectional data. Points and error bars represent mean and standard error of telomere length for all birds born in each summer breeding season. Sample sizes for each year are provided in brackets.
 
-**Figure 3** Factors affecting early-life telomere length in Seychelles warblers at the individual level, within seasons. **A** Model averaged estimates and 95% confidence intervals for explanatory terms used in a linear model with telomere length as the response variable. Numbers in brackets are the relative importance of each term in the top model set (see main text for details; TQ = territory quality). **B,C** Raw telomere length Presence/absence of helpers (**B**) and tarsus length (**C**) in nestlings (black, solid lines) and fledglings (grey, dashed lines). Points and error bars in **B** are means $\pm$ s.e., and the line and shaded areas in **C** represent fitted values and 95% confidence limits from a linear regression.
+**Figure 3** Factors affecting early-life telomere length in Seychelles warblers at the individual level, within seasons. Model averaged estimates and 95% confidence intervals for explanatory terms used in a linear mixed model with telomere length (cross-sectional data, **A**) and telomere loss (longitudinal data, **B**) as the response variable. Numbers in brackets are the relative importance of each term in the top model set (see main text for details; TQ = territory quality, TL = telomere length).
 
-**Figure 4** Temporal, cohort-level variation in lifespan in relation to early-life telomere dynamics in the Seychelles warbler, based on cross-sectional **(A)** and longitudinal **(B)** data (see Fig. 1 and main text for details). Points and error bars represent means and $\pm$ s.e., respectively, of all birds born in each main (black, solid lines) or minor (grey, dashed lines) breeding season. Lines and shaded areas represent fitted values and 95% confidence limits from a linear regression.
+**Figure 4** Telomere length in relation to **A** season and **B** tarsus length in juvenile Seychelles warblers. In *A**, white and grey boxes represent summer and winter seasons, respectively, while in **B** black and grey points represent nestlings and fledglings, respectively. Sample sizes for each group are provided in brackets.
 
-**Figure 5** Kaplan-Meier curves showing the relationship between survival and telomere length for individual Seychelles warblers measured as chicks (**A**), and fledglings  (**B**). Telomere length is binned into groups here for visualisation purposes only (long and short = greater than or less than median telomere length, respectively).
+**Figure 5** Kaplan-Meier curves showing the relationship between survival and telomere length for juvenile Seychelles warblers. Telomere length is binned into groups here for visualisation purposes only (long and short = greater than or less than median telomere length, respectively).
 
 
 
 ```{r Figure 1}
 
 temp <- dd
-temp <- subset(temp,Age<14)
+temp$Agemonths[temp$Agemonths>10] <- '12+'
+temp$Agemonths <- factor(temp$Agemonths,levels = c('1','6','10','12+'))
 
-
-
-ddFig1A <- ddply(temp,
-                 .(Age),
-                 summarize,
-                 TL = mean(LogTL),
-                 TLse = se(LogTL),
-                 n = length(LogTL))
-
-Fig1A <- ggplot(ddFig1A,
-       aes(x = Age,
-           y = TL)) +
+Fig1A <- ggplot(temp,aes(x = Agemonths,y = LogTL))+
+  geom_jitter(col='grey') +
   ylab('Log telomere length (kb)') + 
-  xlab('Age (years)') +
+  xlab('Age (months)') +
   theme_classic() +
-  theme(axis.text.x = element_text(size = 14), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16),
-        legend.position = 'none') +
-  geom_pointrange(aes(ymax=TL+TLse,ymin=TL-TLse))+
-  geom_line()+
-  annotate('text',label = paste0('(',ddFig1A$n,')'),x = ddFig1A$Age,y = 3.3,size=3)+
-  annotate('text',label='A',x = 0,y = 3.8)
- 
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        legend.position = 'none')+
+  geom_boxplot(outlier.colour=NA)+
+  annotate('text',x = 0.6,y = 4.8,label = 'A')
 
 
-####################
-ss <- table(juv$Fledged)
 
-Fig1B <- ggplot(juv,
-       aes(x = Fledged,
-           y = LogTL)) +
-  ylab('Telomere length (kb)') + 
-  xlab('') +
+
+#
+temp <- Loss
+temp[,'Age (months)'] <- factor(temp$Agemonths)
+
+Fig1B <- ggplot(temp,aes(x = LogTL,y = LogTL1,col = `Age (months)`,shape = `Age (months)`)) +
+  ylab('Log adult telomere length (kb)') + 
+  xlab('Log juvenile telomere length (kb)') +
   theme_classic() +
-  theme(axis.text.x = element_text(size = 14), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16),
-        legend.position = 'none') +
-  geom_boxplot(notch=T)+
-  scale_color_manual(values = c('black',grey(0.5))) +
-  annotate('text',label = paste0('(',ss,')'),x = c(1:2),y = 2.85)+
-  annotate('text',label='B',x = 0.5,y = 4.5)
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        legend.position = 'none')+
+  geom_point() +
+  stat_smooth(method = 'lm')+
+  xlim(2,4.5)+
+  ylim(2,4.5)+
+    scale_colour_manual(values = c('darkgrey','darkgreen','darkorange'))+
+  annotate('text',x = 2,y = 4.5,label = 'B')
 
-################################
+
+
+#
+temp <- Loss
+temp[,'Age (months)'] <- factor(temp$Agemonths)
+
+Fig1C <- ggplot(temp,aes(x = TimeDiff,y = Loss,col=`Age (months)`,shape = `Age (months)`)) +
+  ylab('Log telomere loss (kb)') + 
+  xlab('Time interval (years)') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        legend.position = 'none')+
+  geom_point()+
+  geom_abline(slope = 0,intercept = 0,lty = 2)+
+  stat_smooth(method='lm')+
+  scale_colour_manual(values = c('darkgrey','darkgreen','darkorange'))+
+  annotate('text',x = 0,y = 2,label = 'C')
+
+
+Fig1D <- ggplot(temp,aes(x = TimeDiff,y = TROC,col=`Age (months)`,shape = `Age (months)`)) +
+  ylab('Log telomere loss rate (kb/year)') + 
+  xlab('Time interval (years)') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        legend.position = c(0.9,0.8))+
+  geom_point()+
+  geom_abline(slope = 0,intercept = 0,lty = 2)+
+  scale_colour_manual(values = c('darkgrey','darkgreen','darkorange'))+
+  annotate('text',x = 0,y = 8,label = 'D')
+
+
+
 
 pdf('Figures/Figure 1.pdf',
-    width = 9,
-    height = 3,
+    width = 8,
+    height = 8,
     paper = 'a4r')
-multiplot(Fig1A,Fig1B,layout = matrix(c(1,1,1,1,2,2,2),nrow=1))
+multiplot(Fig1A,Fig1B,Fig1C,Fig1D,layout=matrix(c(1:4),nrow = 2,byrow=T))
 dev.off()
 
-```
 
+```
 
 
 
 ```{r Figure 2}
 
 
-####################
-temp <- subset(juvseason,Season == 'Summer')
-temp <- subset(temp,FieldPeriodID != 27)
+###############################
+temp <- juv
+temp$LayYear <- factor(temp$LayYear)
 
-ss <- temp$n
 
-Fig2 <- ggplot(temp,
+Fig2A <- ggplot(subset(temp,Agemonths == 1),
        aes(x = LayYear,
-           y = TLKBmean) +
-  ylab('Log telomere length (kb)') + 
-  xlab('Lay Year') +
+           y = LogTL)) +
+  ylab('') + 
+  xlab('') +
   theme_classic() +
-  theme(axis.text.x = element_text(size = 14), 
+  theme(axis.text.x = element_text(angle = 60,size = 14,vjust=0.5), 
         axis.text.y = element_text(size = 14), 
         axis.title.y = element_text(size = 16,vjust=0.8),
         axis.title.x = element_text(size = 16),
         legend.position = 'none') +
-  geom_pointrange(aes(ymin=TLKBmean-TLKBse,ymax=TLKBmean+TLKBse)) +
-  geom_line()+
-  annotate('text',label=paste0('(',ss,')'),x = temp$LayYear,y = 3.4,size = 4)
+  geom_jitter(col = 'grey')+
+  ylim(c(2,4.5))+
+  geom_boxplot(outlier.colour = NA)+
+  scale_x_discrete(limits = factor(1998:2014),drop=F)+
+  annotate('text',x = 1,y = 4.4,label = 'A')
 
-################################
+Fig2B <- ggplot(subset(juv,Agemonths == 6),
+       aes(x = factor(LayYear),
+           y = LogTL)) +
+  ylab('Log telomere length (kb)') + 
+  xlab('') +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 60,size = 14,vjust=0.5), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16),
+        legend.position = 'none') +
+  geom_jitter(col = 'grey')+
+  ylim(c(2,4.5))+
+  geom_boxplot(outlier.colour = NA)+
+  scale_x_discrete(limits = factor(1998:2014),drop=F)+
+  annotate('text',x = 1,y = 4.4,label = 'B')
+
+Fig2C <- ggplot(subset(juv,Agemonths == 10),
+       aes(x = factor(LayYear),
+           y = LogTL)) +
+  ylab('') + 
+  xlab('Cohort') +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 60,size = 14,vjust=0.5), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16),
+        legend.position = 'none') +
+  geom_jitter(col = 'grey')+
+  ylim(c(2,4.5))+
+  geom_boxplot(outlier.colour = NA)+
+  scale_x_discrete(limits = factor(1998:2014),drop=F)+
+  annotate('text',x = 1,y = 4.4,label = 'C')
+
 
 pdf('Figures/Figure 2.pdf',
-    width = 8,
-    height = 4,
+    width = 6,
+    height = 8,
     paper = 'a4r')
-Fig2
+multiplot(Fig2A,Fig2B,Fig2C)
 dev.off()
 
-adults2 <- subset(adults,Age>0)
-
-mymean <- tapply(adults2$LogTL,adults2$CatchYear,mean)
-myse <- tapply(adults2$LogTL,adults2$CatchYear,se)
-myn <- tapply(adults2$LogTL,adults2$CatchYear,length)
-
-ddFig2B <- data.frame(TL = mymean, TLse = myse, n = myn,LayYear = as.numeric(names(mymean)))
-
-ddFig2B <- subset(ddFig2B,n>5)
-
-ss <- ddFig2B$n
-
-Fig2 <- ggplot(ddFig2B,
-       aes(x = LayYear,
-           y = TL)) +
-  ylab('Log telomere length (kb)') + 
-  xlab('Lay Year') +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 14), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16),
-        legend.position = 'none') +
-  geom_pointrange(aes(ymin=TL-TLse,ymax=TL+TLse)) +
-  geom_line()+
-  annotate('text',label=paste0('(',ss,')'),x = ddFig2B$LayYear,y = 3.3,size = 4)
-
 ```
-
 
 
 
 
 ```{r Figure 3}
 
+temp <- juv
 
 #####################
 #3A
 #####################
 
 #Run the model
-lm2 <- lmer(LogTL ~ Fledged + Tarsus + Helper + NonHelper + Sex + Tarsus + BodyMass  + cenTQ  + Season + (1|LayYear) + (1|PlateID) + (1|BirdID),
-            data = juv,
+lm2 <- lmer(LogTL ~ Agemonths * (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ)  + (1|LayYear) + (1|PlateID) + (1|TerritoryID),
+            data = temp,
             REML = FALSE)
-
+lm2 <- standardize(lm2)
 #Model averaging
 
 lm3 <- dredge(lm2)
@@ -201,13 +236,19 @@ table2 <- signif(table2,2)
 
 #Sort out row/col names
 nams <- rownames(table2)
-nams[nams == 'NonHelper'] <- 'Non helpers'
-nams[nams == 'SexMales'] <- 'Sex'
-nams[nams == 'cenTQ'] <- 'TQ'
-nams[nams == 'Helper'] <- 'Helpers'
-nams[nams == 'BodyMass'] <- 'Body mass'
-nams[nams == 'FledgedFledglings'] <- 'Age class'
-nams[nams == 'SeasonWinter'] <- 'Season'
+nams[nams == 'z.NonHelper'] <- 'Non helpers'
+nams[nams == 'c.Sex'] <- 'Sex'
+nams[nams == 'z.TQ'] <- 'TQ'
+nams[nams == 'c.Helper'] <- 'Helpers'
+nams[nams == 'z.BodyMass'] <- 'Body mass'
+nams[nams == 'z.Agemonths'] <- 'Age'
+nams[nams == 'z.Tarsus'] <- 'Tarsus'
+nams[nams == 'z.Agemonths:z.NonHelper'] <- 'Age x non helpers'
+nams[nams == 'c.Sex:z.Agemonths'] <- 'Age x sex'
+nams[nams == 'z.Agemonths:z.TQ'] <- 'Age x TQ'
+nams[nams == 'c.Helper:z.Agemonths'] <- 'Age x helpers'
+nams[nams == 'z.Agemonths:z.BodyMass'] <- 'Age x mass'
+nams[nams == 'z.Agemonths:z.Tarsus'] <- 'Age x tarsus'
 
 
 rownames(table2) <- nams
@@ -215,125 +256,147 @@ colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
 
 
 table2 <- data.frame(table2,myx=row.names(table2))
+table2$myx <- factor(table2$myx,levels = table2$myx[order(table2$Estimate,decreasing = T)])
 
-Fig3A <- forestplot(table2)
-
-#####################
-#3B
-#####################
-
-#Run the model
-lm2 <- lmer(TROC ~ Fledged + Tarsus + Helper + NonHelper + Sex + Tarsus + BodyMass  + cenTQ  + Season + LogTL + (1|LayYear),
-            data = Loss,
-            REML = FALSE)
-
-#Model averaging
-
-lm3 <- dredge(lm2)
-lm3 <- subset(lm3,delta <=6)
-lmavg <- model.avg(lm3,fit=T)
-myimp <- importance(lmavg) #Relative importance of each explanatory variable
-  
-
-#Put it all into a nice table
-table2 <- imptable(lmavg,myimp)
-table2 <- signif(table2,2)
-
-
-#Sort out row/col names
-nams <- rownames(table2)
-nams[nams == 'NonHelper'] <- 'Non helpers'
-nams[nams == 'SexMales'] <- 'Sex'
-nams[nams == 'cenTQ'] <- 'TQ'
-nams[nams == 'Helper'] <- 'Helpers'
-nams[nams == 'BodyMass'] <- 'Body mass'
-nams[nams == 'FledgedFledglings'] <- 'Age class'
-nams[nams == 'SeasonWinter'] <- 'Season'
-nams[nams == 'LogTL'] <- 'Initial TL'
-
-
-rownames(table2) <- nams
-colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
-
-
-table2 <- data.frame(table2,myx=row.names(table2))
-
-Fig3B <- forestplot(table2)
-
-
-
-
-
-
+Fig3 <- forestplot(table2)+
+  ylim(-0.4,0.4)
 
 
 
 pdf('Figures/Figure 3.pdf',
-    width = 7,
-    height = 8,
-    paper = 'a4')
-multiplot(Fig3A,Fig3B)
+    width = 8,
+    height = 5,
+    paper = 'a4r')
+Fig3
 dev.off()
 
 
 
 
 ```
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 ```{r Figure 4}
+temp <- juv
 
-ss <- c(tapply(juv$LogTL,list(juv$Season,juv$Fledged),length))
+temp[,'Helpers'] <- ifelse(temp$Helper>0,'Present', 'Absent')
+temp[,'Non helpers'] <- ifelse(temp$NonHelper>0,'Present', 'Absent')
+temp[,'Age (months)'] <- factor(temp$Agemonths) 
 
-Fig4A <- ggplot(juv,
-       aes(x = Fledged,
+Fig4A <- ggplot(temp,
+       aes(x = factor(Agemonths),
            y = LogTL,
-           fill=Season)) +
-  ylab('Telomere length (kb)') + 
-  xlab('') +
+           fill=`Non helpers`)) +
+  ylab('Log telomere length (kb)') + 
+  xlab('Age (months)') +
   theme_classic() +
-  theme(axis.text.x = element_text(size = 14), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16),
-        legend.position = 'none') +
-  geom_boxplot(notch=F)+
-  scale_fill_manual(values = c('white',grey(0.5))) +
-  annotate('text',label='A',x = 0.5,y = 4.5) +
-  annotate('text',label = paste0('(',ss,')'),x=c(0.8,1.2,1.8,2.2),y = 2.8)
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        legend.position = 'top') +
+  geom_jitter(aes(colour = `Non helpers`),position=position_jitterdodge(dodge.width = 0.8))+
+  geom_boxplot(outlier.colour = NA,notch=F)+
+  scale_colour_manual(values = c('grey','darkorange'))+
+  scale_fill_manual(values = c('grey','darkorange'))+
+  annotate('text',x = 0.55,y = 4.5,label = 'A')
 
-Fig4B <- ggplot(juv,
+Fig4B <- ggplot(temp,
+       aes(x = factor(Agemonths),
+           y = LogTL,
+           fill=`Helpers`)) +
+  ylab('Log telomere length (kb)') + 
+  xlab('Age (months)') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        legend.position = 'top') +
+  geom_jitter(aes(colour = `Helpers`),position=position_jitterdodge(dodge.width = 0.8))+
+  geom_boxplot(outlier.colour = NA,notch=F)+
+  scale_colour_manual(values = c('grey','darkorange'))+
+  scale_fill_manual(values = c('grey','darkorange'))+
+  annotate('text',x = 0.55,y = 4.5,label = 'B')
+
+
+Fig4C <- ggplot(temp,
+       aes(x = TQ,
+           y = LogTL,
+           colour=`Age (months)`,
+           fill = `Age (months)`,
+           shape = `Age (months)`)) +
+  ylab('Log telomere length (kb)') + 
+  xlab('Territory quality') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        legend.position = 'top') +
+  geom_point(alpha = 0.2)+
+  stat_smooth(method = 'lm')+
+  scale_colour_manual(values = c(grey(0.2),'darkorange','darkgreen'))+
+  scale_fill_manual(values = c('darkgrey','darkorange','darkgreen'))+
+  annotate('text',x = 3,y = 4.5,label = 'C')
+
+
+  
+Fig4D <- ggplot(temp,
        aes(x = Tarsus,
            y = LogTL,
-           col = Fledged)) +
-  ylab('Telomere length (kb)') + 
-  xlab('') +
+           colour=`Age (months)`,
+           fill = `Age (months)`,
+           shape = `Age (months)`)) +
+  ylab('Log telomere length (kb)') + 
+  xlab('Tarsus length (mm)') +
   theme_classic() +
-  theme(axis.text.x = element_text(size = 14), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16),
-        legend.position = 'none') +
-  geom_point()+
-  scale_colour_manual(values = c('black',grey(0.5))) +
-  annotate('text',label='B',x = 17.5,y = 4.5) +
-  stat_smooth(method = 'lm')
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        legend.position = 'top') +
+  geom_point(alpha = 0.2)+
+  stat_smooth(method = 'lm')+
+  scale_colour_manual(values = c(grey(0.2),'darkorange','darkgreen'))+
+  scale_fill_manual(values = c('darkgrey','darkorange','darkgreen'))+
+  annotate('text',x = 17,y = 4.5,label = 'D')
 
 
 pdf('Figures/Figure 4.pdf',
-    width = 4,
+    width = 7,
     height = 8,
-    paper = 'a4')
-multiplot(Fig4A,Fig4B)
+    paper = 'a4r')
+multiplot(Fig4A,Fig4B,Fig4C,Fig4D,layout=matrix(c(1:4),byrow = TRUE,nrow = 2))
 dev.off()
+
 
 ```
 
+
+
+
 ```{r Figure 5}
-s1 <- survfit(Surv(time = Lifespan+1, event = Died)~TLF, data = juv)
-Fig5 <- ggsurv(s1,plot.cens=F,lty.est=c(1,2)) + 
+temp <- subset(juv,LayYear<2009)
+mymed <- median(temp$cohortTL)
+temp$coTLF <- ifelse(temp$cohortTL>mymed,'h','l')
+  
+s1 <- survfit(Surv(time = Lifespan, event = Died)~coTLF, data = temp)
+Fig5A <- ggsurv(s1,plot.cens=F,lty.est=c(1:2)) + 
   theme_classic() +
   ylab('Proportion survived') + 
   xlab('Age (years)') + 
@@ -345,14 +408,36 @@ Fig5 <- ggsurv(s1,plot.cens=F,lty.est=c(1,2)) +
         axis.title.x = element_text(size = 16),
         legend.position = 'none') +
   scale_colour_manual(name = 'TL',
-                      values = c('black',grey(0.5))) +
+                      values = c('grey','black')) +
   guides(colour=F)
+
+
+mymed <- median(temp$cenTL)
+temp$cenTLF <- ifelse(temp$cenTL>mymed,'h','l')
+s1 <- survfit(Surv(time = Lifespan, event = Died)~cenTLF, data = temp)
+Fig5B <- ggsurv(s1,plot.cens=F,lty.est=c(1,2)) + 
+  theme_classic() +
+  ylab('Proportion survived') + 
+  xlab('Age (years)') + 
+  xlim(c(0,15)) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16),
+        legend.position = 'none') +
+  scale_colour_manual(name = 'TL',
+                      values = c('black','grey')) +
+  guides(colour=F)
+
+
 
 pdf('Figures/Figure 5.pdf',
     width = 4,
-    height = 4,
+    height = 8,
     paper = 'a4')
-Fig5
+multiplot(Fig5A,Fig5B)
 dev.off()
 
 ```
+

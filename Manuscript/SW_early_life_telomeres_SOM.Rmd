@@ -41,14 +41,15 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 
 ```
 
-**Table S1** Model selection table for analysis of factors affecting early life telomere length in Seychelles warblers. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. TQ = territory quality.
+**Table S1** Model selection table for analysis of factors affecting early life telomere length in juvenile Seychelles warblers. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. TQ = territory quality.
 
 ```{r Table S1}
 
 #Run the model
-lm1 <- lmer(LogTL ~ Fledged + Tarsus + Helper + NonHelper + Sex + Tarsus + BodyMass  + cenTQ  + Season + (1|LayYear),
+lm1 <- lmer(LogTL ~ Agemonths * (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|LayYear)+(1|PlateID)+(1|BirdID),
             data = juv,
             REML = FALSE)
+lm1 <- standardize(lm1)
 
 #Model averaging
 lm2 <- dredge(lm1)
@@ -56,19 +57,25 @@ t1 <- as.matrix(subset(lm2, delta<=6))
 
 #Sort out row/col names
 nams <- colnames(t1)
-#Sort out row/col names
-nams[nams == 'NonHelper'] <- 'Non helpers'
-nams[nams == 'SexMales'] <- 'Sex'
-nams[nams == 'cenTQ'] <- 'TQ'
-nams[nams == 'Helper'] <- 'Helpers'
-nams[nams == 'BodyMass'] <- 'Body mass'
-nams[nams == 'FledgedFledglings'] <- 'Age class'
-nams[nams == 'SeasonWinter'] <- 'Season'
+
+nams[nams == 'z.NonHelper'] <- 'Non helpers'
+nams[nams == 'c.Sex'] <- 'Sex'
+nams[nams == 'z.TQ'] <- 'TQ'
+nams[nams == 'c.Helper'] <- 'Helpers'
+nams[nams == 'z.BodyMass'] <- 'Body mass'
+nams[nams == 'z.Agemonths'] <- 'Age'
+nams[nams == 'z.Tarsus'] <- 'Tarsus'
+nams[nams == 'z.Agemonths:z.NonHelper'] <- 'Age x non helpers'
+nams[nams == 'c.Sex:z.Agemonths'] <- 'Age x sex'
+nams[nams == 'z.Agemonths:z.TQ'] <- 'Age x TQ'
+nams[nams == 'c.Helper:z.Agemonths'] <- 'Age x helpers'
+nams[nams == 'z.Agemonths:z.BodyMass'] <- 'Age x mass'
+nams[nams == 'z.Agemonths:z.Tarsus'] <- 'Age x tarsus'
 
 
 colnames(t1) <- nams
 
-tableS1 <- data.frame(Model = apply(t1,1,getterms,c(2:12)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+tableS1 <- data.frame(Model = apply(t1,1,getterms,c(2:14)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
 colnames(tableS1) <- c('Model','df','AICc', 'Delta AICc','Weight')
 rownames(tableS1) <- NULL
 tableS1$Model[tableS1$Model == ''] <- 'Null model'
@@ -79,14 +86,16 @@ kable(tableS1,digits=2)
 
 
 
+**Table S2** Model selection table for analysis of factors affecting early life telomere loss in Seychelles warbler chicks, using longitudinal data. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. TQ = territory quality.
 
 ```{r Table S2}
+temp <- subset(subset(Loss,Agemonths == 1),TimeDiff>0.3)
 
 #Run the model
-lm2 <- lmer(TROC ~ Fledged + Tarsus + Helper + NonHelper + Sex + Tarsus + BodyMass  + cenTQ  + Season + LogTL + (1|LayYear),
-            data = Loss,
+lm2 <- lmer(TROC ~ Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ + (1|LayYear),
+            data = temp,
             REML = FALSE)
-
+lm2 <- standardize(lm2)
 #Model averaging
 
 lm3 <- dredge(lm2)
@@ -101,23 +110,83 @@ t1 <- as.matrix(subset(lm3, delta<=6))
 #Sort out row/col names
 nams <- colnames(t1)
 
-nams[nams == 'NonHelper'] <- 'Non helpers'
-nams[nams == 'SexMales'] <- 'Sex'
-nams[nams == 'cenTQ'] <- 'TQ'
-nams[nams == 'Helper'] <- 'Helpers'
-nams[nams == 'BodyMass'] <- 'Body mass'
-nams[nams == 'FledgedFledglings'] <- 'Age class'
-nams[nams == 'SeasonWinter'] <- 'Season'
-nams[nams == 'LogTL'] <- 'Initial TL'
+nams[nams == 'z.NonHelper'] <- 'Non helpers'
+nams[nams == 'c.Sex'] <- 'Sex'
+nams[nams == 'z.TQ'] <- 'TQ'
+nams[nams == 'c.Helper'] <- 'Helpers'
+nams[nams == 'z.BodyMass'] <- 'Body mass'
+nams[nams == 'z.Agemonths'] <- 'Age'
+nams[nams == 'z.Tarsus'] <- 'Tarsus'
+nams[nams == 'z.Agemonths:z.NonHelper'] <- 'Age x non helpers'
+nams[nams == 'c.Sex:z.Agemonths'] <- 'Age x sex'
+nams[nams == 'z.Agemonths:z.TQ'] <- 'Age x TQ'
+nams[nams == 'c.Helper:z.Agemonths'] <- 'Age x helpers'
+nams[nams == 'z.Agemonths:z.BodyMass'] <- 'Age x mass'
+nams[nams == 'z.Agemonths:z.Tarsus'] <- 'Age x tarsus'
 
 
 colnames(t1) <- nams
 
-tableS1 <- data.frame(Model = apply(t1,1,getterms,c(2:12)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+tableS1 <- data.frame(Model = apply(t1,1,getterms,c(2:7)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
 colnames(tableS1) <- c('Model','df','AICc', 'Delta AICc','Weight')
 rownames(tableS1) <- NULL
 tableS1$Model[tableS1$Model == ''] <- 'Null model'
 tableS1[,3:5] <- lapply(tableS1[,3:5],as.numeric)
 kable(tableS1,digits=2)
+
+```
+
+
+
+**Figure S1**
+```{r Figure S1}
+#####################
+#4A
+#####################
+temp <- subset(subset(Loss,Agemonths == 1),TimeDiff>0.3)
+
+#Run the model
+lm2 <- lmer(TROC ~ Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ + (1|LayYear),
+            data = temp,
+            REML = FALSE)
+lm2 <- standardize(lm2)
+#Model averaging
+
+lm3 <- dredge(lm2)
+lm3 <- subset(lm3,delta <=6)
+lmavg <- model.avg(lm3,fit=T)
+myimp <- importance(lmavg) #Relative importance of each explanatory variable
+  
+
+#Put it all into a nice table
+table2 <- imptable(lmavg,myimp)
+table2 <- signif(table2,2)
+
+
+#Sort out row/col names
+nams <- rownames(table2)
+nams[nams == 'z.NonHelper'] <- 'Non helpers'
+nams[nams == 'c.Sex'] <- 'Sex'
+nams[nams == 'z.TQ'] <- 'TQ'
+nams[nams == 'c.Helper'] <- 'Helpers'
+nams[nams == 'z.BodyMass'] <- 'Body mass'
+nams[nams == 'z.Agemonths'] <- 'Age'
+nams[nams == 'z.LogTL'] <- 'Initial TL'
+nams[nams == 'z.Tarsus'] <- 'Tarsus'
+nams[nams == 'z.Agemonths:z.NonHelper'] <- 'Age x non helpers'
+nams[nams == 'c.Sex:z.Agemonths'] <- 'Age x sex'
+nams[nams == 'z.Agemonths:z.TQ'] <- 'Age x TQ'
+nams[nams == 'c.Helper:z.Agemonths'] <- 'Age x helpers'
+nams[nams == 'z.Agemonths:z.BodyMass'] <- 'Age x mass'
+nams[nams == 'z.Agemonths:z.Tarsus'] <- 'Age x tarsus'
+
+rownames(table2) <- nams
+colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
+
+
+table2 <- data.frame(table2,myx=row.names(table2))
+
+FigS1 <- forestplot(table2)
+FigS1
 
 ```
