@@ -49,9 +49,9 @@ temp <- dd
 temp$Agemonths[temp$Agemonths>10] <- '12+'
 temp$Agemonths <- factor(temp$Agemonths,levels = c('1','6','10','12+'))
 
-Fig1A <- ggplot(temp,aes(x = Agemonths,y = LogTL))+
+Fig1A <- ggplot(temp,aes(x = Agemonths,y = RTL))+
   geom_jitter(col='grey') +
-  ylab('Log telomere length (kb)') + 
+  ylab('RTL') + 
   xlab('Age (months)') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
@@ -59,157 +59,87 @@ Fig1A <- ggplot(temp,aes(x = Agemonths,y = LogTL))+
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
         legend.position = 'none')+
-  geom_boxplot(outlier.colour=NA)+
+  geom_boxplot(outlier.colour=NA)
   annotate('text',x = 0.6,y = 4.8,label = 'A')
 
 
+  temp <- Loss
+  temp[,'Age (months)'] <- factor(temp$Agemonths)
 
-
-#
-temp <- Loss
-temp[,'Age (months)'] <- factor(temp$Agemonths)
-
-Fig1B <- ggplot(temp,aes(x = LogTL,y = LogTL1,col = `Age (months)`,shape = `Age (months)`)) +
-  ylab('Log adult telomere length (kb)') + 
-  xlab('Log juvenile telomere length (kb)') +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        legend.position = 'none')+
-  geom_point() +
-  stat_smooth(method = 'lm')+
-  xlim(2,4.5)+
-  ylim(2,4.5)+
-    scale_colour_manual(values = c('darkgrey','darkgreen','darkorange'))+
-  annotate('text',x = 2,y = 4.5,label = 'B')
-
-
-
-#
-temp <- Loss
-temp[,'Age (months)'] <- factor(temp$Agemonths)
-
-Fig1C <- ggplot(temp,aes(x = TimeDiff,y = Loss,col=`Age (months)`,shape = `Age (months)`)) +
-  ylab('Log telomere loss (kb)') + 
-  xlab('Time interval (years)') +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        legend.position = 'none')+
-  geom_point()+
-  geom_abline(slope = 0,intercept = 0,lty = 2)+
-  stat_smooth(method='lm')+
-  scale_colour_manual(values = c('darkgrey','darkgreen','darkorange'))+
-  annotate('text',x = 0,y = 2,label = 'C')
-
-
-Fig1D <- ggplot(temp,aes(x = TimeDiff,y = TROC,col=`Age (months)`,shape = `Age (months)`)) +
-  ylab('Log telomere loss rate (kb/year)') + 
-  xlab('Time interval (years)') +
+Fig1B <- ggplot(temp,aes(x = `Age (months)`,y = TROC)) +
+    geom_jitter(col='grey') +
+  ylab('Loss in RTL') + 
+  xlab('Age (months)') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
         legend.position = c(0.9,0.8))+
-  geom_point()+
-  geom_abline(slope = 0,intercept = 0,lty = 2)+
+  geom_boxplot(outlier.shape = NA)+
   stat_smooth(method = 'lm', formula = y~(1/exp(x)))+
-  scale_colour_manual(values = c('darkgrey','darkgreen','darkorange'))+
+  scale_colour_manual(values = c('darkgrey','darkgreen','darkorange'))
   annotate('text',x = 0,y = 8,label = 'D')
 
+temp <- juv
+temp$LayYear <- factor(temp$LayYear)
 
 
+Fig1C <- ggplot(temp,
+       aes(x = LayYear,
+           y = RTL)) +
+  ylab('') + 
+  xlab('RTL') +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 60,size = 14,vjust=0.5), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16),
+        legend.position = 'none') +
+  geom_jitter(col = 'grey')+
+  geom_boxplot(outlier.colour = NA)+
+  scale_x_discrete(limits = factor(1998:2014),drop=F)
+  annotate('text',x = 1,y = 4.4,label = 'C')
+
+
+  
+temp <- Loss
+temp$LayYear <- factor(temp$LayYear)
+
+  
+Fig1D <- ggplot(temp,
+       aes(x = LayYear,
+           y = RTL)) +
+  ylab('') + 
+  xlab('Loss in RTL') +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 60,size = 14,vjust=0.5), 
+        axis.text.y = element_text(size = 14), 
+        axis.title.y = element_text(size = 16,vjust=0.8),
+        axis.title.x = element_text(size = 16),
+        legend.position = 'none') +
+  geom_jitter(col = 'grey')+
+  geom_boxplot(outlier.colour = NA)+
+  scale_x_discrete(limits = factor(1998:2014),drop=F)
+  annotate('text',x = 1,y = 4.4,label = 'D')
+
+  
+  
 
 pdf('Figures/Figure 1.pdf',
     width = 8,
     height = 8,
     paper = 'a4r')
-multiplot(Fig1A,Fig1B,Fig1C,Fig1D,layout=matrix(c(1:4),nrow = 2,byrow=T))
+multiplot(Fig1A,Fig1B,Fig1C,Fig1D,layout=matrix(c(1,2,3,3,4,4),nrow = 3,byrow=T))
 dev.off()
 
 
 ```
+
 
 
 
 ```{r Figure 2}
-
-
-###############################
-temp <- juv
-temp$LayYear <- factor(temp$LayYear)
-
-
-Fig2A <- ggplot(subset(temp,Agemonths == 1),
-       aes(x = LayYear,
-           y = LogTL)) +
-  ylab('') + 
-  xlab('') +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 60,size = 14,vjust=0.5), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16),
-        legend.position = 'none') +
-  geom_jitter(col = 'grey')+
-  ylim(c(2,4.5))+
-  geom_boxplot(outlier.colour = NA)+
-  scale_x_discrete(limits = factor(1998:2014),drop=F)+
-  annotate('text',x = 1,y = 4.4,label = 'A')
-
-Fig2B <- ggplot(subset(juv,Agemonths == 6),
-       aes(x = factor(LayYear),
-           y = LogTL)) +
-  ylab('Log telomere length (kb)') + 
-  xlab('') +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 60,size = 14,vjust=0.5), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16),
-        legend.position = 'none') +
-  geom_jitter(col = 'grey')+
-  ylim(c(2,4.5))+
-  geom_boxplot(outlier.colour = NA)+
-  scale_x_discrete(limits = factor(1998:2014),drop=F)+
-  annotate('text',x = 1,y = 4.4,label = 'B')
-
-Fig2C <- ggplot(subset(juv,Agemonths == 10),
-       aes(x = factor(LayYear),
-           y = LogTL)) +
-  ylab('') + 
-  xlab('Cohort') +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 60,size = 14,vjust=0.5), 
-        axis.text.y = element_text(size = 14), 
-        axis.title.y = element_text(size = 16,vjust=0.8),
-        axis.title.x = element_text(size = 16),
-        legend.position = 'none') +
-  geom_jitter(col = 'grey')+
-  ylim(c(2,4.5))+
-  geom_boxplot(outlier.colour = NA)+
-  scale_x_discrete(limits = factor(1998:2014),drop=F)+
-  annotate('text',x = 1,y = 4.4,label = 'C')
-
-
-pdf('Figures/Figure 2.pdf',
-    width = 6,
-    height = 8,
-    paper = 'a4r')
-multiplot(Fig2A,Fig2B,Fig2C)
-dev.off()
-
-```
-
-
-
-
-```{r Figure 3}
 
 temp <- juv
 
@@ -218,7 +148,7 @@ temp <- juv
 #####################
 
 #Run the model
-lm2 <- lmer(LogTL ~ Agemonths * (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ)  + (1|LayYear) + (1|PlateID) + (1|TerritoryID),
+lm2 <- lmer(RTL ~ Agemonths * (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ)  + (1|LayYear) + (1|TerritoryID),
             data = temp,
             REML = FALSE)
 lm2 <- standardize(lm2)
@@ -259,68 +189,21 @@ colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
 table2 <- data.frame(table2,myx=row.names(table2))
 table2$myx <- factor(table2$myx,levels = table2$myx[order(table2$Estimate,decreasing = T)])
 
-Fig3 <- forestplot(table2)+
-  ylim(-0.4,0.4)
+Fig2A <- forestplot(table2)
 
 
 
-pdf('Figures/Figure 3.pdf',
-    width = 8,
-    height = 5,
-    paper = 'a4r')
-Fig3
-dev.off()
-
-
-
-
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-```{r Figure 4}
 temp <- juv
 
 temp[,'Helpers'] <- ifelse(temp$Helper>0,'Present', 'Absent')
 temp[,'Non helpers'] <- ifelse(temp$NonHelper>0,'Present', 'Absent')
 temp[,'Age (months)'] <- factor(temp$Agemonths) 
 
-Fig4A <- ggplot(temp,
+Fig2B <- ggplot(temp,
        aes(x = factor(Agemonths),
-           y = LogTL,
-           fill=`Non helpers`)) +
-  ylab('Log telomere length (kb)') + 
-  xlab('Age (months)') +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        legend.position = 'top') +
-  geom_jitter(aes(colour = `Non helpers`),position=position_jitterdodge(dodge.width = 0.8))+
-  geom_boxplot(outlier.colour = NA,notch=F)+
-  scale_colour_manual(values = c('grey','darkorange'))+
-  scale_fill_manual(values = c('grey','darkorange'))+
-  annotate('text',x = 0.55,y = 4.5,label = 'A')
-
-Fig4B <- ggplot(temp,
-       aes(x = factor(Agemonths),
-           y = LogTL,
+           y = RTL,
            fill=`Helpers`)) +
-  ylab('Log telomere length (kb)') + 
+  ylab('RTL') + 
   xlab('Age (months)') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
@@ -331,17 +214,17 @@ Fig4B <- ggplot(temp,
   geom_jitter(aes(colour = `Helpers`),position=position_jitterdodge(dodge.width = 0.8))+
   geom_boxplot(outlier.colour = NA,notch=F)+
   scale_colour_manual(values = c('grey','darkorange'))+
-  scale_fill_manual(values = c('grey','darkorange'))+
+  scale_fill_manual(values = c('grey','darkorange'))
   annotate('text',x = 0.55,y = 4.5,label = 'B')
 
 
-Fig4C <- ggplot(temp,
+Fig2C <- ggplot(temp,
        aes(x = TQ,
-           y = LogTL,
+           y = RTL,
            colour=`Age (months)`,
            fill = `Age (months)`,
            shape = `Age (months)`)) +
-  ylab('Log telomere length (kb)') + 
+  ylab('RTL') + 
   xlab('Territory quality') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
@@ -352,18 +235,18 @@ Fig4C <- ggplot(temp,
   geom_point(alpha = 0.2)+
   stat_smooth(method = 'lm')+
   scale_colour_manual(values = c(grey(0.2),'darkorange','darkgreen'))+
-  scale_fill_manual(values = c('darkgrey','darkorange','darkgreen'))+
+  scale_fill_manual(values = c('darkgrey','darkorange','darkgreen'))
   annotate('text',x = 3,y = 4.5,label = 'C')
 
 
   
-Fig4D <- ggplot(temp,
+Fig2D <- ggplot(temp,
        aes(x = Tarsus,
-           y = LogTL,
+           y = RTL,
            colour=`Age (months)`,
            fill = `Age (months)`,
            shape = `Age (months)`)) +
-  ylab('Log telomere length (kb)') + 
+  ylab('RTL') + 
   xlab('Tarsus length (mm)') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
@@ -374,16 +257,19 @@ Fig4D <- ggplot(temp,
   geom_point(alpha = 0.2)+
   stat_smooth(method = 'lm')+
   scale_colour_manual(values = c(grey(0.2),'darkorange','darkgreen'))+
-  scale_fill_manual(values = c('darkgrey','darkorange','darkgreen'))+
+  scale_fill_manual(values = c('darkgrey','darkorange','darkgreen'))
   annotate('text',x = 17,y = 4.5,label = 'D')
 
 
-pdf('Figures/Figure 4.pdf',
-    width = 7,
-    height = 8,
+
+pdf('Figures/Figure 2.pdf',
+    width = 9,
+    height = 9,
     paper = 'a4r')
-multiplot(Fig4A,Fig4B,Fig4C,Fig4D,layout=matrix(c(1:4),byrow = TRUE,nrow = 2))
+multiplot(Fig2A,Fig2B,Fig2C,Fig2D,layout = matrix(c(1,1,1,2,3,4),nrow = 2,byrow = T))
 dev.off()
+
+
 
 
 ```
@@ -391,13 +277,155 @@ dev.off()
 
 
 
-```{r Figure 5}
+
+
+
+
+
+
+
+
+
+
+
+
+```{r Figure 3}
+
+temp <- subset(Loss,TimeDiff>0.3)
+
+#####################
+#3A
+#####################
+
+#Run the model
+lm2 <- lmer(TROC ~ Agemonths * (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ)  + RTL + (1|LayYear),
+            data = temp,
+            REML = FALSE)
+lm2 <- standardize(lm2)
+#Model averaging
+
+lm3 <- dredge(lm2)
+lm3 <- subset(lm3,delta <=6)
+lmavg <- model.avg(lm3,fit=T)
+myimp <- importance(lmavg) #Relative importance of each explanatory variable
+  
+
+#Put it all into a nice table
+table2 <- imptable(lmavg,myimp)
+table2 <- signif(table2,2)
+
+
+#Sort out row/col names
+nams <- rownames(table2)
+nams[nams == 'z.RTL'] <- 'RTL'
+nams[nams == 'z.NonHelper'] <- 'Non helpers'
+nams[nams == 'c.Sex'] <- 'Sex'
+nams[nams == 'z.TQ'] <- 'TQ'
+nams[nams == 'c.Helper'] <- 'Helpers'
+nams[nams == 'z.BodyMass'] <- 'Body mass'
+nams[nams == 'z.Agemonths'] <- 'Age'
+nams[nams == 'z.Tarsus'] <- 'Tarsus'
+nams[nams == 'z.Agemonths:z.NonHelper'] <- 'Age x non helpers'
+nams[nams == 'c.Sex:z.Agemonths'] <- 'Age x sex'
+nams[nams == 'z.Agemonths:z.TQ'] <- 'Age x TQ'
+nams[nams == 'c.Helper:z.Agemonths'] <- 'Age x helpers'
+nams[nams == 'z.Agemonths:z.BodyMass'] <- 'Age x mass'
+nams[nams == 'z.Agemonths:z.Tarsus'] <- 'Age x tarsus'
+
+
+rownames(table2) <- nams
+colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
+
+
+table2 <- data.frame(table2,myx=row.names(table2))
+table2$myx <- factor(table2$myx,levels = table2$myx[order(table2$Estimate,decreasing = T)])
+
+Fig3A <- forestplot(table2)
+
+
+
+
+temp[,'Helpers'] <- ifelse(temp$Helper>0,'Present', 'Absent')
+temp[,'Non helpers'] <- ifelse(temp$NonHelper>0,'Present', 'Absent')
+temp[,'Age (months)'] <- factor(temp$Agemonths) 
+
+Fig3B <- ggplot(temp,
+       aes(x = factor(Agemonths),
+           y = TROC,
+           fill=`Helpers`)) +
+  ylab('Loss in RTL') + 
+  xlab('Age (months)') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        legend.position = 'top') +
+  geom_jitter(aes(colour = `Helpers`),position=position_jitterdodge(dodge.width = 0.8))+
+  geom_boxplot(outlier.colour = NA,notch=F)+
+  scale_colour_manual(values = c('grey','darkorange'))+
+  scale_fill_manual(values = c('grey','darkorange'))
+  annotate('text',x = 0.55,y = 4.5,label = 'B')
+
+
+Fig3C <- ggplot(temp,
+       aes(x = factor(Agemonths),
+           y = TROC,
+           fill=Sex)) +
+  ylab('Loss in RTL') + 
+  xlab('Age (months)') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        legend.position = 'top') +
+  geom_jitter(aes(colour = Sex),position=position_jitterdodge(dodge.width = 0.8))+
+  geom_boxplot(outlier.colour = NA,notch=F)+
+  scale_colour_manual(values = c('grey','darkorange'))+
+  scale_fill_manual(values = c('grey','darkorange'))
+  annotate('text',x = 0.55,y = 4.5,label = 'B')
+
+  
+Fig3D <- ggplot(temp,
+       aes(x = BodyMass,
+           y = TROC,
+           col=`Age (months)`)) +
+  ylab('Loss in RTL') + 
+  xlab('Body mass (g)') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        legend.position = 'top') +
+  geom_point(alpha = 0.2)+
+  stat_smooth(method = 'lm')+
+    scale_colour_manual(values = c(grey(0.2),'darkorange','darkgreen'))+
+  scale_fill_manual(values = c('darkgrey','darkorange','darkgreen'))
+  annotate('text',x = 17,y = 4.5,label = 'D')
+
+
+
+pdf('Figures/Figure 3.pdf',
+    width = 9,
+    height = 9,
+    paper = 'a4r')
+multiplot(Fig3A,Fig3B,Fig3C,Fig3D,layout = matrix(c(1,1,1,2,3,4),nrow = 2,byrow = T))
+dev.off()
+
+```
+
+
+
+
+```{r Figure 4}
 temp <- subset(juv,LayYear<2009)
 mymed <- median(temp$cohortTL)
 temp$coTLF <- ifelse(temp$cohortTL>mymed,'h','l')
   
 s1 <- survfit(Surv(time = Lifespan, event = Died)~coTLF, data = temp)
-Fig5A <- ggsurv(s1,plot.cens=F,lty.est=c(1:2)) + 
+Fig4A <- ggsurv(s1,plot.cens=F,lty.est=c(1:2)) + 
   theme_classic() +
   ylab('Proportion survived') + 
   xlab('Age (years)') + 
@@ -412,11 +440,12 @@ Fig5A <- ggsurv(s1,plot.cens=F,lty.est=c(1:2)) +
                       values = c('grey','black')) +
   guides(colour=F)
 
-
+temp <- subset(temp,!(is.na(cenTL)))
 mymed <- median(temp$cenTL)
 temp$cenTLF <- ifelse(temp$cenTL>mymed,'h','l')
+
 s1 <- survfit(Surv(time = Lifespan, event = Died)~cenTLF, data = temp)
-Fig5B <- ggsurv(s1,plot.cens=F,lty.est=c(1,2)) + 
+Fig4B <- ggsurv(s1,plot.cens=F,lty.est=c(1,2)) + 
   theme_classic() +
   ylab('Proportion survived') + 
   xlab('Age (years)') + 
@@ -433,11 +462,11 @@ Fig5B <- ggsurv(s1,plot.cens=F,lty.est=c(1,2)) +
 
 
 
-pdf('Figures/Figure 5.pdf',
+pdf('Figures/Figure 4.pdf',
     width = 4,
     height = 8,
     paper = 'a4')
-multiplot(Fig5A,Fig5B)
+multiplot(Fig4A,Fig4B)
 dev.off()
 
 ```

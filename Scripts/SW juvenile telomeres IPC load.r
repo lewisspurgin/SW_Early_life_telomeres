@@ -17,7 +17,7 @@ library(gvlma)
 library(survival)
 
 # Load data ---------------------------------------------------------------
-dd0 <- read.csv('Data/TL2 output 15 Dec 2015.csv') #main dataset
+dd0 <- read.csv('Data/REL_TL_EB_EAF_25 Feb FULL DATA.csv') #main dataset
 terr <- read.csv('Data/SW TL all territories.csv')
 status <- read.csv('Data/SW TL all breedstatus.csv')
 insects <- read.csv('Data/Insects.csv')

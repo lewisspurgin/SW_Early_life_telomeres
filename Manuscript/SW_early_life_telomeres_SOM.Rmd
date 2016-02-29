@@ -46,7 +46,7 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 ```{r Table S1}
 
 #Run the model
-lm1 <- lmer(LogTL ~ Agemonths * (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|LayYear)+(1|PlateID)+(1|BirdID),
+lm1 <- lmer(RTL ~ Agemonths * (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|LayYear)+(1|TerritoryID),
             data = juv,
             REML = FALSE)
 lm1 <- standardize(lm1)
@@ -89,27 +89,22 @@ kable(tableS1,digits=2)
 **Table S2** Model selection table for analysis of factors affecting early life telomere loss in Seychelles warbler chicks, using longitudinal data. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. TQ = territory quality.
 
 ```{r Table S2}
-temp <- subset(subset(Loss,Agemonths == 1),TimeDiff>0.3)
+temp <- subset(Loss,TimeDiff>0.3)
 
 #Run the model
-lm2 <- lmer(TROC ~ Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ + (1|LayYear),
+lm1 <- lmer(TROC ~ Agemonths * (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + RTL + (1|LayYear),
             data = temp,
             REML = FALSE)
-lm2 <- standardize(lm2)
-#Model averaging
-
-lm3 <- dredge(lm2)
-lm3 <- subset(lm3,delta <=6)
-
+lm1 <- standardize(lm1)
 
 #Model averaging
-t1 <- as.matrix(subset(lm3, delta<=6))
-
-
+lm2 <- dredge(lm1)
+t1 <- as.matrix(subset(lm2, delta<=6))
 
 #Sort out row/col names
 nams <- colnames(t1)
 
+nams[nams == 'z.RTL'] <- 'RTL'
 nams[nams == 'z.NonHelper'] <- 'Non helpers'
 nams[nams == 'c.Sex'] <- 'Sex'
 nams[nams == 'z.TQ'] <- 'TQ'
@@ -127,12 +122,12 @@ nams[nams == 'z.Agemonths:z.Tarsus'] <- 'Age x tarsus'
 
 colnames(t1) <- nams
 
-tableS1 <- data.frame(Model = apply(t1,1,getterms,c(2:7)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
-colnames(tableS1) <- c('Model','df','AICc', 'Delta AICc','Weight')
-rownames(tableS1) <- NULL
-tableS1$Model[tableS1$Model == ''] <- 'Null model'
-tableS1[,3:5] <- lapply(tableS1[,3:5],as.numeric)
-kable(tableS1,digits=2)
+tableS2 <- data.frame(Model = apply(t1,1,getterms,c(2:15)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+colnames(tableS2) <- c('Model','df','AICc', 'Delta AICc','Weight')
+rownames(tableS2) <- NULL
+tableS2$Model[tableS2$Model == ''] <- 'Null model'
+tableS2[,3:5] <- lapply(tableS2[,3:5],as.numeric)
+kable(tableS2,digits=2)
 
 ```
 
@@ -143,7 +138,10 @@ kable(tableS1,digits=2)
 #####################
 #4A
 #####################
-temp <- subset(subset(Loss,Agemonths == 1),TimeDiff>0.3)
+temp <- subset(Loss,TimeDiff>0.3)
+temp <- subset(temp,Agemonths == 1)
+temp <- subset(temp,TROC<2)
+temp <- subset(temp,TQI<4)
 
 #Run the model
 lm2 <- lmer(TROC ~ Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ + (1|LayYear),
@@ -171,7 +169,7 @@ nams[nams == 'z.TQ'] <- 'TQ'
 nams[nams == 'c.Helper'] <- 'Helpers'
 nams[nams == 'z.BodyMass'] <- 'Body mass'
 nams[nams == 'z.Agemonths'] <- 'Age'
-nams[nams == 'z.LogTL'] <- 'Initial TL'
+nams[nams == 'z.RTL'] <- 'Initial TL'
 nams[nams == 'z.Tarsus'] <- 'Tarsus'
 nams[nams == 'z.Agemonths:z.NonHelper'] <- 'Age x non helpers'
 nams[nams == 'c.Sex:z.Agemonths'] <- 'Age x sex'
@@ -190,3 +188,9 @@ FigS1 <- forestplot(table2)
 FigS1
 
 ```
+
+
+
+ggplot(temp,aes(x = RTL,y = TROC,col=factor(Helper)))+
+geom_point()+
+stat_smooth(method = 'lm')

@@ -4,11 +4,11 @@
 #################################################################################
 
 #Only use Ellie's samples
-dd0 <- subset(dd0,Whodunnit == 'EAF')
+#dd0 <- subset(dd0,Whodunnit == 'EAF')
 
 #Average repeats of blood samples
-av <- ave(dd0$TL,c(dd0$BloodID,dd0$Status,dd0$PlateID))
-dd0$TL <- av
+av <- ave(dd0$RTL,c(dd0$BloodID,dd0$Status,dd0$PlateID))
+dd0$RTL <- av
 dd <- dd0[!(duplicated(dd0$BloodID)),]
 
 
@@ -49,17 +49,10 @@ dd$LeftTarsus <- NULL
 
 # Remove unwanted data/outliers ----------------------------------------------------
 
-
-dd <- droplevels(subset(subset(dd,TL>50),TL<30000))
+dd <- subset(dd,RTL<3)
+dd <- subset(dd,RTL > 0.04)
 dd <- subset(dd,BodyMass>5)
 dd <- subset(dd,Tarsus>17)
-
-
-# Telomere data -----------------------------------------------------------
-
-dd$TLKB <- dd$TL/1000
-dd$LogTL <- log10(dd$TL)
-
 
 
 
@@ -124,8 +117,8 @@ juv$cohortTL <- NA
 for(i in 1:nrow(juv))
 {
   currentdata <- subset(juv,FieldPeriodID == FieldPeriodID[i])
-  juv$cenTL[i] <- (juv$LogTL[i] - mean(currentdata$LogTL))/sd(currentdata$LogTL)
-  juv$cohortTL[i] <- mean(currentdata$LogTL)
+  juv$cenTL[i] <- (juv$RTL[i] - mean(currentdata$RTL))/sd(currentdata$RTL)
+  juv$cohortTL[i] <- mean(currentdata$RTL)
 }
 
 mymed <- median(juv$cenTL,na.rm=T)
@@ -251,22 +244,23 @@ x4 <- x4[order(x4$BirdID),]
 
 
 #Apply Verhulst's correction for regresison to the mean
-xx1 <- x4$TLKB-mean(x4$TLKB)
-xx2 <- x2$TLKB-mean(x2$TLKB)          
-rho <- cor(x4$TLKB,x2$TLKB)
+xx1 <- x4$RTL-mean(x4$RTL)
+xx2 <- x2$RTL-mean(x2$RTL)          
+rho <- cor(x4$RTL,x2$RTL)
 
 #Creat data frame with TROC
 Loss <- data.frame(x4,
-                   Loss = x4$LogTL-x2$LogTL,
-                   LogTL1 = x2$LogTL,
+                   Loss = x4$RTL-x2$RTL,
+                   RTL1 = x2$RTL,
                    Agemonths1 = x2$Agemonths,
-                   TimeDiff = as.numeric(x2$CatchDate-x4$CatchDate)/365,
+                   TimeDiff = round(as.numeric(x2$CatchDate-x4$CatchDate)/365,0),
                    RemainingLife2 = x2$RemainingLife,
                    D=(rho*xx1)-xx2)
-Loss$TROC <- with(Loss,Loss/TimeDiff)
+Loss$TROC <- with(Loss,D/TimeDiff)
 
 #Restrict to brids with sample within 5 years
 Loss <- subset(Loss,TimeDiff<5.5)
+Loss <- subset(Loss,TimeDiff>0)
 
 #Calculate body condition
 Loss$Condition <- lm(BodyMass~Tarsus, data=Loss)$residuals
@@ -283,18 +277,18 @@ rm(status,helpers,hatchdate,x1,x2,x3,x4)
 
 # Field period average data for plots -----------------------------------------------
 
-juvseason <- ddply(FlSA,
-                   .(FieldPeriodID,Season),
+juvseason <- ddply(juv,
+                   .(factor(FieldPeriodID)),
                    summarize,
-                   TL = median(LogTL),
-                   TLse = se(LogTL),
+                   RTL = mean(RTL),
+                   TLse = se(RTL),
                    Helper = mean(Helper),
-                   Insect = median(Insect),
+                   Insect = mean(Insect),
                    Density = mean(Density),
-                   Lifespan = median(RemainingLife),
+                   Lifespan = mean(RemainingLife),
                    LayYear = mean(CatchYear),
                    Age = mean(Agemonths),
-                   n = length(TLKB),
+                   n = length(TQ),
                    TQ = mean(TQ))
 juvseason <- subset(juvseason,n>4)
 
