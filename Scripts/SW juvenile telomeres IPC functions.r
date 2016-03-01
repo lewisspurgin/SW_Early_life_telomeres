@@ -292,7 +292,7 @@ forestplot <- function(mytable)
           axis.title.y = element_text(size = 16,vjust=0.8),
           axis.title.x = element_text(size = 16)) +
     geom_abline(slope=0,intercept=0,lty=2) +
-    annotate('text',x=mytable$myx,y=min(mytable$X2.5)*1.2,label=paste('(',mytable$RI,')',sep=''))
+    annotate('text',x=mytable$myx,y=min(mytable$X2.5)*1.2,label=paste('(',mytable$RI,')',sep=''),size = 4)
     
 }
 

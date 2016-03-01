@@ -49,7 +49,7 @@ dd$LeftTarsus <- NULL
 
 # Remove unwanted data/outliers ----------------------------------------------------
 
-dd <- subset(dd,RTL<3)
+dd <- subset(dd,RTL<2)
 dd <- subset(dd,RTL > 0.04)
 dd <- subset(dd,BodyMass>5)
 dd <- subset(dd,Tarsus>17)
@@ -74,7 +74,7 @@ dd$Agemonths <- ifelse(dd$Ageclass == 'CH',1,
                        ifelse(dd$Ageclass == 'FL',6,
                               ifelse(dd$Ageclass == 'SA',10,dd$Age*12)))
 
-dd <- subset(dd,Agemonths>0)
+dd <- subset(dd,Agemonths!=12)
 
 dd$Age[dd$Fledged != 'Adults'] <- 1
 
@@ -90,7 +90,7 @@ dd$Died <- ifelse(dd$DeathYear<2013,1,0)
 # Exclude winter seasons and early years ----------------------------------
 
 dd <- subset(dd,LayYear>1997)
-dd <- subset(dd,Season == 'Summer')
+#dd <- subset(dd,Season == 'Summer')
 
 
 # Sex ---------------------------------------------------------------------
@@ -244,8 +244,8 @@ x4 <- x4[order(x4$BirdID),]
 
 
 #Apply Verhulst's correction for regresison to the mean
-xx1 <- x4$RTL-mean(x4$RTL)
-xx2 <- x2$RTL-mean(x2$RTL)          
+xx1 <- x4$RTL
+xx2 <- x2$RTL        
 rho <- cor(x4$RTL,x2$RTL)
 
 #Creat data frame with TROC
@@ -253,17 +253,17 @@ Loss <- data.frame(x4,
                    Loss = x4$RTL-x2$RTL,
                    RTL1 = x2$RTL,
                    Agemonths1 = x2$Agemonths,
-                   TimeDiff = round(as.numeric(x2$CatchDate-x4$CatchDate)/365,0),
+                   TimeDiff = round(as.numeric(x2$CatchDate-x4$CatchDate)/182.5)*0.5,
                    RemainingLife2 = x2$RemainingLife,
                    D=(rho*xx1)-xx2)
-Loss$TROC <- with(Loss,D/TimeDiff)
+Loss$TROC <- with(Loss,Loss/TimeDiff)
 
 #Restrict to brids with sample within 5 years
 Loss <- subset(Loss,TimeDiff<5.5)
-Loss <- subset(Loss,TimeDiff>0)
+Loss <- subset(Loss,TimeDiff>0.3)
 
 #Calculate body condition
-Loss$Condition <- lm(BodyMass~Tarsus, data=Loss)$residuals
+Loss$Condition <- lm(BodyMass~Tarsus+Agemonths+Sex, data=Loss)$residuals
 
 #Remove outliers
 Loss <- subset(subset(Loss,TROC> -10),TROC < 10)
@@ -278,18 +278,18 @@ rm(status,helpers,hatchdate,x1,x2,x3,x4)
 # Field period average data for plots -----------------------------------------------
 
 juvseason <- ddply(juv,
-                   .(factor(FieldPeriodID)),
+                   .(factor(LayYear),Season),
                    summarize,
-                   RTL = mean(RTL),
+                   RTL = median(RTL),
                    TLse = se(RTL),
-                   Helper = mean(Helper),
-                   Insect = mean(Insect),
+                   Helper = mean(Helper,na.rm=T),
+                   Insect = mean(Insect,na.rm=T),
                    Density = mean(Density),
                    Lifespan = mean(RemainingLife),
                    LayYear = mean(CatchYear),
                    Age = mean(Agemonths),
                    n = length(TQ),
-                   TQ = mean(TQ))
+                   TQ = mean(TQ,na.rm=T))
 juvseason <- subset(juvseason,n>4)
 
 
