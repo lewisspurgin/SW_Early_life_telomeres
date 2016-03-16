@@ -91,10 +91,10 @@ kable(tableS1,digits=2)
 **Table S2** Model selection table for analysis of factors affecting early life telomere loss in Seychelles warbler chicks, using longitudinal data. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. TQ = territory quality.
 
 ```{r Table S2}
-temp <- Loss
+temp <- subset(Loss,Agemonths == 1)
 
 #Run the model
-lm1 <- lmer(TROC ~ Agemonths * (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ + Season) + (1|LayYear),
+lm1 <- lmer(Loss ~ (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ + Season) + (1|LayYear),
             data = temp,
             REML = FALSE)
 lm1 <- standardize(lm1)
@@ -126,7 +126,7 @@ nams[nams == 'z.Agemonths:z.Tarsus'] <- 'Age x tarsus'
 
 colnames(t1) <- nams
 
-tableS2 <- data.frame(Model = apply(t1,1,getterms,c(2:16)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+tableS2 <- data.frame(Model = apply(t1,1,getterms,c(2:8)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
 colnames(tableS2) <- c('Model','df','AICc', 'Delta AICc','Weight')
 rownames(tableS2) <- NULL
 tableS2$Model[tableS2$Model == ''] <- 'Null model'

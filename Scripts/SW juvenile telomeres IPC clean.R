@@ -4,7 +4,7 @@
 #################################################################################
 
 #Only use Ellie's samples
-#dd0 <- subset(dd0,Whodunnit == 'EAF')
+dd0 <- subset(dd0,Whodunnit == 'EAF')
 
 #Average repeats of blood samples
 av <- ave(dd0$RTL,c(dd0$BloodID,dd0$Status,dd0$PlateID))
@@ -25,35 +25,12 @@ colnames(dd)[colnames(dd) == 'MinOfFieldPeriodID'] <- 'FieldPeriodID'
 dd$CatchYear <- as.numeric(substr(dd$CatchDate,7,10))
 dd$DeathYear <- as.numeric(substr(dd$DeathDate,7,10))
 dd$CatchDate <- as.Date(dd$CatchDate,"%d/%m/%Y")
+dd$DeathDate <- as.Date(dd$DeathDate,"%d/%m/%Y")
+
+
 
 dd$Season <- ifelse(as.numeric(format(dd$CatchDate,'%m')) %in% c(4:10),
                     'Summer','Winter')
-
-
-# Tarsus ------------------------------------------------------------------
-
-dd$Tarsus <- NA
-for(i in 1:nrow(dd))
-{
-  ifelse(is.na(dd$RightTarsus[i]),
-         ifelse(is.na(dd$LeftTarsus[i]),
-                dd$Tarsus[i] <- NA,
-                dd$Tarsus[i] <- dd$LeftTarsus[i]),
-         dd$Tarsus[i] <- dd$RightTarsus[i])
-}
-
-dd$RightTarsus <- NULL
-dd$LeftTarsus <- NULL
-
-
-
-# Remove unwanted data/outliers ----------------------------------------------------
-
-dd <- subset(dd,RTL<2)
-dd <- subset(dd,RTL > 0.04)
-dd <- subset(dd,BodyMass>5)
-dd <- subset(dd,Tarsus>17)
-
 
 
 # Age data ----------------------------------------------------------------
@@ -78,9 +55,45 @@ dd <- subset(dd,Agemonths!=12)
 
 dd$Age[dd$Fledged != 'Adults'] <- 1
 
+
+
+
+# Tarsus and delta age ------------------------------------------------------------------
+
+dd$Tarsus <- NA
+dd$DeltaAge <- NA
+for(i in 1:nrow(dd))
+{
+  ifelse(is.na(dd$RightTarsus[i]),
+         ifelse(is.na(dd$LeftTarsus[i]),
+                dd$Tarsus[i] <- NA,
+                dd$Tarsus[i] <- dd$LeftTarsus[i]),
+         dd$Tarsus[i] <- dd$RightTarsus[i])
+  
+  dd$DeltaAge[i] <- dd$Agemonths[i] - mean(subset(dd,BirdID == dd$BirdID[i])$Agemonths)
+  
+}
+
+dd$RightTarsus <- NULL
+dd$LeftTarsus <- NULL
+
+
+
+# Remove unwanted data/outliers ----------------------------------------------------
+
+dd <- subset(dd,RTL<2)
+dd <- subset(dd,RTL > 0.04)
+dd <- subset(dd,BodyMass>5)
+dd <- subset(dd,Tarsus>17)
+
+
+
+
 # Survival and lifespan ---------------------------------------------------
 
-dd$RemainingLife <- dd$DeathYear-dd$CatchYear
+dd$RemainingLife <- round(as.numeric(dd$DeathDate-dd$CatchDate)/365,0)
+dd$SurvivedNext <- ifelse(dd$RemainingLife<1,0,1)
+
 dd$SurvivedNext <- ifelse(dd$RemainingLife>1,1,0)
 dd$Lifespan <- (dd$DeathYear-dd$LayYear)+1
 dd$Died <- ifelse(dd$DeathYear<2013,1,0)
@@ -118,7 +131,7 @@ for(i in 1:nrow(juv))
 {
   currentdata <- subset(juv,FieldPeriodID == FieldPeriodID[i])
   juv$cenTL[i] <- (juv$RTL[i] - mean(currentdata$RTL))/sd(currentdata$RTL)
-  juv$cohortTL[i] <- mean(currentdata$RTL)
+  juv$cohortTL[i] <- median(currentdata$RTL)
 }
 
 mymed <- median(juv$cenTL,na.rm=T)
@@ -129,6 +142,9 @@ juv$coTLF <- ifelse(juv$cohortTL < mymed,'Short telomeres','Long telomeres')
 
 
 rm(mymed)
+
+juv <- subset(juv,!(is.na(cenTL)))
+
 # Helpers and social group size -------------------------------------------
 
 status <- subset(status,BreedGroupID %in% juv$BreedGroupID)
@@ -153,15 +169,18 @@ juv$Helper[juv$Helper>1] <- 1
 
 
 terr <- terr[complete.cases(terr),] #Get rid of blank rows
-subset(terr,FieldPeriodID == 105)
-
 insects <- subset(insects,FieldPeriodID != 26)
+dens$SPsize <- with(dens,(PsizeFP-mean(PsizeFP))/sd(PsizeFP))
+
 
 juv$TQ <- NA
 juv$TQI <- NA
 juv$cenTQ <- NA
 juv$Insect <- NA
 juv$Density <- NA
+juv$SDensity <- NA
+juv$HatchDate <- NA
+
 
 for(i in 1:nrow(juv))
 {
@@ -190,15 +209,24 @@ for(i in 1:nrow(juv))
   
   if(juv$FieldPeriodID[i] %in% dens$FieldPeriodID)
   {
-    juv$Density[i] <- dens$PsizeFP[dens$FieldPeriodID == juv$FieldPeriodID[i]] 
+    juv$Density[i] <- dens$PsizeFP[dens$FieldPeriodID == juv$FieldPeriodID[i]]
+    juv$SDensity[i] <- dens$SPsize[dens$FieldPeriodID == juv$FieldPeriodID[i]]
+    
+  }
+  
+  
+  if(juv$BirdID[i] %in% chickinfo$BirdID)
+  {
+    juv$HatchDate[i] <- paste(chickinfo$HatchDate[chickinfo$BirdID == juv$BirdID[i]])
   }
   
   
 }
 
 
-
-
+juv$HatchDate <- as.Date(juv$HatchDate,"%d/%m/%Y")
+juv$Chickage <- as.numeric(juv$CatchDate-juv$HatchDate)
+juv <- subset(juv,!(is.na(Density)))
 
 # Subset Fledglings and subadults -----------------------------------------------------------
 
@@ -250,29 +278,26 @@ rho <- cor(x4$RTL,x2$RTL)
 
 #Creat data frame with TROC
 Loss <- data.frame(x4,
-                   Loss = x4$RTL-x2$RTL,
+                   Loss = x2$RTL-x4$RTL,
                    RTL1 = x2$RTL,
                    Agemonths1 = x2$Agemonths,
-                   TimeDiff = round(as.numeric(x2$CatchDate-x4$CatchDate)/182.5)*0.5,
+                   TimeDiff = as.numeric(x2$CatchDate-x4$CatchDate),
                    RemainingLife2 = x2$RemainingLife,
+                   SurvivedNext2 = x2$SurvivedNext,
                    D=(rho*xx1)-xx2)
 Loss$TROC <- with(Loss,Loss/TimeDiff)
-
-#Restrict to brids with sample within 5 years
-Loss <- subset(Loss,TimeDiff<5.5)
-Loss <- subset(Loss,TimeDiff>0.3)
+Loss$Loss2 <- lm(Loss~RTL,data=Loss)$residuals
+#
+Loss <- subset(Loss,TimeDiff>0)
 
 #Calculate body condition
 Loss$Condition <- lm(BodyMass~Tarsus+Agemonths+Sex, data=Loss)$residuals
 
 #Remove outliers
-Loss <- subset(subset(Loss,TROC> -10),TROC < 10)
 
 # Get rid of stuff not to be used -----------------------------------------
 
 rm(status,helpers,hatchdate,x1,x2,x3,x4)
-
-
 
 
 # Field period average data for plots -----------------------------------------------
@@ -285,13 +310,14 @@ juvseason <- ddply(juv,
                    Helper = mean(Helper,na.rm=T),
                    Insect = mean(Insect,na.rm=T),
                    Density = mean(Density),
-                   Lifespan = mean(RemainingLife),
+                   Lifespan = median(RemainingLife),
                    LayYear = mean(CatchYear),
                    Age = mean(Agemonths),
                    n = length(TQ),
-                   TQ = mean(TQ,na.rm=T))
+                   TQ = mean(TQ,na.rm=T),
+                   Survived=mean(SurvivedNext)*100)
 juvseason <- subset(juvseason,n>4)
 
 
-juv9 <- subset(juv,LayYear<2009)
+juv9 <- subset(juv,LayYear<2008)
 juv13 <- subset(juv,LayYear<2013)
