@@ -130,8 +130,12 @@ juv$cohortTL <- NA
 for(i in 1:nrow(juv))
 {
   currentdata <- subset(juv,FieldPeriodID == FieldPeriodID[i])
-  juv$cenTL[i] <- (juv$RTL[i] - mean(currentdata$RTL))/sd(currentdata$RTL)
-  juv$cohortTL[i] <- median(currentdata$RTL)
+  if(nrow(currentdata>4))
+  {
+    juv$cenTL[i] <- (juv$RTL[i] - mean(currentdata$RTL))/sd(currentdata$RTL)
+    juv$cohortTL[i] <- median(currentdata$RTL)  
+  }
+
 }
 
 mymed <- median(juv$cenTL,na.rm=T)
@@ -296,6 +300,23 @@ juvseason <- ddply(juv,
                    Survived=mean(SurvivedNext)*100)
 juvseason <- subset(juvseason,n>4)
 
-
+with(juv,tapply(Died,LayYear,mean))
 juv9 <- subset(juv,LayYear<2008)
 juv13 <- subset(juv,LayYear<2013)
+
+
+juvseason9 <- ddply(juv9,
+                   .(factor(LayYear),Season),
+                   summarize,
+                   RTL = median(RTL),
+                   TLse = se(RTL),
+                   Helper = mean(Helper,na.rm=T),
+                   Insect = mean(Insect,na.rm=T),
+                   Density = mean(Density),
+                   Lifespan = median(RemainingLife),
+                   LayYear = mean(CatchYear),
+                   Age = mean(Agemonths),
+                   n = length(TQ),
+                   TQ = mean(TQ,na.rm=T),
+                   Survived=mean(SurvivedNext)*100)
+juvseason9 <- subset(juvseason9,n>4)
