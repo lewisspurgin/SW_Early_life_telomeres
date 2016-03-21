@@ -31,13 +31,15 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 
 **Figure Legends**
 
-**Figure 1** Telomere length in relation to age in Seychelles warblers. **(A)** Mean  ($\pm$ s.e.) age for all birds. **(B)** Notched boxplot of telomere length at different age classes within the first year of life. Sample sizes for each group are provided in brackets.
+**Figure 1** RTL in relation to **(A)** age and **(B)** $\Delta$Age in Seychelles warblers. Lines and shaded areas are fitted values and 95% confidence limits from linear regressions.
 
-**Figure 2** Factors affecting early-life telomere length in Seychelles warblers. **A** Model averaged estimates and 95% confidence intervals for explanatory terms used in a linear mixed model with telomere length (see main text for details; TQ = territory quality, TL = telomere length).
+**Figure 2** Cohort effects on early-life RTL in Seychelles warblers. **A** temporal variation RTL in major and minor cohorts, **B** tempoeral variation in adult population size, and **C** early-life RTL in relation to cohort-level variation in adult population size. Lines and shaded areas in **C** are fitted values and 95% confidence limits from general linear models.
 
-**Figure 3** Factors affecting early-life telomere shortening rates in Seychelles warblers, within seasons. Model averaged estimates and 95% confidence intervals for explanatory terms used in a linear mixed model with telomere length (cross-sectional data, **A**) and telomere loss (longitudinal data, **B**) as the response variable. Numbers in brackets are the relative importance of each term in the top model set (see main text for details; TQ = territory quality, TL = telomere length).
+**Figure 3** Factors affecting early-life RTL in Seychelles warblers. **A** Model averaged estimates and 95% confidence intervals for explanatory terms used in a linear mixed model with RTL as the response variable (see main text for details; TQ = territory quality). **B-D** early life RTL in relation to season (**B**),tarsus length (**C**) and sex (**D**). Lines and shaded areas in **D** are fitted values and 95% confidence limits from general linear models.
 
-**Figure 4** Kaplan-Meier curves showing the relationship between survival and telomere length for juvenile Seychelles warblers. Telomere length is binned into groups here for visualisation purposes only (long and short = greater than or less than median telomere length, respectively).
+**Figure** Longitudinal telomere dynamics in juvenile Seychelles warblers. **A** Juvenile telomere length in relation to adult telomere length within individuals. **B** $\Delta$RTL in relation to the time between sampling events. Lines and shaded areas represent fitted values and 95% confidence limits from general linear models. Raw data have been ommited from **B** for the sake of clarity, but are plotted in Figure S1.
+
+**Figure 5** Factors affecting $\Delta$RTL in juvenile Seychelles warblers. Model averaged estimates and 95% confidence intervals for explanatory terms used in a linear mixed model with $\Delta$RTL as the response variable (see main text for details; TQ = territory quality).
 
 
 
@@ -99,10 +101,11 @@ dev.off()
 ```{r Figure 2}
 
 temp <- juv
+x <- ifelse(temp$Season == 'Minor',0.5,0)
+temp$LayYear2 <- temp$LayYear+x
 temp$LayYear <- factor(temp$LayYear)
 
-
-Fig2A <- ggplot(temp,aes(x = LayYear,y = RTL,col=Season,fill=Season))+
+Fig2A <- ggplot(temp,aes(x = LayYear,y = RTL,fill=Season))+
   ylab('RTL') + 
   xlab('Cohort') +
   theme_classic() +
@@ -122,9 +125,6 @@ Fig2A <- ggplot(temp,aes(x = LayYear,y = RTL,col=Season,fill=Season))+
 
 
 
-temp <- juv
-x <- ifelse(temp$Season == 'Winter',0.5,0)
-temp$LayYear2 <- temp$LayYear+x
 temp <- temp[!(duplicated(temp$LayYear2)),]
   
 Fig2B <- ggplot(temp,aes(x = LayYear2,y = Density))+
@@ -140,11 +140,8 @@ Fig2B <- ggplot(temp,aes(x = LayYear2,y = Density))+
   annotate('text',x = 1998,y = 360,label = 'B')
 
 
-
-
-
-
 temp <- juv
+temp[,'Age (months)'] <- factor(temp$Agemonths)
 
 Fig2C <- ggplot(temp,
        aes(x = Density,
@@ -163,15 +160,14 @@ Fig2C <- ggplot(temp,
   stat_smooth(method = 'lm')+
   scale_colour_manual(values = c('grey','darkorange','darkgreen'))+
   scale_fill_manual(values = c('grey','darkorange','darkgreen'))+
-  annotate('text',x = 240,y = 2.1,label = 'C')
-
+  annotate('text',x = 250,y = 2.1,label = 'C')
 
 
 
 pdf('Figures/Figure 2.pdf',
     width = 8,
     height = 8,
-    paper = 'a4')
+    paper = 'a4r')
 multiplot(Fig2A,Fig2B,Fig2C,layout=matrix(c(1,1,2,3),nrow = 2,byrow=T))
 dev.off()
 
@@ -191,12 +187,9 @@ dev.off()
 
 temp <- juv
 
-#####################
-#2A
-#####################
 
 #Run the model
-lm2 <- lmer(RTL ~ Agemonths * (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ + Season)  + (1|LayYear) + (1|TerritoryID),
+lm2 <- lmer(RTL ~ Agemonths * (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ)  + (1|FieldPeriodID) + (1|TerritoryID)+(1|PlateID),
             data = temp,
             REML = FALSE)
 lm2 <- standardize(lm2)
@@ -222,7 +215,7 @@ nams[nams == 'c.Helper'] <- 'Helpers'
 nams[nams == 'z.BodyMass'] <- 'Body mass'
 nams[nams == 'z.Agemonths'] <- 'Age'
 nams[nams == 'z.Tarsus'] <- 'Tarsus'
-nams[nams == 'c.Season'] <- 'Season (winter)'
+nams[nams == 'c.Season'] <- 'Season (minor)'
 nams[nams == 'c.Season:z.Agemonths'] <- 'Age x season'
 nams[nams == 'z.Agemonths:z.NonHelper'] <- 'Age x non helpers'
 nams[nams == 'c.Sex:z.Agemonths'] <- 'Age x sex'
@@ -250,25 +243,8 @@ temp[,'Helpers'] <- ifelse(temp$Helper>0,'Present', 'Absent')
 temp[,'Non helpers'] <- ifelse(temp$NonHelper>0,'Present', 'Absent')
 temp[,'Age (months)'] <- factor(temp$Agemonths) 
 
-Fig3B <- ggplot(temp,
-       aes(x = `Age (months)`,
-           y = RTL,
-           fill=Season)) +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        legend.position = 'top') +
-  geom_jitter(aes(colour = Season),position=position_jitterdodge(dodge.width = 0.8))+
-  geom_boxplot(outlier.colour = NA,notch=F,alpha=0.2)+
-  scale_colour_manual(values = c('grey','darkorange'))+
-  scale_fill_manual(values = c('grey','darkorange'))+
-  annotate('text',x = 0.55,y = 2.1,label = 'B')
-
-
   
-Fig3C <- ggplot(temp,
+Fig3B <- ggplot(temp,
        aes(x = Tarsus,
            y = RTL,
            colour=`Age (months)`,
@@ -284,12 +260,12 @@ Fig3C <- ggplot(temp,
         legend.position = 'top') +
   geom_point()+
   stat_smooth(method = 'lm')+
-  scale_colour_manual(values = c(grey(0.2),'darkorange','darkgreen'))+
-  scale_fill_manual(values = c('darkgrey','darkorange','darkgreen'))+
-  annotate('text',x = 17,y = 2.1,label = 'C')
+  scale_colour_manual(values = c('grey','darkorange','darkgreen'))+
+  scale_fill_manual(values = c('grey','darkorange','darkgreen'))+
+  annotate('text',x = 17,y = 2.1,label = 'B')
 
 
-Fig3D <- ggplot(temp,
+Fig3C <- ggplot(temp,
        aes(x = `Age (months)`,
            y = RTL,
            fill=Sex)) +
@@ -303,15 +279,15 @@ Fig3D <- ggplot(temp,
   geom_boxplot(outlier.colour = NA,notch=F,alpha=0.2)+
   scale_colour_manual(values = c('grey','darkorange'))+
   scale_fill_manual(values = c('grey','darkorange'))+
-  annotate('text',x = 0.55,y = 2.1,label = 'D')
+  annotate('text',x = 0.55,y = 2.1,label = 'C')
 
 
 
 pdf('Figures/Figure 3.pdf',
-    width = 9,
-    height = 9,
+    width = 8,
+    height = 8,
     paper = 'a4r')
-multiplot(Fig3A,Fig3B,Fig3C,Fig3D,layout = matrix(c(1,1,1,2,3,4),nrow = 2,byrow = T))
+multiplot(Fig3A,Fig3B,Fig3C,layout = matrix(c(1,1,2,3),nrow = 2,byrow = T))
 dev.off()
 
 
@@ -365,11 +341,11 @@ Fig4B <- ggplot(temp2,
         legend.position = 'top') +
   geom_point(alpha=0)+
   stat_smooth(method = 'lm')+
-  scale_colour_manual(values = c(grey(0.2),'darkorange','darkgreen'))+
-  scale_fill_manual(values = c('darkgrey','darkorange','darkgreen'))+
+  scale_colour_manual(values = c('grey','darkorange','darkgreen'))+
+  scale_fill_manual(values = c('grey','darkorange','darkgreen'))+
     geom_abline(slope = 0,intercept = 0,lty = 2)+
-  coord_cartesian(ylim = c(-0.5,0.25))+
-  annotate('text',x = 0,y = 0.5,label = 'B')
+  coord_cartesian(ylim = c(-0.5,0.3))+
+  annotate('text',x = 0,y = 0.25,label = 'B')
 
 
 
@@ -403,12 +379,10 @@ dev.off()
 ```{r Figure 5}
 
 
-#####################
-#4A
-#####################
+
 temp <- subset(Loss,Agemonths == 1)
 #Run the model
-lm2 <- lmer(Loss ~ (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|LayYear),
+lm2 <- lmer(Loss ~ (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|FieldPeriodID),
             data = temp,
             REML = FALSE)
 lm2 <- standardize(lm2)
@@ -428,13 +402,12 @@ table2 <- signif(table2,2)
 #Sort out row/col names
 nams <- rownames(table2)
 nams[nams == 'z.NonHelper'] <- 'Non helpers'
-nams[nams == 'c.Sex'] <- 'Sex'
+nams[nams == 'c.Sex'] <- 'Sex (males)'
 nams[nams == 'z.TQ'] <- 'TQ'
 nams[nams == 'c.Helper'] <- 'Helpers'
 nams[nams == 'z.BodyMass'] <- 'Body mass'
 nams[nams == 'z.Agemonths'] <- 'Age'
 nams[nams == 'z.Tarsus'] <- 'Tarsus'
-nams[nams == 'c.Season'] <- 'Season'
 
 
 
@@ -446,16 +419,40 @@ colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
 table2 <- data.frame(table2,myx=row.names(table2))
 table2$myx <- factor(table2$myx,levels = table2$myx[order(table2$Estimate,decreasing = T)])
 
-Fig4 <- forestplot(table2)
+Fig5A <- forestplot(table2)+
+  annotate('text',x = 0.75,y = 0.45,label = 'A')
 
 
 
-pdf('Figures/Figure 4.pdf',
-    width = 5,
-    height = 4,
+
+
+
+Fig5B <- ggplot(temp,
+       aes(x = Tarsus,
+           y = Loss,
+           col=Sex)) +
+  ylab(expression(Delta*'RTL')) + 
+  xlab('Tarsus length (mm)') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        legend.position = 'top') +
+  geom_point()+
+  stat_smooth(method = 'lm')+
+  scale_colour_manual(values = c('grey','darkorange','darkgreen'))+
+  scale_fill_manual(values = c('grey','darkorange','darkgreen'))+
+  annotate('text',x = 19,y = 1.1,label = 'B')
+
+
+pdf('Figures/Figure 5.pdf',
+    width = 4,
+    height = 8,
     paper = 'a4')
-Fig5
+multiplot(Fig5A,Fig5B)
 dev.off()
 
 ```
+
 

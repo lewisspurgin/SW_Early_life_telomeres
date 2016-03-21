@@ -46,7 +46,7 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 ```{r Table S1}
 
 #Run the model
-lm1 <- lmer(RTL ~ Agemonths * (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ + Season) + (1|LayYear)+(1|TerritoryID),
+lm1 <- lmer(RTL ~ Agemonths * (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|FieldPeriodID)+(1|TerritoryID)+(1|PlateID),
             data = juv,
             REML = FALSE)
 lm1 <- standardize(lm1)
@@ -77,7 +77,7 @@ nams[nams == 'z.Agemonths:z.Tarsus'] <- 'Age x tarsus'
 
 colnames(t1) <- nams
 
-tableS1 <- data.frame(Model = apply(t1,1,getterms,c(2:16)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+tableS1 <- data.frame(Model = apply(t1,1,getterms,c(2:14)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
 colnames(tableS1) <- c('Model','df','AICc', 'Delta AICc','Weight')
 rownames(tableS1) <- NULL
 tableS1$Model[tableS1$Model == ''] <- 'Null model'
@@ -94,7 +94,7 @@ kable(tableS1,digits=2)
 temp <- subset(Loss,Agemonths == 1)
 
 #Run the model
-lm1 <- lmer(Loss ~ (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ + Season) + (1|LayYear),
+lm1 <- lmer(Loss ~ (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|FieldPeriodID),
             data = temp,
             REML = FALSE)
 lm1 <- standardize(lm1)
@@ -126,7 +126,7 @@ nams[nams == 'z.Agemonths:z.Tarsus'] <- 'Age x tarsus'
 
 colnames(t1) <- nams
 
-tableS2 <- data.frame(Model = apply(t1,1,getterms,c(2:8)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+tableS2 <- data.frame(Model = apply(t1,1,getterms,c(2:7)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
 colnames(tableS2) <- c('Model','df','AICc', 'Delta AICc','Weight')
 rownames(tableS2) <- NULL
 tableS2$Model[tableS2$Model == ''] <- 'Null model'
@@ -134,4 +134,3 @@ tableS2[,3:5] <- lapply(tableS2[,3:5],as.numeric)
 kable(tableS2,digits=2)
 
 ```
-

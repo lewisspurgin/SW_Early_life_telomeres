@@ -4,7 +4,7 @@
 #################################################################################
 
 #Only use Ellie's samples
-dd0 <- subset(dd0,Whodunnit == 'EAF')
+#dd0 <- subset(dd0,Whodunnit == 'EAF')
 
 #Average repeats of blood samples
 av <- ave(dd0$RTL,c(dd0$BloodID,dd0$Status,dd0$PlateID))
@@ -30,7 +30,7 @@ dd$DeathDate <- as.Date(dd$DeathDate,"%d/%m/%Y")
 
 
 dd$Season <- ifelse(as.numeric(format(dd$CatchDate,'%m')) %in% c(4:10),
-                    'Summer','Winter')
+                    'Major','Minor')
 
 
 # Age data ----------------------------------------------------------------
@@ -100,11 +100,11 @@ dd$Died <- ifelse(dd$DeathYear<2013,1,0)
 
 
 
-# Exclude winter seasons and early years ----------------------------------
+# Exclude weird seasons and early years ----------------------------------
 
 dd <- subset(dd,LayYear>1997)
-#dd <- subset(dd,Season == 'Summer')
-
+#dd <- subset(dd,Season == 'Major')
+dd <- subset(dd,FieldPeriodID != 27)
 
 # Sex ---------------------------------------------------------------------
 
@@ -226,9 +226,9 @@ for(i in 1:nrow(juv))
 
 juv$HatchDate <- as.Date(juv$HatchDate,"%d/%m/%Y")
 juv$Chickage <- as.numeric(juv$CatchDate-juv$HatchDate)
+juv$O_HatchDate <- as.POSIXlt(juv$HatchDate,format='%yyyy-%mm-%dd')$yday
+juv$O_CatchDate <- as.POSIXlt(juv$CatchDate,format='%yyyy-%mm-%dd')$yday
 juv <- subset(juv,!(is.na(Density)))
-
-# Subset Fledglings and subadults -----------------------------------------------------------
 
 
 
@@ -239,61 +239,39 @@ juv <- subset(juv,!is.na(TQ))
 juv <- subset(juv,Status!='XF')
 
 
-#Subsetting
-FlSA <- subset(juv,Ageclass!='CH')
-chicks <- subset(juv,Ageclass == 'CH')
-
-juvall <- droplevels(juv[complete.cases(juv),])
-FlSAall <- droplevels(FlSA[complete.cases(FlSA),])
-chickall <- droplevels(chicks[complete.cases(chicks),])
-
-
+juv$Condition <- lm(BodyMass~Tarsus+Age+Sex,data=juv)$residuals
 
 # Look at telomere loss ---------------------------------------------------
-
-
 #Get earliest catch for each juvenile
-x3 <- aggregate(CatchDate~BirdID,juv,min)
-x4 <- merge(x3,juv)
-x4 <- x4[!(duplicated(x4$BirdID)),]
+earlies <- merge(juv,aggregate(CatchDate~BirdID,juv,min)) %>% 
+subset(!(duplicated(BirdID)))
 
 #Get earliest subsetquent catch
-laters <- subset(dd,!(BloodID %in% x4$BloodID))
-x1 <- aggregate(CatchDate~BirdID,laters,min)
-x2 <- merge(laters,x1)
-x2 <- x2[!(duplicated(x2$BirdID)),]
+laters <- merge(aggregate(CatchDate~BirdID,subset(dd,!(BloodID %in% earlies$BloodID)),
+                          min),
+                subset(dd,!(BloodID %in% earlies$BloodID))) %>% 
+subset(!(duplicated(BirdID)))
 
 
-x2 <- x2[x2$BirdID %in% x4$BirdID,]
-x4 <- x4[x4$BirdID %in% x2$BirdID,]
+earlies <- subset(earlies,BirdID %in% laters$BirdID)
+laters <- subset(laters,BirdID %in% earlies$BirdID)
 
-x3 <- x2[order(x2$BirdID),]
-x4 <- x4[order(x4$BirdID),]
+earlies <- earlies[order(earlies$BirdID),]
+laters <- laters[order(laters$BirdID),]
 
-
-#Apply Verhulst's correction for regresison to the mean
-xx1 <- x4$RTL
-xx2 <- x2$RTL        
-rho <- cor(x4$RTL,x2$RTL)
 
 #Creat data frame with TROC
-Loss <- data.frame(x4,
-                   Loss = x2$RTL-x4$RTL,
-                   RTL1 = x2$RTL,
-                   Agemonths1 = x2$Agemonths,
-                   TimeDiff = as.numeric(x2$CatchDate-x4$CatchDate),
-                   RemainingLife2 = x2$RemainingLife,
-                   SurvivedNext2 = x2$SurvivedNext,
-                   D=(rho*xx1)-xx2)
+Loss <- data.frame(earlies,
+                   Loss = laters$RTL-earlies$RTL,
+                   RTL1 = laters$RTL,
+                   Agemonths1 = laters$Agemonths,
+                   TimeDiff = as.numeric(laters$CatchDate-earlies$CatchDate),
+                   RemainingLife2 = laters$RemainingLife,
+                   SurvivedNext2 = laters$SurvivedNext)
 Loss$TROC <- with(Loss,Loss/TimeDiff)
-Loss$Loss2 <- lm(Loss~RTL,data=Loss)$residuals
+
 #
 Loss <- subset(Loss,TimeDiff>0)
-
-#Calculate body condition
-Loss$Condition <- lm(BodyMass~Tarsus+Agemonths+Sex, data=Loss)$residuals
-
-#Remove outliers
 
 # Get rid of stuff not to be used -----------------------------------------
 
