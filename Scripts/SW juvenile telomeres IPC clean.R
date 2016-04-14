@@ -31,6 +31,7 @@ dd$DeathDate <- as.Date(dd$DeathDate,"%d/%m/%Y")
 
 dd$Season <- ifelse(as.numeric(format(dd$CatchDate,'%m')) %in% c(4:10),
                     'Major','Minor')
+dd <- subset(dd,Season == 'Major')
 
 
 # Age data ----------------------------------------------------------------
@@ -252,7 +253,7 @@ subset(!(duplicated(BirdID)))
 
 #Get earliest subsetquent catch
 laters <- merge(aggregate(CatchDate~BirdID,subset(dd,!(BloodID %in% earlies$BloodID)),
-                          min),
+                          max),
                 subset(dd,!(BloodID %in% earlies$BloodID))) %>% 
 subset(!(duplicated(BirdID)))
 

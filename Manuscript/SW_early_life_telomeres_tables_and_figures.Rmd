@@ -185,11 +185,9 @@ dev.off()
 
 ```{r Figure 3}
 
-temp <- juv
-
 
 #Run the model
-lm2 <- lmer(RTL ~ Agemonths * (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ)  + (1|FieldPeriodID) + (1|TerritoryID)+(1|PlateID),
+lm2 <- lmer(RTL ~ Agemonths*(Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ)  + (1|FieldPeriodID) + (1|TerritoryID)+(1|PlateID),
             data = temp,
             REML = FALSE)
 lm2 <- standardize(lm2)
@@ -320,18 +318,16 @@ Fig4A <- ggplot(temp,
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
         legend.position = 'top') +
-  geom_point(col='grey')+
-  stat_smooth(method = 'lm',col='darkgrey')+
+  geom_point()+
+  stat_smooth(method = 'lm')+
   annotate('text',x = 0,y = 2.1,label = 'A')
 
 temp2 <- temp
 temp2$TimeDiff <- temp2$TimeDiff/365
 
 Fig4B <- ggplot(temp2,
-       aes(x = TimeDiff,
-           y = Loss,
-           colour=`Age (months)`,
-           fill = `Age (months)`)) +
+       aes(x = Ageclass,
+           y = Loss)) +
   ylab(expression(Delta*'RTL')) + 
   xlab('Time (years)') +
   theme_classic() +
@@ -340,13 +336,10 @@ Fig4B <- ggplot(temp2,
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
         legend.position = 'top') +
-  geom_point(alpha=0)+
-  stat_smooth(method = 'lm')+
-  scale_colour_manual(values = c('grey','darkorange','darkgreen'))+
-  scale_fill_manual(values = c('grey','darkorange','darkgreen'))+
-    geom_abline(slope = 0,intercept = 0,lty = 2)+
-  coord_cartesian(ylim = c(-0.5,0.3))+
-  annotate('text',x = 0,y = 0.25,label = 'B')
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(col = 'grey')+
+  annotate('text',x = 0.5,y = 1.5,label = 'B')+
+  geom_abline(slope = 0,intercept = 0,lty = 2)
 
 
 
@@ -381,9 +374,9 @@ dev.off()
 
 
 
-temp <- subset(Loss,Agemonths == 1)
+temp <- Loss
 #Run the model
-lm2 <- lmer(Loss ~ (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|FieldPeriodID),
+lm2 <- lmer(Loss ~ Agemonths*(Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|FieldPeriodID),
             data = temp,
             REML = FALSE)
 lm2 <- standardize(lm2)
@@ -425,13 +418,15 @@ Fig5A <- forestplot(table2)+
 
 
 
+boxplot(Loss~Helper*Ageclass,data=Loss)
 
+temp <- Loss
 
 
 Fig5B <- ggplot(temp,
-       aes(x = Tarsus,
+       aes(col = factor(Helper),
            y = Loss,
-           col=Sex)) +
+           x=Ageclass)) +
   ylab(expression(Delta*'RTL')) + 
   xlab('Tarsus length (mm)') +
   theme_classic() +
@@ -440,11 +435,9 @@ Fig5B <- ggplot(temp,
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
         legend.position = 'top') +
-  geom_point()+
-  stat_smooth(method = 'lm')+
+  geom_boxplot(notch=T)+
   scale_colour_manual(values = c('grey','darkorange','darkgreen'))+
-  scale_fill_manual(values = c('grey','darkorange','darkgreen'))+
-  annotate('text',x = 19,y = 1.1,label = 'B')
+  scale_fill_manual(values = c('grey','darkorange','darkgreen'))
 
 
 pdf('Figures/Figure 5.pdf',
