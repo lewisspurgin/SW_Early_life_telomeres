@@ -101,11 +101,9 @@ dev.off()
 ```{r Figure 2}
 
 temp <- juv
-x <- ifelse(temp$Season == 'Minor',0.5,0)
-temp$LayYear2 <- temp$LayYear+x
 temp$LayYear <- factor(temp$LayYear)
 
-Fig2A <- ggplot(temp,aes(x = LayYear,y = RTL,fill=Season))+
+Fig2A <- ggplot(temp,aes(x = LayYear,y = RTL))+
   ylab('RTL') + 
   xlab('Cohort') +
   theme_classic() +
@@ -114,7 +112,7 @@ Fig2A <- ggplot(temp,aes(x = LayYear,y = RTL,fill=Season))+
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
         legend.position = 'top')+
-  geom_jitter(aes(colour = Season),position=position_jitterdodge(dodge.width = 0.8))+
+  geom_jitter(col = 'grey')+
   geom_boxplot(outlier.colour = NA,notch=F,alpha=0.2)+
   scale_colour_manual(values = c('grey','darkorange'))+
   scale_fill_manual(values = c('grey','darkorange'))+
@@ -124,10 +122,9 @@ Fig2A <- ggplot(temp,aes(x = LayYear,y = RTL,fill=Season))+
 
 
 
+temp$LayYear <- as.numeric(paste(temp$LayYear))
 
-temp <- temp[!(duplicated(temp$LayYear2)),]
-  
-Fig2B <- ggplot(temp,aes(x = LayYear2,y = Density))+
+Fig2B <- ggplot(temp,aes(x = LayYear,y = Density))+
   ylab('Adult population size') + 
   xlab('Cohort') +
   theme_classic() +
@@ -140,35 +137,13 @@ Fig2B <- ggplot(temp,aes(x = LayYear2,y = Density))+
   annotate('text',x = 1998,y = 360,label = 'B')
 
 
-temp <- juv
-temp[,'Age (months)'] <- factor(temp$Agemonths)
-
-Fig2C <- ggplot(temp,
-       aes(x = Density,
-           y = RTL,
-           colour=Season,
-           fill = Season)) +
-  ylab('RTL') + 
-  xlab('Adult population size') +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        legend.position = 'none') +
-  geom_point()+
-  stat_smooth(method = 'lm')+
-  scale_colour_manual(values = c('grey','darkorange','darkgreen'))+
-  scale_fill_manual(values = c('grey','darkorange','darkgreen'))+
-  annotate('text',x = 250,y = 2.1,label = 'C')
-
 
 
 pdf('Figures/Figure 2.pdf',
     width = 8,
-    height = 8,
+    height = 6,
     paper = 'a4r')
-multiplot(Fig2A,Fig2B,Fig2C,layout=matrix(c(1,1,2,3),nrow = 2,byrow=T))
+multiplot(Fig2A,Fig2B,layout=matrix(c(1,2),nrow = 2,byrow=T))
 dev.off()
 
 
@@ -185,6 +160,7 @@ dev.off()
 
 ```{r Figure 3}
 
+temp <- juv
 
 #Run the model
 lm2 <- lmer(RTL ~ Agemonths*(Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ)  + (1|FieldPeriodID) + (1|TerritoryID)+(1|PlateID),
@@ -264,20 +240,21 @@ Fig3B <- ggplot(temp,
 
 
 Fig3C <- ggplot(temp,
-       aes(x = `Age (months)`,
+       aes(col = `Age (months)`,
+           fill =  `Age (months)`,
            y = RTL,
-           fill=Sex)) +
+           x=TQ)) +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
         legend.position = 'top') +
-  geom_jitter(aes(colour = Sex),position=position_jitterdodge(dodge.width = 0.8))+
-  geom_boxplot(outlier.colour = NA,notch=F,alpha=0.2)+
-  scale_colour_manual(values = c('grey','darkorange'))+
-  scale_fill_manual(values = c('grey','darkorange'))+
-  annotate('text',x = 0.55,y = 2.1,label = 'C')
+  geom_point()+
+  stat_smooth(method = 'lm')+
+  scale_colour_manual(values = c('grey','darkorange','darkgreen'))+
+  scale_fill_manual(values = c('grey','darkorange','darkgreen'))+
+  annotate('text',x = 3,y = 2.1,label = 'C')
 
 
 
@@ -303,13 +280,12 @@ dev.off()
 
 temp <- Loss
 temp[,'Age (months)'] <- factor(temp$Agemonths)
-temp$LayYear <- factor(temp$LayYear)
 
 
 Fig4A <- ggplot(temp,
        aes(x = RTL,
            y = RTL1,
-           col=Ageclass)) +
+           col=`Age (months)`)) +
   ylab('Adult RTL') + 
   xlab('Juvenile RTL') +
   theme_classic() +
@@ -319,17 +295,16 @@ Fig4A <- ggplot(temp,
         axis.title.x = element_text(size = 14),
         legend.position = 'top') +
   geom_point()+
-  stat_smooth(method = 'lm')+
+  scale_colour_manual(values = c('grey','darkorange','darkgreen'))+
+  scale_fill_manual(values = c('grey','darkorange','darkgreen'))
   annotate('text',x = 0,y = 2.1,label = 'A')
 
-temp2 <- temp
-temp2$TimeDiff <- temp2$TimeDiff/365
 
-Fig4B <- ggplot(temp2,
-       aes(x = Ageclass,
+Fig4B <- ggplot(temp,
+       aes(x = `Age (months)`,
            y = Loss)) +
   ylab(expression(Delta*'RTL')) + 
-  xlab('Time (years)') +
+  xlab('Age (months)') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
@@ -402,6 +377,14 @@ nams[nams == 'c.Helper'] <- 'Helpers'
 nams[nams == 'z.BodyMass'] <- 'Body mass'
 nams[nams == 'z.Agemonths'] <- 'Age'
 nams[nams == 'z.Tarsus'] <- 'Tarsus'
+nams[nams == 'c.Season'] <- 'Season (minor)'
+nams[nams == 'c.Season:z.Agemonths'] <- 'Age x season'
+nams[nams == 'z.Agemonths:z.NonHelper'] <- 'Age x non helpers'
+nams[nams == 'c.Sex:z.Agemonths'] <- 'Age x sex'
+nams[nams == 'z.Agemonths:z.TQ'] <- 'Age x TQ'
+nams[nams == 'c.Helper:z.Agemonths'] <- 'Age x helpers'
+nams[nams == 'z.Agemonths:z.BodyMass'] <- 'Age x mass'
+nams[nams == 'z.Agemonths:z.Tarsus'] <- 'Age x tarsus'
 
 
 
@@ -414,44 +397,41 @@ table2 <- data.frame(table2,myx=row.names(table2))
 table2$myx <- factor(table2$myx,levels = table2$myx[order(table2$Estimate,decreasing = T)])
 
 Fig5A <- forestplot(table2)+
-  annotate('text',x = 0.75,y = 0.45,label = 'A')
+  annotate('text',x = 0.75,y = 0.6,label = 'A')
 
-
-
-boxplot(Loss~Helper*Ageclass,data=Loss)
 
 temp <- Loss
+temp[,'Helpers'] <- ifelse(temp$Helper>0,'Present', 'Absent')
+temp[,'Non helpers'] <- ifelse(temp$NonHelper>0,'Present', 'Absent')
+temp[,'Age (months)'] <- factor(temp$Agemonths) 
 
 
 Fig5B <- ggplot(temp,
-       aes(col = factor(Helper),
+       aes(x = `Age (months)`,
            y = Loss,
-           x=Ageclass)) +
-  ylab(expression(Delta*'RTL')) + 
-  xlab('Tarsus length (mm)') +
+           fill=Helpers)) +
   theme_classic() +
+  ylab(expression(Delta*'RTL'))+
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
         legend.position = 'top') +
-  geom_boxplot(notch=T)+
-  scale_colour_manual(values = c('grey','darkorange','darkgreen'))+
-  scale_fill_manual(values = c('grey','darkorange','darkgreen'))
-
+  geom_jitter(aes(colour = Helpers),position=position_jitterdodge(dodge.width = 0.8))+
+  geom_boxplot(outlier.colour = NA,notch=F,alpha=0.2)+
+  scale_colour_manual(values = c('grey','darkorange'))+
+  scale_fill_manual(values = c('grey','darkorange'))+
+  geom_abline(slope = 0,intercept = 0,lty = 2)+
+  annotate('text',x = 0.55,y = 1.5,label = 'C')
 
 pdf('Figures/Figure 5.pdf',
-    width = 4,
+    width = 8,
     height = 8,
     paper = 'a4')
 multiplot(Fig5A,Fig5B)
 dev.off()
 
-
-ggplot(juvseason9,aes(x = RTL,y = Lifespan,col = Season))+
-  geom_point()+
-  stat_smooth(method = 'lm')
-
-
 ```
+
+
 

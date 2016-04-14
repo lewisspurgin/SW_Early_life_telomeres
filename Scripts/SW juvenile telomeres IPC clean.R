@@ -251,9 +251,9 @@ juv$Condition <- lm(BodyMass~Tarsus+Age+Sex,data=juv)$residuals
 earlies <- merge(juv,aggregate(CatchDate~BirdID,juv,min)) %>% 
 subset(!(duplicated(BirdID)))
 
-#Get earliest subsetquent catch
+#Get earliest subsequent catch
 laters <- merge(aggregate(CatchDate~BirdID,subset(dd,!(BloodID %in% earlies$BloodID)),
-                          max),
+                          min),
                 subset(dd,!(BloodID %in% earlies$BloodID))) %>% 
 subset(!(duplicated(BirdID)))
 
@@ -277,6 +277,7 @@ Loss$TROC <- with(Loss,Loss/TimeDiff)
 
 #
 Loss <- subset(Loss,TimeDiff>0)
+Loss <- subset(Loss,TimeDiff<(365*2))
 
 # Get rid of stuff not to be used -----------------------------------------
 
