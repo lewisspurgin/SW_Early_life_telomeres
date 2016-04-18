@@ -276,8 +276,9 @@ Loss <- data.frame(earlies,
 Loss$TROC <- with(Loss,Loss/TimeDiff)
 
 #
-Loss <- subset(Loss,TimeDiff>0)
-Loss <- subset(Loss,TimeDiff<(365*2))
+Loss <- subset(Loss,TimeDiff>(365/2))
+Loss <- subset(Loss,TimeDiff<(365*5))
+Loss$TimeDiff <- Loss$TimeDiff/365
 
 # Get rid of stuff not to be used -----------------------------------------
 
