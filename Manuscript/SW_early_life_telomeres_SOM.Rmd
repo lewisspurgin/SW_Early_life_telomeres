@@ -92,10 +92,10 @@ kable(tableS1,digits=2)
 **Table S2** Model selection table for analysis of factors affecting $\Delta$RTL in Seychelles warbler nestlings, using longitudinal data. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. TQ = territory quality.
 
 ```{r Table S2}
-temp <- subset(Loss,Agemonths == 1)
+temp <- Loss
 
 #Run the model
-lm1 <- lmer(Loss ~ (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|FieldPeriodID),
+lm1 <- lmer(Loss ~ Agemonths*(Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|FieldPeriodID),
             data = temp,
             REML = FALSE)
 lm1 <- standardize(lm1)
@@ -107,7 +107,6 @@ t1 <- as.matrix(subset(lm2, delta<=6))
 #Sort out row/col names
 nams <- colnames(t1)
 
-nams[nams == 'z.RTL'] <- 'RTL'
 nams[nams == 'z.NonHelper'] <- 'Non helpers'
 nams[nams == 'c.Sex'] <- 'Sex'
 nams[nams == 'z.TQ'] <- 'TQ'
@@ -127,12 +126,12 @@ nams[nams == 'z.Agemonths:z.Tarsus'] <- 'Age x tarsus'
 
 colnames(t1) <- nams
 
-tableS2 <- data.frame(Model = apply(t1,1,getterms,c(2:7)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
-colnames(tableS2) <- c('Model','df','AICc', 'Delta AICc','Weight')
-rownames(tableS2) <- NULL
-tableS2$Model[tableS2$Model == ''] <- 'Null model'
-tableS2[,3:5] <- lapply(tableS2[,3:5],as.numeric)
-kable(tableS2,digits=2)
+tableS1 <- data.frame(Model = apply(t1,1,getterms,c(2:14)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+colnames(tableS1) <- c('Model','df','AICc', 'Delta AICc','Weight')
+rownames(tableS1) <- NULL
+tableS1$Model[tableS1$Model == ''] <- 'Null model'
+tableS1[,3:5] <- lapply(tableS1[,3:5],as.numeric)
+kable(tableS1,digits=2)
 
 ```
 

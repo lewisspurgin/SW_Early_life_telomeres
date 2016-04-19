@@ -4,7 +4,7 @@
 #################################################################################
 
 #Only use Ellie's samples
-#dd0 <- subset(dd0,Whodunnit == 'EAF')
+dd0 <- subset(dd0,Whodunnit == 'EAF')
 
 #Average repeats of blood samples
 av <- ave(dd0$RTL,c(dd0$BloodID,dd0$Status,dd0$PlateID))
