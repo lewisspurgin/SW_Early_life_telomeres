@@ -380,26 +380,37 @@ dev.off()
 
 
 ```{r Figure 5}
-temp <- subset(juv13,Agemonths != 1)
+temp <- juv
 temp$LayYear <- factor(temp$LayYear)
 temp[,'Survived to following year?'] <- ifelse(temp$SurvivedNext == 1,'Y','N')
+temp[,'Age (months)'] <- factor(temp$Agemonths)
 
-Fig4B <- ggplot(temp,
-       aes(x = LayYear,
-           y = RTL,
-           fill = `Survived to following year?`)) +
-  xlab('Cohort') +
+Fig5 <- ggplot(temp,
+       aes(x = RTL,
+           y = SurvivedNext,
+           fill = `Age (months)`,
+           col = `Age (months)`)) +
+  xlab('RTL') +
+  ylab('Proportion survived')+
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
         legend.position = 'top') +
-  geom_boxplot(outlier.shape = NA,alpha = 0.2)+
-  geom_jitter(aes(col = `Survived to following year?`),position=position_jitterdodge(jitter.width = 0.2))+
-  annotate('text',x = 0.5,y = 1.5,label = 'B')
+  geom_point(alpha=0.2)+
+  stat_smooth(method = 'glm',family = 'binomial')+
+    scale_colour_manual(values = c('grey','darkorange','darkgreen'))+
+  scale_fill_manual(values = c('grey','darkorange','darkgreen'))
 
-Fig4B
+
+pdf('Figures/Figure 5.pdf',
+    width = 4,
+    height = 4,
+    paper = 'a4')
+Fig5
+dev.off()
+
 
 ```
 
