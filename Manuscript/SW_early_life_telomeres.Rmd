@@ -50,7 +50,7 @@ Lewis G. Spurgin^1,2^,  Kat Bebbington^1^, Eleanor A. Fairfield^1^, Martijn Hamm
 **Running head:** Early-life telomeres
 
 ###Abstract
-1. Understanding the short and long term costs of individual early-life experiences is fundamental to understanding life-history evolution. Telomeres, the protective caps at the ends of chromosomes, shorten in response to oxidative stress, and telomere shortening is correlated with reduced survival. Thus, it is possible that telomere dynamics may help us quantify individual variation in early-life costs, and enhance our understanding of how poor conditions in early life are related to later-life survival. 
+1. Understanding the costs of individual early-life experiences is fundamental to understanding life-history evolution. Telomeres, the protective caps at the ends of chromosomes, shorten in response to oxidative stress, and telomere shortening is correlated with reduced survival. Thus, it is possible that telomere dynamics may help us quantify individual variation in early-life costs, and enhance our understanding of how poor conditions in early life are related to later-life survival. 
 
 2. We tested how telomere dynamics are related to spatio-temporal variation in early-life conditions and later-life survival in the Seychelles warbler (*Acrocephalus sechellensis*), using a large dataset of `r nrow(juv)` juveniles from multiple cohorts spanning `r max(juv$LayYear)-min(juv$LayYear)` years. 
 
