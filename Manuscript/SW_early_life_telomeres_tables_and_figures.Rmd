@@ -21,6 +21,7 @@ opts_chunk$set(include=FALSE,
 
 ```{r load and clean, include = F}
 
+
 #Load and clean data
 source('Scripts/SW juvenile telomeres IPC load.r')
 source('Scripts/SW juvenile telomeres IPC functions.r')
@@ -56,6 +57,8 @@ Fig1A <- ggplot(temp,aes(x = Agemonths,y = RTL))+
         axis.text.y = element_text(size = 12), 
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
+                axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
         legend.position = 'none')+
   geom_point(col='grey')+
   stat_smooth(method = 'lm',col='darkgrey')+
@@ -76,6 +79,8 @@ Fig1B <- ggplot(temp,aes(x = DeltaAge,y = RTL))+
         axis.text.y = element_text(size = 12), 
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
         legend.position = 'none')+
   geom_point(col='grey')+
   stat_smooth(method = 'lm',col = 'darkgrey')+
@@ -98,6 +103,8 @@ dev.off()
 
 
 
+
+
 ```{r Figure 2}
 
 temp <- juv
@@ -111,11 +118,11 @@ Fig2 <- ggplot(temp,aes(x = LayYear,y = RTL))+
         axis.text.y = element_text(size = 12), 
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
+                axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
         legend.position = 'top')+
   geom_jitter(col = 'grey')+
-  geom_boxplot(outlier.colour = NA,notch=F,alpha=0.2)+
-  scale_colour_manual(values = c('grey','darkorange'))+
-  scale_fill_manual(values = c('grey','darkorange'))
+  geom_boxplot(outlier.colour = NA,notch=F,alpha=0)
 
 
 
@@ -188,7 +195,9 @@ table2 <- data.frame(table2,myx=row.names(table2))
 table2$myx <- factor(table2$myx,levels = table2$myx[order(table2$Estimate,decreasing = T)])
 
 Fig3A <- forestplot(table2)+
-  annotate('text',x = 0.8,y = 0.25,label = 'A')
+  annotate('text',x = 0.6,y = 0.25,label = 'A')+
+  theme(axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'))
 
 
 
@@ -212,6 +221,8 @@ Fig3B <- ggplot(temp,
         axis.text.y = element_text(size = 12), 
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
+                axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
         legend.position = 'top') +
   geom_point()+
   stat_smooth(method = 'lm')+
@@ -230,6 +241,8 @@ Fig3C <- ggplot(temp,
         axis.text.y = element_text(size = 12), 
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
+                axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
         legend.position = 'top') +
   geom_point()+
   stat_smooth(method = 'lm')+
@@ -265,8 +278,7 @@ temp[,'Age (months)'] <- factor(temp$Agemonths)
 
 Fig4A <- ggplot(temp,
        aes(x = RTL,
-           y = RTL1,
-           col=`Age (months)`)) +
+           y = RTL1)) +
   ylab('Adult RTL') + 
   xlab('Juvenile RTL') +
   theme_classic() +
@@ -274,34 +286,51 @@ Fig4A <- ggplot(temp,
         axis.text.y = element_text(size = 12), 
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
-        legend.position = c(0.9,0.9),
+        legend.position = c(0.82,0.88),
+        legend.title = element_text(size = 12),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
         legend.background = element_rect(fill = grey(0.9))) +
-  geom_point()+
-  scale_colour_manual(values = c('grey','darkorange','darkgreen'))+
-  scale_fill_manual(values = c('grey','darkorange','darkgreen'))+
-  annotate('text',x = 0,y = 2.1,label = 'A')
+  geom_point(col='grey')+
+  stat_smooth(method = 'lm',col='darkgrey')+
+  annotate('text',x = 0,y = 1.8,label = 'A')
 
 
-Fig4B <- ggplot(temp,
-       aes(x = `Age (months)`,
-           y = Loss)) +
-  ylab(expression(Delta*'RTL')) + 
+
+
+
+
+
+temp <- subset(dd,DeltaAge !=0)
+reps <- tapply(temp$RTL,temp$BirdID,length)
+keep <- names(reps[reps>3])
+temp <- subset(temp,BirdID %in% keep)
+
+mins <- tapply(temp$Agemonths,temp$BirdID,min)
+keep2 <- names(mins[mins <5])
+temp <- subset(temp,BirdID %in% keep2)
+temp <- subset(temp,!duplicated(paste0(BirdID,Agemonths)))
+
+
+
+Fig4B <- ggplot(temp,aes(x = Agemonths,y = RTL,group = BirdID,col=factor(BirdID)))+
+geom_point()+
+geom_line()+
   xlab('Age (months)') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
-        legend.position = 'top') +
-  geom_boxplot(outlier.shape = NA)+
-  geom_jitter(col = 'grey')+
-  annotate('text',x = 0.5,y = 1.5,label = 'B')+
-  geom_abline(slope = 0,intercept = 0,lty = 2)
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'none')+
+  annotate('text',x = -5,y = 2,label = 'B')
 
 
 temp <- Loss
 #Run the model
-lm2 <- lmer(Loss ~ Agemonths+Helper+Tarsus + NonHelper + Sex + BodyMass  + TQ + (1|FieldPeriodID),
+lm2 <- lmer(Loss ~ Agemonths+Helper+Tarsus + NonHelper + Sex + BodyMass  + TQ + (1|FieldPeriodID) + (1|TerritoryID),
             data = temp,
             REML = FALSE)
 lm2 <- standardize(lm2)
@@ -348,7 +377,9 @@ table2 <- table2[rownames(table2) != 'z.TimeDiff',]
 table2$myx <- factor(table2$myx,levels = table2$myx[order(table2$Estimate,decreasing = T)])
 
 Fig4C <- forestplot(table2)+
-  annotate('text',x = 0.75,y = 0.6,label = 'C')
+  annotate('text',x = 0.55,y = 0.6,label = 'C')+
+  theme(        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'))
 
 
 
@@ -365,6 +396,20 @@ dev.off()
 
 
 
+temp <- subset(dd,DeltaAge !=0)
+reps <- tapply(temp$RTL,temp$BirdID,length)
+keep <- names(reps[reps>3])
+temp <- subset(temp,BirdID %in% keep)
+
+mins <- tapply(temp$Agemonths,temp$BirdID,min)
+keep2 <- names(mins[mins <5])
+temp <- subset(temp,BirdID %in% keep2)
+temp <- subset(temp,!duplicated(paste0(BirdID,Agemonths)))
+
+ggplot(temp,aes(x = Agemonths,y = RTL,group = BirdID,col=factor(BirdID)))+
+geom_point()+
+geom_line()+
+theme(legend.position='none')
 
 
 
@@ -373,46 +418,6 @@ dev.off()
 
 
 
-
-
-
-
-
-
-```{r Figure 5}
-temp <- juv
-temp$LayYear <- factor(temp$LayYear)
-temp[,'Survived to following year?'] <- ifelse(temp$SurvivedNext == 1,'Y','N')
-temp[,'Age (months)'] <- factor(temp$Agemonths)
-
-Fig5 <- ggplot(temp,
-       aes(x = RTL,
-           y = SurvivedNext,
-           fill = `Age (months)`,
-           col = `Age (months)`)) +
-  xlab('RTL') +
-  ylab('Proportion survived')+
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        legend.position = 'top') +
-  geom_point(alpha=0.2)+
-  stat_smooth(method = 'glm',family = 'binomial')+
-    scale_colour_manual(values = c('grey','darkorange','darkgreen'))+
-  scale_fill_manual(values = c('grey','darkorange','darkgreen'))
-
-
-pdf('Figures/Figure 5.pdf',
-    width = 4,
-    height = 4,
-    paper = 'a4')
-Fig5
-dev.off()
-
-
-```
 
 
 

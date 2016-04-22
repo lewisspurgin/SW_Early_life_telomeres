@@ -4,7 +4,7 @@
 #################################################################################
 
 #Only use Ellie's samples
-dd0 <- subset(dd0,Whodunnit == 'EAF')
+#dd0 <- subset(dd0,Whodunnit == 'EAF')
 
 #Average repeats of blood samples
 av <- ave(dd0$RTL,c(dd0$BloodID,dd0$Status,dd0$PlateID))
@@ -63,6 +63,11 @@ dd$Age[dd$Fledged != 'Adults'] <- 1
 
 dd$Tarsus <- NA
 dd$DeltaAge <- NA
+dd$Malaria <- NA
+
+malaria <- subset(malaria,!duplicated(BloodID))
+malaria <- subset(malaria,Consensus <2)
+
 for(i in 1:nrow(dd))
 {
   ifelse(is.na(dd$RightTarsus[i]),
@@ -72,7 +77,10 @@ for(i in 1:nrow(dd))
          dd$Tarsus[i] <- dd$RightTarsus[i])
   
   dd$DeltaAge[i] <- dd$Agemonths[i] - mean(subset(dd,BirdID == dd$BirdID[i])$Agemonths)
-  
+  if(dd$BloodID[i] %in% malaria$BloodID)
+     {
+       dd$Malaria[i] <- subset(malaria,BloodID == dd$BloodID[i])$Consensus
+     }
 }
 
 dd$RightTarsus <- NULL
@@ -197,7 +205,7 @@ for(i in 1:nrow(juv))
       juv$TQ[i] <- log10(subset(cd,FieldPeriodID == juv$FieldPeriodID[i])$TQcorrected)
     } else
     {
-      juv$TQ[i] <- log10(mean(cd$TQcorrected))
+      log10(mean(cd$TQcorrected))
     }
     juv$TQI[i] <- juv$TQ[i]/juv$GroupSize[i]
     
@@ -253,7 +261,7 @@ subset(!(duplicated(BirdID)))
 
 #Get earliest subsequent catch
 laters <- merge(aggregate(CatchDate~BirdID,subset(dd,!(BloodID %in% earlies$BloodID)),
-                          min),
+                          mean),
                 subset(dd,!(BloodID %in% earlies$BloodID))) %>% 
 subset(!(duplicated(BirdID)))
 
@@ -277,7 +285,6 @@ Loss$TROC <- with(Loss,Loss/TimeDiff)
 
 #
 Loss <- subset(Loss,TimeDiff>(365/2))
-Loss <- subset(Loss,TimeDiff<(365*5))
 Loss$TimeDiff <- Loss$TimeDiff/365
 
 # Get rid of stuff not to be used -----------------------------------------

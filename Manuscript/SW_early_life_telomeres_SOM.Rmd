@@ -95,7 +95,7 @@ kable(tableS1,digits=2)
 temp <- Loss
 
 #Run the model
-lm1 <- lmer(Loss ~ Agemonths*(Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|FieldPeriodID),
+lm1 <- lmer(Loss ~ Agemonths*(Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|FieldPeriodID) + (1|TerritoryID),
             data = temp,
             REML = FALSE)
 lm1 <- standardize(lm1)
