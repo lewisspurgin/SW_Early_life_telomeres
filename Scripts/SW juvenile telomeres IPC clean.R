@@ -185,6 +185,7 @@ terr <- terr[complete.cases(terr),] #Get rid of blank rows
 insects <- subset(insects,FieldPeriodID != 26)
 dens$SPsize <- with(dens,(PsizeFP-mean(PsizeFP))/sd(PsizeFP))
 
+terrmeans 
 
 juv$TQ <- NA
 juv$TQI <- NA
