@@ -328,66 +328,120 @@ geom_line()+
   annotate('text',x = -5,y = 2,label = 'B')
 
 
-temp <- Loss
-#Run the model
-lm2 <- lmer(Loss ~ Agemonths+Helper+Tarsus + NonHelper + Sex + BodyMass  + TQ + (1|FieldPeriodID) + (1|TerritoryID),
-            data = temp,
-            REML = FALSE)
-lm2 <- standardize(lm2)
-
-#Model averaging
-lm3 <- dredge(lm2)
-lm3 <- subset(lm3,delta <=6)
-lmavg <- model.avg(lm3,fit=T)
-myimp <- importance(lmavg)
-
-
-#Put it all into a nice table
-table2 <- imptable(lmavg,myimp)
-table2 <- signif(table2,2)
-
-
-#Sort out row/col names
-nams <- rownames(table2)
-nams[nams == 'z.NonHelper'] <- 'Non helpers'
-nams[nams == 'c.Sex'] <- 'Sex (males)'
-nams[nams == 'z.TQ'] <- 'TQ'
-nams[nams == 'c.Helper'] <- 'Helpers'
-nams[nams == 'z.BodyMass'] <- 'Body mass'
-nams[nams == 'z.Agemonths'] <- 'Age'
-nams[nams == 'z.Tarsus'] <- 'Tarsus'
-nams[nams == 'c.Season'] <- 'Season (minor)'
-nams[nams == 'c.Season:z.Agemonths'] <- 'Age x season'
-nams[nams == 'z.Agemonths:z.NonHelper'] <- 'Age x non helpers'
-nams[nams == 'c.Sex:z.Agemonths'] <- 'Age x sex'
-nams[nams == 'z.Agemonths:z.TQ'] <- 'Age x TQ'
-nams[nams == 'c.Helper:z.Agemonths'] <- 'Age x helpers'
-nams[nams == 'z.Agemonths:z.BodyMass'] <- 'Age x mass'
-nams[nams == 'z.Agemonths:z.Tarsus'] <- 'Age x tarsus'
 
 
 
 
-rownames(table2) <- nams
-colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
+#First calculate Delta RTL 
+temp <- subset(dd,!duplicated(paste0(BirdID,Agemonths)))
+counts <- with(temp,tapply(RTL,BirdID,length))
+c3 <- names(counts[counts >= 2])
 
 
-table2 <- data.frame(table2,myx=row.names(table2))
-table2 <- table2[rownames(table2) != 'z.TimeDiff',]
-table2$myx <- factor(table2$myx,levels = table2$myx[order(table2$Estimate,decreasing = T)])
+dd3 <- subset(temp,BirdID %in% c3)
 
-Fig4C <- forestplot(table2)+
-  annotate('text',x = 0.55,y = 0.6,label = 'C')+
-  theme(        axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'))
+ggplot(dd3,aes(x = Agemonths,y = RTL, group = BirdID))+
+  geom_line(alpha = 0.5)
+
+dd3$DeltaRTL <- NA
+
+for(i in 1:nrow(dd3))
+{
+  cd <- subset(dd3,BirdID == dd3$BirdID[i])
+  cd <- cd[order(cd$Agemonths),]
+  
+  birdpos <- which(cd$BloodID == dd3$BloodID[i])
+  
+  if(birdpos == 1)
+  {
+    dd3$DeltaRTL[i] <- 0
+  } else
+  {
+      prevbird <- cd[birdpos-1,'RTL']
+  dd3$DeltaRTL[i] <- dd3$RTL[i]-prevbird
+  dd3$MidAge[i] <- mean(c(dd3$Agemonths[i],cd[birdpos-1,'Agemonths']))
+  dd3$MinAge[i] <- cd[birdpos-1,'Agemonths']
+  dd3$TimeDiff[i] <- dd3$Agemonths[i] - cd[birdpos-1,'Agemonths']
+  }
+  
+
+}
+
+temp <- subset(dd3,DeltaRTL != 0)
+
+boxplot(DeltaRTL~SurvivedNext,data=subset(temp,MinAge>1))
+summary(lm(DeltaRTL~RemainingLife,data=subset(temp,MinAge>1)))
+
+plot(DeltaRTL~LayYear,data=subset(temp,MinAge>1 ))
+
+temp <- subset(dd0,!duplicated(paste0(BloodID,RTL)))
+
+temp <- subset(temp,RTL<2)
+temp <- subset(temp,RTL > 0.04)
+
+counts <- with(temp,tapply(RTL,BloodID,length))
+c3 <- names(counts[counts %in% c(2:5)])
+
+
+dd3_2 <- subset(temp,BloodID %in% c3)
+dd3_2 <- dd3_2[order(dd3_2$BloodID),]
+counts <- with(dd3_2,tapply(RTL,BloodID,length))
+
+dd3_2$birdpos <- unlist(sapply(counts,function(x) c(1:x)))
+
+dd3_2$DeltaRTL <- NA
+
+for(i in 1:nrow(dd3_2))
+{
+  cd <- subset(dd3_2,BloodID == dd3_2$BloodID[i])
+  
+  if(dd3_2$birdpos[i] == 1)
+  {
+    dd3_2$DeltaRTL[i] <- 0
+  } else
+  {
+      prevbird <- subset(cd,birdpos == dd3_2$birdpos[i]-1)$RTL
+  dd3_2$DeltaRTL[i] <- dd3_2$RTL[i]-prevbird
+  }
+  
+
+}
+
+
+dd3 <- subset(dd3,DeltaRTL !=0)
+dd3_2 <- subset(dd3_2,DeltaRTL!=0)
+
+dd3_2 <- dd3_2[1:nrow(dd3),]
+
+
+temp <- data.frame(DeltaRTL = c(dd3$DeltaRTL,dd3_2$DeltaRTL),Group = rep(c('Among samples','Within samples'),c(nrow(dd3),nrow(dd3_2))))
+
+
+Fig4C <- ggplot(temp,aes(col=Group,fill = Group,x = DeltaRTL, y = ..scaled..))+
+    geom_density(alpha = 0.2)+
+  theme_classic()+
+    theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        legend.position = c(0.22,0.78),
+        legend.title = element_blank(),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black')) +
+  scale_colour_manual(values = c('darkgrey','gold'))+
+  scale_fill_manual(values = c('darkgrey','gold'))+
+  geom_vline(xintercept = 0,lty = 2)+
+  annotate('text',x = -5,y = 2,label = 'C')
+
+
 
 
 
 pdf('Figures/Figure 4.pdf',
-    width = 8,
-    height = 8,
+    width = 4,
+    height = 9,
     paper = 'a4')
-multiplot(Fig4A,Fig4B,Fig4C,layout=matrix(c(1,2,3,3),nrow=2,byrow=T))
+multiplot(Fig4A,Fig4B,Fig4C,layout=matrix(c(1,2,3),nrow=3,byrow=T))
 dev.off()
 
 
@@ -396,20 +450,6 @@ dev.off()
 
 
 
-temp <- subset(dd,DeltaAge !=0)
-reps <- tapply(temp$RTL,temp$BirdID,length)
-keep <- names(reps[reps>3])
-temp <- subset(temp,BirdID %in% keep)
-
-mins <- tapply(temp$Agemonths,temp$BirdID,min)
-keep2 <- names(mins[mins <5])
-temp <- subset(temp,BirdID %in% keep2)
-temp <- subset(temp,!duplicated(paste0(BirdID,Agemonths)))
-
-ggplot(temp,aes(x = Agemonths,y = RTL,group = BirdID,col=factor(BirdID)))+
-geom_point()+
-geom_line()+
-theme(legend.position='none')
 
 
 
@@ -420,4 +460,96 @@ theme(legend.position='none')
 
 
 
+
+#First calculate Delta RTL 
+temp <- subset(dd,!duplicated(paste0(BirdID,Agemonths)))
+counts <- with(temp,tapply(RTL,BirdID,length))
+c3 <- names(counts[counts >= 2])
+
+
+dd3 <- subset(temp,BirdID %in% c3)
+
+ggplot(dd3,aes(x = Agemonths,y = RTL, group = BirdID))+
+  geom_line(alpha = 0.5)
+
+dd3$DeltaRTL <- NA
+
+for(i in 1:nrow(dd3))
+{
+  cd <- subset(dd3,BirdID == dd3$BirdID[i])
+  cd <- cd[order(cd$Agemonths),]
+  
+  birdpos <- which(cd$BloodID == dd3$BloodID[i])
+  
+  if(birdpos == 1)
+  {
+    dd3$DeltaRTL[i] <- 0
+  } else
+  {
+      prevbird <- cd[birdpos-1,'RTL']
+  dd3$DeltaRTL[i] <- dd3$RTL[i]-prevbird
+  dd3$MidAge[i] <- mean(c(dd3$Agemonths[i],cd[birdpos-1,'Agemonths']))
+  dd3$MinAge[i] <- cd[birdpos-1,'Agemonths']
+  dd3$TimeDiff[i] <- dd3$Agemonths[i] - cd[birdpos-1,'Agemonths']
+  }
+  
+
+}
+
+temp <- subset(dd3,DeltaRTL != 0)
+
+boxplot(DeltaRTL~SurvivedNext,data=subset(temp,MinAge>1))
+summary(lm(DeltaRTL~RemainingLife,data=subset(temp,MinAge>1)))
+
+plot(DeltaRTL~LayYear,data=subset(temp,MinAge>1 ))
+
+temp <- subset(dd0,!duplicated(paste0(BloodID,RTL)))
+
+temp <- subset(temp,RTL<2)
+temp <- subset(temp,RTL > 0.04)
+
+counts <- with(temp,tapply(RTL,BloodID,length))
+c3 <- names(counts[counts %in% c(2:5)])
+
+
+dd3_2 <- subset(temp,BloodID %in% c3)
+dd3_2 <- dd3_2[order(dd3_2$BloodID),]
+counts <- with(dd3_2,tapply(RTL,BloodID,length))
+
+dd3_2$birdpos <- unlist(sapply(counts,function(x) c(1:x)))
+
+dd3_2$DeltaRTL <- NA
+
+for(i in 1:nrow(dd3_2))
+{
+  cd <- subset(dd3_2,BloodID == dd3_2$BloodID[i])
+  
+  if(dd3_2$birdpos[i] == 1)
+  {
+    dd3_2$DeltaRTL[i] <- 0
+  } else
+  {
+      prevbird <- subset(cd,birdpos == dd3_2$birdpos[i]-1)$RTL
+  dd3_2$DeltaRTL[i] <- dd3_2$RTL[i]-prevbird
+  }
+  
+
+}
+
+
+dd3 <- subset(dd3,DeltaRTL !=0)
+dd3_2 <- subset(dd3_2,DeltaRTL!=0)
+
+dd3_2 <- dd3_2[1:nrow(dd3),]
+
+
+temp <- data.frame(DeltaRTL = c(dd3$DeltaRTL,dd3_2$DeltaRTL),Group = rep(c('Among samples','Within samples'),c(nrow(dd3),nrow(dd3_2))))
+
+
+ggplot(temp,aes(col=Group,fill = Group,x = DeltaRTL))+
+    geom_histogram()+
+  theme_classic()+
+  scale_colour_manual(values = c('darkgrey','gold'))+
+  scale_fill_manual(values = c('darkgrey','gold'))+
+  geom_vline(xintercept = 0,lty = 2)
 

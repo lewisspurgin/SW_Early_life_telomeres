@@ -4,13 +4,14 @@
 #################################################################################
 
 #Only use Ellie's samples
-#dd0 <- subset(dd0,Whodunnit == 'EAF')
+dd0 <- subset(dd0,Whodunnit == 'EAF')
 
 #Average repeats of blood samples
 av <- ave(dd0$RTL,c(dd0$BloodID,dd0$Status,dd0$PlateID))
-dd0$RTL <- av
+dd0$RTL2 <- av
 dd <- dd0[!(duplicated(dd0$BloodID)),]
-
+dd$RTL <- dd$RTL2
+dd$RTL2 <- NULL
 
 # Weird variable names ----------------------------------------------------
 
@@ -185,7 +186,6 @@ terr <- terr[complete.cases(terr),] #Get rid of blank rows
 insects <- subset(insects,FieldPeriodID != 26)
 dens$SPsize <- with(dens,(PsizeFP-mean(PsizeFP))/sd(PsizeFP))
 
-terrmeans 
 
 juv$TQ <- NA
 juv$TQI <- NA
