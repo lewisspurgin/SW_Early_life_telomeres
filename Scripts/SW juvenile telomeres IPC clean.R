@@ -331,3 +331,84 @@ juvseason9 <- ddply(juv9,
                    TQ = mean(TQ,na.rm=T),
                    Survived=mean(SurvivedNext)*100)
 juvseason9 <- subset(juvseason9,n>4)
+
+
+
+
+
+
+
+# Longitudinal data for whole dataset -------------------------------------
+
+#First calculate Delta RTL 
+temp <- subset(dd,!duplicated(paste0(BirdID,Agemonths)))
+counts <- with(temp,tapply(RTL,BirdID,length))
+c3 <- names(counts[counts >= 2])
+dd3 <- subset(temp,BirdID %in% c3)
+DeltaRTL <- NA
+
+for(i in 1:nrow(dd3))
+{
+  cd <- subset(dd3,BirdID == dd3$BirdID[i])
+  cd <- cd[order(cd$Agemonths),]
+  
+  birdpos <- which(cd$BloodID == dd3$BloodID[i])
+  
+  if(birdpos == 1)
+  {
+    dd3$DeltaRTL[i] <- 0
+  } else
+  {
+    prevbird <- cd[birdpos-1,'RTL']
+    dd3$DeltaRTL[i] <- dd3$RTL[i]-prevbird
+    dd3$MidAge[i] <- mean(c(dd3$Agemonths[i],cd[birdpos-1,'Agemonths']))
+    dd3$MinAge[i] <- cd[birdpos-1,'Agemonths']
+    dd3$TimeDiff[i] <- dd3$Agemonths[i] - cd[birdpos-1,'Agemonths']
+  }
+  
+  
+}
+
+
+temp <- subset(dd0,!duplicated(paste0(BloodID,RTL)))
+temp <- subset(temp,RTL<2)
+temp <- subset(temp,RTL > 0.04)
+
+counts <- with(temp,tapply(RTL,BloodID,length))
+c3 <- names(counts[counts %in% c(2:5)])
+
+
+dd3_2 <- subset(temp,BloodID %in% c3)
+dd3_2 <- dd3_2[order(dd3_2$BloodID),]
+counts <- with(dd3_2,tapply(RTL,BloodID,length))
+
+dd3_2$birdpos <- unlist(sapply(counts,function(x) c(1:x)))
+
+dd3_2$DeltaRTL <- NA
+
+for(i in 1:nrow(dd3_2))
+{
+  cd <- subset(dd3_2,BloodID == dd3_2$BloodID[i])
+  
+  if(dd3_2$birdpos[i] == 1)
+  {
+    dd3_2$DeltaRTL[i] <- 0
+  } else
+  {
+    prevbird <- subset(cd,birdpos == dd3_2$birdpos[i]-1)$RTL
+    dd3_2$DeltaRTL[i] <- dd3_2$RTL[i]-prevbird
+  }
+  
+  
+}
+
+
+dd3 <- subset(dd3,DeltaRTL !=0)
+dd3_2 <- subset(dd3_2,DeltaRTL!=0)
+dd3_2 <- dd3_2[1:nrow(dd3),]
+
+
+ddL <- data.frame(DeltaRTL = c(dd3$DeltaRTL,dd3_2$DeltaRTL),Group = rep(c('Among samples','Within samples'),c(nrow(dd3),nrow(dd3_2))))
+
+
+rm(temp,dd2,dd3_2)
