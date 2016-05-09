@@ -291,6 +291,7 @@ Fig4A <- ggplot(temp,
         axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'),
         legend.background = element_rect(fill = grey(0.9))) +
+  geom_abline(slope = 1,intercept = 0,lty = 2)+
   geom_point(col='grey')+
   stat_smooth(method = 'lm',col='darkgrey')+
   annotate('text',x = 0,y = 1.8,label = 'A')
@@ -336,14 +337,8 @@ geom_line()+
 temp <- subset(dd,!duplicated(paste0(BirdID,Agemonths)))
 counts <- with(temp,tapply(RTL,BirdID,length))
 c3 <- names(counts[counts >= 2])
-
-
 dd3 <- subset(temp,BirdID %in% c3)
-
-ggplot(dd3,aes(x = Agemonths,y = RTL, group = BirdID))+
-  geom_line(alpha = 0.5)
-
-dd3$DeltaRTL <- NA
+DeltaRTL <- NA
 
 for(i in 1:nrow(dd3))
 {
@@ -367,15 +362,8 @@ for(i in 1:nrow(dd3))
 
 }
 
-temp <- subset(dd3,DeltaRTL != 0)
-
-boxplot(DeltaRTL~SurvivedNext,data=subset(temp,MinAge>1))
-summary(lm(DeltaRTL~RemainingLife,data=subset(temp,MinAge>1)))
-
-plot(DeltaRTL~LayYear,data=subset(temp,MinAge>1 ))
 
 temp <- subset(dd0,!duplicated(paste0(BloodID,RTL)))
-
 temp <- subset(temp,RTL<2)
 temp <- subset(temp,RTL > 0.04)
 
@@ -410,7 +398,6 @@ for(i in 1:nrow(dd3_2))
 
 dd3 <- subset(dd3,DeltaRTL !=0)
 dd3_2 <- subset(dd3_2,DeltaRTL!=0)
-
 dd3_2 <- dd3_2[1:nrow(dd3),]
 
 
@@ -420,6 +407,8 @@ temp <- data.frame(DeltaRTL = c(dd3$DeltaRTL,dd3_2$DeltaRTL),Group = rep(c('Amon
 Fig4C <- ggplot(temp,aes(col=Group,fill = Group,x = DeltaRTL, y = ..scaled..))+
     geom_density(alpha = 0.2)+
   theme_classic()+
+  ylab ('Scaled density')+
+  xlab(expression(Delta*'RTL'))+
     theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
         axis.title.y = element_text(size = 14,vjust=0.8),
@@ -431,7 +420,7 @@ Fig4C <- ggplot(temp,aes(col=Group,fill = Group,x = DeltaRTL, y = ..scaled..))+
   scale_colour_manual(values = c('darkgrey','gold'))+
   scale_fill_manual(values = c('darkgrey','gold'))+
   geom_vline(xintercept = 0,lty = 2)+
-  annotate('text',x = -5,y = 2,label = 'C')
+  annotate('text',x = -2,y = 1,label = 'C')
 
 
 
@@ -446,110 +435,4 @@ dev.off()
 
 
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#First calculate Delta RTL 
-temp <- subset(dd,!duplicated(paste0(BirdID,Agemonths)))
-counts <- with(temp,tapply(RTL,BirdID,length))
-c3 <- names(counts[counts >= 2])
-
-
-dd3 <- subset(temp,BirdID %in% c3)
-
-ggplot(dd3,aes(x = Agemonths,y = RTL, group = BirdID))+
-  geom_line(alpha = 0.5)
-
-dd3$DeltaRTL <- NA
-
-for(i in 1:nrow(dd3))
-{
-  cd <- subset(dd3,BirdID == dd3$BirdID[i])
-  cd <- cd[order(cd$Agemonths),]
-  
-  birdpos <- which(cd$BloodID == dd3$BloodID[i])
-  
-  if(birdpos == 1)
-  {
-    dd3$DeltaRTL[i] <- 0
-  } else
-  {
-      prevbird <- cd[birdpos-1,'RTL']
-  dd3$DeltaRTL[i] <- dd3$RTL[i]-prevbird
-  dd3$MidAge[i] <- mean(c(dd3$Agemonths[i],cd[birdpos-1,'Agemonths']))
-  dd3$MinAge[i] <- cd[birdpos-1,'Agemonths']
-  dd3$TimeDiff[i] <- dd3$Agemonths[i] - cd[birdpos-1,'Agemonths']
-  }
-  
-
-}
-
-temp <- subset(dd3,DeltaRTL != 0)
-
-boxplot(DeltaRTL~SurvivedNext,data=subset(temp,MinAge>1))
-summary(lm(DeltaRTL~RemainingLife,data=subset(temp,MinAge>1)))
-
-plot(DeltaRTL~LayYear,data=subset(temp,MinAge>1 ))
-
-temp <- subset(dd0,!duplicated(paste0(BloodID,RTL)))
-
-temp <- subset(temp,RTL<2)
-temp <- subset(temp,RTL > 0.04)
-
-counts <- with(temp,tapply(RTL,BloodID,length))
-c3 <- names(counts[counts %in% c(2:5)])
-
-
-dd3_2 <- subset(temp,BloodID %in% c3)
-dd3_2 <- dd3_2[order(dd3_2$BloodID),]
-counts <- with(dd3_2,tapply(RTL,BloodID,length))
-
-dd3_2$birdpos <- unlist(sapply(counts,function(x) c(1:x)))
-
-dd3_2$DeltaRTL <- NA
-
-for(i in 1:nrow(dd3_2))
-{
-  cd <- subset(dd3_2,BloodID == dd3_2$BloodID[i])
-  
-  if(dd3_2$birdpos[i] == 1)
-  {
-    dd3_2$DeltaRTL[i] <- 0
-  } else
-  {
-      prevbird <- subset(cd,birdpos == dd3_2$birdpos[i]-1)$RTL
-  dd3_2$DeltaRTL[i] <- dd3_2$RTL[i]-prevbird
-  }
-  
-
-}
-
-
-dd3 <- subset(dd3,DeltaRTL !=0)
-dd3_2 <- subset(dd3_2,DeltaRTL!=0)
-
-dd3_2 <- dd3_2[1:nrow(dd3),]
-
-
-temp <- data.frame(DeltaRTL = c(dd3$DeltaRTL,dd3_2$DeltaRTL),Group = rep(c('Among samples','Within samples'),c(nrow(dd3),nrow(dd3_2))))
-
-
-ggplot(temp,aes(col=Group,fill = Group,x = DeltaRTL))+
-    geom_histogram()+
-  theme_classic()+
-  scale_colour_manual(values = c('darkgrey','gold'))+
-  scale_fill_manual(values = c('darkgrey','gold'))+
-  geom_vline(xintercept = 0,lty = 2)
 
