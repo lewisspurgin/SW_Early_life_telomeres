@@ -17,6 +17,7 @@ library(gvlma)
 library(survival)
 library(nlme)
 library(magrittr)
+library(car)
 
 # Load data ---------------------------------------------------------------
 dd0 <- read.csv('Data/REL_TL_EB_EAF_25 Feb FULL DATA.csv') #main dataset
