@@ -7,8 +7,7 @@
 dd0 <- subset(dd0,Whodunnit == 'EAF')
 
 #Average repeats of blood samples
-av <- ave(dd0$RTL,c(dd0$BloodID,dd0$Status,dd0$PlateID))
-dd0$RTL2 <- av
+dd0$RTL2 <- ave(dd0$RTL,c(dd0$BloodID,dd0$Status,dd0$PlateID))
 dd <- dd0[!(duplicated(dd0$BloodID)),]
 dd$RTL <- dd$RTL2
 dd$RTL2 <- NULL
@@ -64,10 +63,6 @@ dd$Age[dd$Fledged != 'Adults'] <- 1
 
 dd$Tarsus <- NA
 dd$DeltaAge <- NA
-dd$Malaria <- NA
-
-malaria <- subset(malaria,!duplicated(BloodID))
-malaria <- subset(malaria,Consensus <2)
 
 for(i in 1:nrow(dd))
 {
@@ -78,10 +73,6 @@ for(i in 1:nrow(dd))
          dd$Tarsus[i] <- dd$RightTarsus[i])
   
   dd$DeltaAge[i] <- dd$Agemonths[i] - mean(subset(dd,BirdID == dd$BirdID[i])$Agemonths)
-  if(dd$BloodID[i] %in% malaria$BloodID)
-     {
-       dd$Malaria[i] <- subset(malaria,BloodID == dd$BloodID[i])$Consensus
-     }
 }
 
 dd$RightTarsus <- NULL
@@ -92,7 +83,10 @@ dd$LeftTarsus <- NULL
 # Remove unwanted data/outliers ----------------------------------------------------
 
 dd <- subset(dd,RTL<2)
-dd <- subset(dd,RTL > 0.04)
+dd <- subset(dd,RTL > 0.05)
+#dd <- subset(dd,CqTelomere <22)
+dd <- subset(dd,CqGAPDH < 25)
+
 dd <- subset(dd,BodyMass>5)
 dd <- subset(dd,Tarsus>17)
 
@@ -206,7 +200,7 @@ for(i in 1:nrow(juv))
       juv$TQ[i] <- log10(subset(cd,FieldPeriodID == juv$FieldPeriodID[i])$TQcorrected)
     } else
     {
-      log10(mean(cd$TQcorrected))
+      juv$TQ[i] <-log10(mean(cd$TQcorrected))
     }
     juv$TQI[i] <- juv$TQ[i]/juv$GroupSize[i]
     
@@ -242,7 +236,7 @@ juv$HatchDate <- as.Date(juv$HatchDate,"%d/%m/%Y")
 juv$Chickage <- as.numeric(juv$CatchDate-juv$HatchDate)
 juv$O_HatchDate <- as.POSIXlt(juv$HatchDate,format='%yyyy-%mm-%dd')$yday
 juv$O_CatchDate <- as.POSIXlt(juv$CatchDate,format='%yyyy-%mm-%dd')$yday
-juv <- subset(juv,!(is.na(Density)))
+#juv <- subset(juv,!(is.na(Density)))
 
 
 
@@ -345,7 +339,10 @@ temp <- subset(dd,!duplicated(paste0(BirdID,Agemonths)))
 counts <- with(temp,tapply(RTL,BirdID,length))
 c3 <- names(counts[counts >= 2])
 dd3 <- subset(temp,BirdID %in% c3)
-DeltaRTL <- NA
+dd3$TimeDiff <- NA
+dd3$DeltaRTL <- NA
+dd3$DeltaTL <- NA
+dd3$DeltaGAP <- NA
 
 for(i in 1:nrow(dd3))
 {
@@ -354,25 +351,28 @@ for(i in 1:nrow(dd3))
   
   birdpos <- which(cd$BloodID == dd3$BloodID[i])
   
-  if(birdpos == 1)
+  if(birdpos == nrow(cd))
   {
-    dd3$DeltaRTL[i] <- 0
+    dd3$DeltaRTL[i] <- NA
   } else
   {
-    prevbird <- cd[birdpos-1,'RTL']
-    dd3$DeltaRTL[i] <- dd3$RTL[i]-prevbird
-    dd3$MidAge[i] <- mean(c(dd3$Agemonths[i],cd[birdpos-1,'Agemonths']))
-    dd3$MinAge[i] <- cd[birdpos-1,'Agemonths']
-    dd3$TimeDiff[i] <- dd3$Agemonths[i] - cd[birdpos-1,'Agemonths']
+    nextbird <- cd[birdpos+1,]
+    dd3$DeltaRTL[i] <- nextbird$RTL - dd3$RTL[i]
+    dd3$DeltaGAP[i] <- nextbird$CqGAPDH - dd3$CqGAPDH[i]
+    dd3$DeltaTL[i] <- nextbird$CqTelomere - dd3$CqTelomere[i]
+    dd3$TimeDiff[i] <- cd[birdpos+1,'Agemonths'] - dd3$Agemonths[i]
   }
   
   
 }
 
 
+
 temp <- subset(dd0,!duplicated(paste0(BloodID,RTL)))
 temp <- subset(temp,RTL<2)
-temp <- subset(temp,RTL > 0.04)
+temp <- subset(temp,RTL > 0.05)
+#temp <- subset(temp,CqTelomere <22)
+temp <- subset(temp,CqGAPDH < 25)
 
 counts <- with(temp,tapply(RTL,BloodID,length))
 c3 <- names(counts[counts %in% c(2:5)])
@@ -385,30 +385,37 @@ counts <- with(dd3_2,tapply(RTL,BloodID,length))
 dd3_2$birdpos <- unlist(sapply(counts,function(x) c(1:x)))
 
 dd3_2$DeltaRTL <- NA
+dd3_2$DeltaTL <- NA
+dd3_2$DeltaGAP <- NA
 
 for(i in 1:nrow(dd3_2))
 {
   cd <- subset(dd3_2,BloodID == dd3_2$BloodID[i])
   
-  if(dd3_2$birdpos[i] == 1)
+  if(dd3_2$birdpos[i] == nrow(cd))
   {
-    dd3_2$DeltaRTL[i] <- 0
+    dd3_2$DeltaRTL[i] <- NA
   } else
   {
-    prevbird <- subset(cd,birdpos == dd3_2$birdpos[i]-1)$RTL
-    dd3_2$DeltaRTL[i] <- dd3_2$RTL[i]-prevbird
+    nextbird <- subset(cd,birdpos == dd3_2$birdpos[i]+1)
+    dd3_2$DeltaRTL[i] <- nextbird$RTL - dd3_2$RTL[i]
+    dd3_2$DeltaGAP[i] <- nextbird$CqGAPDH - dd3_2$CqGAPDH[i]
+    dd3_2$DeltaTL[i] <- nextbird$CqTelomere - dd3_2$CqTelomere[i]
   }
   
   
 }
 
 
-dd3 <- subset(dd3,DeltaRTL !=0)
-dd3_2 <- subset(dd3_2,DeltaRTL!=0)
-dd3_2 <- dd3_2[1:nrow(dd3),]
+dd3 <- subset(dd3,!is.na(DeltaRTL))
+dd3_2 <- subset(dd3_2,!is.na(DeltaRTL))
 
 
-ddL <- data.frame(DeltaRTL = c(dd3$DeltaRTL,dd3_2$DeltaRTL),Group = rep(c('Among samples','Within samples'),c(nrow(dd3),nrow(dd3_2))))
+ddL <- data.frame(BirdID = c(dd3$BirdID,dd3_2$BloodID),
+                  DeltaRTL = c(dd3$DeltaRTL,dd3_2$DeltaRTL),
+                  DeltaTL = c(dd3$DeltaTL,dd3_2$DeltaTL),
+                  DeltaGAP = c(dd3$DeltaGAP,dd3_2$DeltaGAP),
+                  Group = rep(c('Among samples','Within samples'),c(nrow(dd3),nrow(dd3_2))))
 
 
-rm(temp,dd2,dd3_2)
+rm(temp,dd3_2)
