@@ -384,6 +384,10 @@ boxplot(CqTelomere~Ageclass,data=dd)
 boxplot(CqGAPDH~Ageclass,data=dd)
 
 
-ggplot(dd,aes(y = CqTelomere, x = CqGAPDH,col = Ageclass))+
+ggplot(dd,aes(y = CqGAPDH, x = Agemonths,col=Sex))+
 geom_point()+
 stat_smooth(method = 'lm')
+
+summary(lm(CqGAPDH~Agemonths,data=dd))
+summary(lm(CqTelomere~Agemonths,data=dd))
+summary(lm(RTL~Agemonths,data=dd))
