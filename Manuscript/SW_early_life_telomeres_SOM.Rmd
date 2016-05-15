@@ -46,7 +46,7 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 ```{r Table S1}
 
 #Run the model
-lm1 <- lmer(cenTL ~ Agemonths * (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|FieldPeriodID)+(1|TerritoryID)+(1|PlateID),
+lm1 <- lmer(RTL ~ Agemonths * (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|FieldPeriodID)+(1|TerritoryID)+(1|PlateID),
             data = juv,
             REML = FALSE)
 lm1 <- standardize(lm1)
