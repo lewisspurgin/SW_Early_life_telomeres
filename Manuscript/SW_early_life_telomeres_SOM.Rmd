@@ -95,8 +95,8 @@ kable(tableS1,digits=2)
 temp <- Loss
 
 #Run the model
-lm1 <- lmer(Loss ~ Agemonths*(Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|FieldPeriodID) + (1|TerritoryID),
-            data = temp,
+lm1 <- glmer(L ~ Agemonths*(Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|FieldPeriodID) + (1|TerritoryID),
+            data = subset(temp,Loss<0),
             REML = FALSE)
 lm1 <- standardize(lm1)
 
@@ -173,6 +173,22 @@ FigS1
 ```
 
 
+ggplot(d5,aes(x = RTL,col = factor(LayYear)))+
+geom_density()
 
+with(juv,tapply(RTL,LayYear,length))
 
+d5 <- subset(juv,LayYear == 2002)
+plot(RTL~BodyMass,data=d5)
 
+lm1 <- lmer(RTL ~ Agemonths*(Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|TerritoryID),
+            data = d5,
+            REML = FALSE)
+lm1 <- standardize(lm1)
+
+#Model averaging
+lm2 <- dredge(lm1)
+
+head(lm2)
+
+plot(RTL~BodyMass,data=d5)
