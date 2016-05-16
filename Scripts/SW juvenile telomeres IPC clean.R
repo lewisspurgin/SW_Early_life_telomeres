@@ -343,6 +343,7 @@ dd3$TimeDiff <- NA
 dd3$DeltaRTL <- NA
 dd3$DeltaTL <- NA
 dd3$DeltaGAP <- NA
+dd3$BloodID1 <- NA
 
 for(i in 1:nrow(dd3))
 {
@@ -361,6 +362,7 @@ for(i in 1:nrow(dd3))
     dd3$DeltaGAP[i] <- nextbird$CqGAPDH - dd3$CqGAPDH[i]
     dd3$DeltaTL[i] <- nextbird$CqTelomere - dd3$CqTelomere[i]
     dd3$TimeDiff[i] <- cd[birdpos+1,'Agemonths'] - dd3$Agemonths[i]
+    dd3$BloodID1[i] <- nextbird$BloodID
   }
   
   
@@ -387,6 +389,7 @@ dd3_2$birdpos <- unlist(sapply(counts,function(x) c(1:x)))
 dd3_2$DeltaRTL <- NA
 dd3_2$DeltaTL <- NA
 dd3_2$DeltaGAP <- NA
+dd3_2$BloodID1 <- NA
 
 for(i in 1:nrow(dd3_2))
 {
@@ -401,6 +404,7 @@ for(i in 1:nrow(dd3_2))
     dd3_2$DeltaRTL[i] <- nextbird$RTL - dd3_2$RTL[i]
     dd3_2$DeltaGAP[i] <- nextbird$CqGAPDH - dd3_2$CqGAPDH[i]
     dd3_2$DeltaTL[i] <- nextbird$CqTelomere - dd3_2$CqTelomere[i]
+    dd3_2$BloodID1[i] <- nextbird$BloodID
   }
   
   
@@ -411,7 +415,9 @@ dd3 <- subset(dd3,!is.na(DeltaRTL))
 dd3_2 <- subset(dd3_2,!is.na(DeltaRTL))
 
 
-ddL <- data.frame(BirdID = c(dd3$BirdID,dd3_2$BloodID),
+ddL <- data.frame(BirdID = c(dd3$BirdID,dd3_2$BirdID),
+                  BloodID = c(dd3$BloodID,dd3_2$BloodID),
+                  BloodID1 = c(dd3$BloodID1,dd3_2$BloodID1),
                   DeltaRTL = c(dd3$DeltaRTL,dd3_2$DeltaRTL),
                   DeltaTL = c(dd3$DeltaTL,dd3_2$DeltaTL),
                   DeltaGAP = c(dd3$DeltaGAP,dd3_2$DeltaGAP),
@@ -419,3 +425,4 @@ ddL <- data.frame(BirdID = c(dd3$BirdID,dd3_2$BloodID),
 
 
 rm(temp,dd3_2)
+

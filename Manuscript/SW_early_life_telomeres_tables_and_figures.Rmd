@@ -351,14 +351,40 @@ Fig4C <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
   annotate('text',x = -2,y = 1,label = 'C')
 
 
+temp <- Loss
+temp$LossL <- ifelse(temp$Loss>0,'Lengthening','Shortening')
+
+Fig4D <- ggplot(temp,aes(col=LossL,fill = LossL,y = Loss,x = TimeDiff))+
+    geom_point()+
+  stat_smooth(method = 'lm')+
+  theme_classic()+
+  xlab ('Follow up time (years)')+
+  ylab(expression(Delta*'RTL'))+
+    theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        legend.position = c(0.8,0.9),
+        legend.title = element_blank(),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black')) +
+  scale_colour_manual(values = c('darkgrey','gold'))+
+  scale_fill_manual(values = c('darkgrey','gold'))+
+    geom_abline(slope = 0,intercept = 0,lty = 2)+
+  annotate('text',x = 0,y = 1,label = 'D')
+
+
+
+
 
 
 
 pdf('Figures/Figure 4.pdf',
-    width = 4,
-    height = 9,
+    width = 8,
+    height = 7,
     paper = 'a4')
-multiplot(Fig4A,Fig4B,Fig4C,layout=matrix(c(1,2,3),nrow=3,byrow=T))
+multiplot(Fig4A,Fig4B,Fig4C,Fig4D,layout=matrix(c(1,2,3,4),nrow=2,byrow=T))
 dev.off()
 
 ```
+
