@@ -295,7 +295,7 @@ Fig4A <- ggplot(temp,
         axis.line.y = element_line(colour = 'black')) +
   geom_abline(slope = 1,intercept = 0,lty = 2)+
   geom_point()+
-  scale_colour_manual(values = c('darkgrey','red'))+
+  scale_colour_manual(values = c('navy','red'))+
   annotate('text',x = 0,y = 3,label = 'A')
 
 
@@ -358,12 +358,12 @@ Fig4C <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
 
 temp <- Loss
 
-Fig4D <- ggplot(temp,aes(col=LossF,fill = LossF,y = Loss,x = TimeDiff))+
+Fig4D <- ggplot(temp,aes(col=LossF,y = Loss,x = TimeDiff))+
     geom_point()+
-  stat_smooth(method = 'lm')+
   theme_classic()+
   xlab ('Follow up time (years)')+
   ylab(expression(Delta*'RTL'))+
+  ylim(c(-2,2))+
     theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
         axis.title.y = element_text(size = 14,vjust=0.8),
@@ -372,10 +372,9 @@ Fig4D <- ggplot(temp,aes(col=LossF,fill = LossF,y = Loss,x = TimeDiff))+
         legend.title = element_blank(),
         axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black')) +
-  scale_colour_manual(values = c('darkgrey','red'))+
-  scale_fill_manual(values = c('darkgrey','red'))+
+  scale_colour_manual(values = c('navy','red'))+
     geom_abline(slope = 0,intercept = 0,lty = 2)+
-  annotate('text',x = 0,y = 1,label = 'D')
+  annotate('text',x = 0,y = 2,label = 'D')
 
 
 

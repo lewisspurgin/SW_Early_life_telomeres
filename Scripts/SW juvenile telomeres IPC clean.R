@@ -83,9 +83,9 @@ dd$LeftTarsus <- NULL
 # Remove unwanted data/outliers ----------------------------------------------------
 
 
-dd <- subset(dd,RTL > 0.05)
-dd <- subset(dd,CqTelomere <22)
-dd <- subset(dd,CqGAPDH < 25)
+#dd <- subset(dd,RTL > 0.05)
+dd <- subset(dd,CqTelomere <28)
+dd <- subset(dd,CqGAPDH < 28)
 
 dd <- subset(dd,BodyMass>5)
 dd <- subset(dd,Tarsus>17)
@@ -100,7 +100,7 @@ dd$SurvivedNext <- ifelse(dd$RemainingLife<1,0,1)
 
 dd$SurvivedNext <- ifelse(dd$RemainingLife>1,1,0)
 dd$Lifespan <- (dd$DeathYear-dd$LayYear)+1
-dd$Died <- ifelse(dd$DeathYear<2013,1,0)
+dd$Died <- ifelse(dd$DeathYear<2014,1,0)
 
 
 
@@ -307,7 +307,7 @@ juvseason <- ddply(juv,
 juvseason <- subset(juvseason,n>4)
 
 with(juv,tapply(Died,LayYear,mean))
-juv9 <- subset(juv,LayYear<2008)
+juv9 <- subset(juv,LayYear<2009)
 juv13 <- subset(juv,LayYear<2013)
 
 
@@ -415,6 +415,8 @@ for(i in 1:nrow(dd3_2))
 dd3 <- subset(dd3,!is.na(DeltaRTL))
 dd3_2 <- subset(dd3_2,!is.na(DeltaRTL))
 
+dd3$DeltaRTLF <- ifelse(dd3$DeltaRTL>0,1,0)
+
 
 ddL <- data.frame(BirdID = c(dd3$BirdID,dd3_2$BirdID),
                   BloodID = c(dd3$BloodID,dd3_2$BloodID),
@@ -423,7 +425,6 @@ ddL <- data.frame(BirdID = c(dd3$BirdID,dd3_2$BirdID),
                   DeltaTL = c(dd3$DeltaTL,dd3_2$DeltaTL),
                   DeltaGAP = c(dd3$DeltaGAP,dd3_2$DeltaGAP),
                   Group = rep(c('Among samples','Within samples'),c(nrow(dd3),nrow(dd3_2))))
-
 
 rm(temp,dd3_2)
 

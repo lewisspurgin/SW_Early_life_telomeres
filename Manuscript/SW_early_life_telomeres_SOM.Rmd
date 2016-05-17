@@ -95,8 +95,8 @@ kable(tableS1,digits=2)
 temp <- Loss
 
 #Run the model
-lm1 <- lmer(Loss ~ Agemonths*(Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|FieldPeriodID) + (1|TerritoryID),
-            data = Loss,
+lm1 <- lmer(Loss ~ RTL+ Agemonths*(Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|FieldPeriodID) + (1|TerritoryID),
+            data = temp,
             REML = FALSE)
 lm1 <- standardize(lm1)
 
@@ -171,10 +171,3 @@ FigS1 <- ggplot(temp,
 FigS1
 
 ```
-
-
-
-ggplot(dd,aes(x = RTL, col = Ageclass))+
-geom_density()
-
-
