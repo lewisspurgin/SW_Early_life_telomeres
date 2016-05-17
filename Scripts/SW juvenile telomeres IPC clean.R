@@ -82,9 +82,9 @@ dd$LeftTarsus <- NULL
 
 # Remove unwanted data/outliers ----------------------------------------------------
 
-dd <- subset(dd,RTL<2)
+
 dd <- subset(dd,RTL > 0.05)
-#dd <- subset(dd,CqTelomere <22)
+dd <- subset(dd,CqTelomere <22)
 dd <- subset(dd,CqGAPDH < 25)
 
 dd <- subset(dd,BodyMass>5)
@@ -281,6 +281,7 @@ Loss$TROC <- with(Loss,Loss/TimeDiff)
 #
 Loss <- subset(Loss,TimeDiff>(365/2))
 Loss$TimeDiff <- Loss$TimeDiff/365
+Loss$LossF <- ifelse(Loss$Loss>0,'Lengthening','Shortening')
 
 # Get rid of stuff not to be used -----------------------------------------
 

@@ -278,23 +278,25 @@ temp[,'Age (months)'] <- factor(temp$Agemonths)
 
 Fig4A <- ggplot(temp,
        aes(x = RTL,
-           y = RTL1)) +
+           y = RTL1,
+           col = LossF)) +
   ylab('Adult RTL') + 
   xlab('Juvenile RTL') +
+    xlim(c(0,3))+
+  ylim(c(0,3))+
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
-        legend.position = c(0.82,0.88),
+        legend.position = c('none'),
         legend.title = element_text(size = 12),
         axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'),
-        legend.background = element_rect(fill = grey(0.9))) +
+        axis.line.y = element_line(colour = 'black')) +
   geom_abline(slope = 1,intercept = 0,lty = 2)+
-  geom_point(col='grey')+
-  stat_smooth(method = 'lm',col='darkgrey')+
-  annotate('text',x = 0,y = 1.8,label = 'A')
+  geom_point()+
+  scale_colour_manual(values = c('darkgrey','red'))+
+  annotate('text',x = 0,y = 3,label = 'A')
 
 
 
@@ -312,12 +314,14 @@ keep2 <- names(mins[mins <5])
 temp <- subset(temp,BirdID %in% keep2)
 temp <- subset(temp,!duplicated(paste0(BirdID,Agemonths)))
 
+temp$Agemonths <- temp$Agemonths/12
 
+mycols <- topo.colors(length(keep2))
 
 Fig4B <- ggplot(temp,aes(x = Agemonths,y = RTL,group = BirdID,col=factor(BirdID)))+
 geom_point()+
 geom_line()+
-  xlab('Age (months)') +
+  xlab('Age (years)') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
@@ -325,8 +329,9 @@ geom_line()+
         axis.title.x = element_text(size = 14),
         axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'),
-        legend.position = 'none')
-  annotate('text',x = -5,y = 2,label = 'B')
+        legend.position = 'none')+
+  scale_colour_brewer(palette = 'Set1')+
+  annotate('text',x = 0,y = 2,label = 'B')
 
 
 
@@ -352,9 +357,8 @@ Fig4C <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
 
 
 temp <- Loss
-temp$LossL <- ifelse(temp$Loss>0,'Lengthening','Shortening')
 
-Fig4D <- ggplot(temp,aes(col=LossL,fill = LossL,y = Loss,x = TimeDiff))+
+Fig4D <- ggplot(temp,aes(col=LossF,fill = LossF,y = Loss,x = TimeDiff))+
     geom_point()+
   stat_smooth(method = 'lm')+
   theme_classic()+
@@ -364,12 +368,12 @@ Fig4D <- ggplot(temp,aes(col=LossL,fill = LossL,y = Loss,x = TimeDiff))+
         axis.text.y = element_text(size = 12), 
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
-        legend.position = c(0.8,0.9),
+        legend.position = c('none'),
         legend.title = element_blank(),
         axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black')) +
-  scale_colour_manual(values = c('darkgrey','gold'))+
-  scale_fill_manual(values = c('darkgrey','gold'))+
+  scale_colour_manual(values = c('darkgrey','red'))+
+  scale_fill_manual(values = c('darkgrey','red'))+
     geom_abline(slope = 0,intercept = 0,lty = 2)+
   annotate('text',x = 0,y = 1,label = 'D')
 
