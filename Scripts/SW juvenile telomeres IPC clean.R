@@ -83,7 +83,7 @@ dd$LeftTarsus <- NULL
 # Remove unwanted data/outliers ----------------------------------------------------
 
 
-#dd <- subset(dd,RTL > 0.05)
+dd <- subset(dd,RTL > 0.05)
 dd <- subset(dd,CqTelomere <28)
 dd <- subset(dd,CqGAPDH < 28)
 
