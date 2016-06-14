@@ -129,46 +129,46 @@ adults <- droplevels(subset(dd,Ageclass == 'A'))
 
 
 #Centre telomere length by birth year
-juv$cenTL <- NA
-juv$cohortTL <- NA
-for(i in 1:nrow(juv))
+dd$cenTL <- NA
+dd$cohortTL <- NA
+for(i in 1:nrow(dd))
 {
-  currentdata <- subset(juv,FieldPeriodID == FieldPeriodID[i])
+  currentdata <- subset(dd,FieldPeriodID == FieldPeriodID[i])
   if(nrow(currentdata>4))
   {
-    juv$cenTL[i] <- (juv$RTL[i] - mean(currentdata$RTL))/sd(currentdata$RTL)
-    juv$cohortTL[i] <- median(currentdata$RTL)  
+    dd$cenTL[i] <- (dd$RTL[i] - mean(currentdata$RTL))/sd(currentdata$RTL)
+    dd$cohortTL[i] <- median(currentdata$RTL)  
   }
 
 }
 
-mymed <- median(juv$cenTL,na.rm=T)
-juv$cenTLF <- ifelse(juv$cenTL < mymed,'Short telomeres','Long telomeres')
+mymed <- median(dd$cenTL,na.rm=T)
+dd$cenTLF <- ifelse(dd$cenTL < mymed,'Short telomeres','Long telomeres')
 
-mymed <- median(juv$cohortTL,na.rm=T)
-juv$coTLF <- ifelse(juv$cohortTL < mymed,'Short telomeres','Long telomeres')
+mymed <- median(dd$cohortTL,na.rm=T)
+dd$coTLF <- ifelse(dd$cohortTL < mymed,'Short telomeres','Long telomeres')
 
 
 rm(mymed)
 
-juv <- subset(juv,!(is.na(cenTL)))
+dd <- subset(dd,!(is.na(cenTL)))
 
 # Helpers and social group size -------------------------------------------
 
-status <- subset(status,BreedGroupID %in% juv$BreedGroupID)
+status <- subset(status,BreedGroupID %in% dd$BreedGroupID)
 
-for(i in 1:nrow(juv))
+for(i in 1:nrow(dd))
 {
-  currentBG <- juv$BreedGroupID[i]
-  currentdata <- subset(subset(status,BreedGroupID == currentBG),BirdID !=juv$BirdID[i])
-  juv$GroupSize[i] <- nrow(currentdata)
-  juv$Helper[i] <- nrow(subset(currentdata,Status == 'H'))
-  juv$OtherJuvs[i] <- nrow(subset(currentdata,Status %in% c('CH','FL','OFL')))
-  juv$NonHelper[i] <- nrow(subset(currentdata,Status %in% c('AB','ABX')))
+  currentBG <- dd$BreedGroupID[i]
+  currentdata <- subset(subset(status,BreedGroupID == currentBG),BirdID !=dd$BirdID[i])
+  dd$GroupSize[i] <- nrow(currentdata)
+  dd$Helper[i] <- nrow(subset(currentdata,Status == 'H'))
+  dd$Otherdds[i] <- nrow(subset(currentdata,Status %in% c('CH','FL','OFL')))
+  dd$NonHelper[i] <- nrow(subset(currentdata,Status %in% c('AB','ABX')))
 }
 
-juv <- subset(juv,GroupSize>0)
-juv$Helper[juv$Helper>1] <- 1
+dd <- subset(dd,GroupSize>0)
+dd$Helper[dd$Helper>1] <- 1
 
 
 
@@ -181,107 +181,74 @@ insects <- subset(insects,FieldPeriodID != 26)
 dens$SPsize <- with(dens,(PsizeFP-mean(PsizeFP))/sd(PsizeFP))
 
 
-juv$TQ <- NA
-juv$TQI <- NA
-juv$cenTQ <- NA
-juv$Insect <- NA
-juv$Density <- NA
-juv$SDensity <- NA
-juv$HatchDate <- NA
+dd$TQ <- NA
+dd$TQI <- NA
+dd$cenTQ <- NA
+dd$Insect <- NA
+dd$Density <- NA
+dd$SDensity <- NA
+dd$HatchDate <- NA
 
 
-for(i in 1:nrow(juv))
+for(i in 1:nrow(dd))
 {
-  if(juv$TerritoryID[i] %in% terr$TerritoryID)
+  if(dd$TerritoryID[i] %in% terr$TerritoryID)
   {
-    cd <- subset(terr,TerritoryID == juv$TerritoryID[i])
-    if(juv$FieldPeriodID[i] %in% cd$FieldPeriodID)
+    cd <- subset(terr,TerritoryID == dd$TerritoryID[i])
+    if(dd$FieldPeriodID[i] %in% cd$FieldPeriodID)
     {
-      juv$TQ[i] <- log10(subset(cd,FieldPeriodID == juv$FieldPeriodID[i])$TQcorrected)
+      dd$TQ[i] <- log10(subset(cd,FieldPeriodID == dd$FieldPeriodID[i])$TQcorrected)
     } else
     {
-      juv$TQ[i] <-log10(mean(cd$TQcorrected))
+      dd$TQ[i] <-log10(mean(cd$TQcorrected))
     }
-    juv$TQI[i] <- juv$TQ[i]/juv$GroupSize[i]
+    dd$TQI[i] <- dd$TQ[i]/dd$GroupSize[i]
     
   }
   
   
   
-  if(juv$FieldPeriodID[i] %in% insects$FieldPeriodID)
+  if(dd$FieldPeriodID[i] %in% insects$FieldPeriodID)
   {
-    juv$Insect[i] <- insects$MeanInsects[insects$FieldPeriodID == juv$FieldPeriodID[i]] 
+    dd$Insect[i] <- insects$MeanInsects[insects$FieldPeriodID == dd$FieldPeriodID[i]] 
   }
   
   
   
-  if(juv$FieldPeriodID[i] %in% dens$FieldPeriodID)
+  if(dd$FieldPeriodID[i] %in% dens$FieldPeriodID)
   {
-    juv$Density[i] <- dens$PsizeFP[dens$FieldPeriodID == juv$FieldPeriodID[i]]
-    juv$SDensity[i] <- dens$SPsize[dens$FieldPeriodID == juv$FieldPeriodID[i]]
+    dd$Density[i] <- dens$PsizeFP[dens$FieldPeriodID == dd$FieldPeriodID[i]]
+    dd$SDensity[i] <- dens$SPsize[dens$FieldPeriodID == dd$FieldPeriodID[i]]
     
   }
   
   
-  if(juv$BirdID[i] %in% chickinfo$BirdID)
+  if(dd$BirdID[i] %in% chickinfo$BirdID)
   {
-    juv$HatchDate[i] <- paste(chickinfo$HatchDate[chickinfo$BirdID == juv$BirdID[i]])
+    dd$HatchDate[i] <- paste(chickinfo$HatchDate[chickinfo$BirdID == dd$BirdID[i]])
   }
   
   
 }
 
 
-juv$HatchDate <- as.Date(juv$HatchDate,"%d/%m/%Y")
-juv$Chickage <- as.numeric(juv$CatchDate-juv$HatchDate)
-juv$O_HatchDate <- as.POSIXlt(juv$HatchDate,format='%yyyy-%mm-%dd')$yday
-juv$O_CatchDate <- as.POSIXlt(juv$CatchDate,format='%yyyy-%mm-%dd')$yday
-#juv <- subset(juv,!(is.na(Density)))
+dd$HatchDate <- as.Date(dd$HatchDate,"%d/%m/%Y")
+dd$Chickage <- as.numeric(dd$CatchDate-dd$HatchDate)
+dd$O_HatchDate <- as.POSIXlt(dd$HatchDate,format='%yyyy-%mm-%dd')$yday
+dd$O_CatchDate <- as.POSIXlt(dd$CatchDate,format='%yyyy-%mm-%dd')$yday
+#dd <- subset(dd,!(is.na(Density)))
 
 
 
 #Get rid of NAs and cross-fostered birds
-juv <- subset(juv,!is.na(Tarsus))
-juv <- subset(juv,!is.na(BodyMass))
-juv <- subset(juv,!is.na(TQ))
-juv <- subset(juv,Status!='XF')
+dd <- subset(dd,!is.na(Tarsus))
+dd <- subset(dd,!is.na(BodyMass))
+dd <- subset(dd,!is.na(TQ))
+dd <- subset(dd,Status!='XF')
 
 
-juv$Condition <- lm(BodyMass~Tarsus+Age+Sex,data=juv)$residuals
+dd$Condition <- lm(BodyMass~Tarsus+Age+Sex,data=dd)$residuals
 
-# Look at telomere loss ---------------------------------------------------
-#Get earliest catch for each juvenile
-earlies <- merge(juv,aggregate(CatchDate~BirdID,juv,min)) %>% 
-subset(!(duplicated(BirdID)))
-
-#Get earliest subsequent catch
-laters <- merge(aggregate(CatchDate~BirdID,subset(dd,!(BloodID %in% earlies$BloodID)),
-                          mean),
-                subset(dd,!(BloodID %in% earlies$BloodID))) %>% 
-subset(!(duplicated(BirdID)))
-
-
-earlies <- subset(earlies,BirdID %in% laters$BirdID)
-laters <- subset(laters,BirdID %in% earlies$BirdID)
-
-earlies <- earlies[order(earlies$BirdID),]
-laters <- laters[order(laters$BirdID),]
-
-
-#Creat data frame with TROC
-Loss <- data.frame(earlies,
-                   Loss = laters$RTL-earlies$RTL,
-                   RTL1 = laters$RTL,
-                   Agemonths1 = laters$Agemonths,
-                   TimeDiff = as.numeric(laters$CatchDate-earlies$CatchDate),
-                   RemainingLife2 = laters$RemainingLife,
-                   SurvivedNext2 = laters$SurvivedNext)
-Loss$TROC <- with(Loss,Loss/TimeDiff)
-
-#
-Loss <- subset(Loss,TimeDiff>(365/2))
-Loss$TimeDiff <- Loss$TimeDiff/365
-Loss$LossF <- ifelse(Loss$Loss>0,'Lengthening','Shortening')
 
 # Get rid of stuff not to be used -----------------------------------------
 
@@ -289,48 +256,6 @@ rm(status,helpers,hatchdate,x1,x2,x3,x4)
 
 
 # Field period average data for plots -----------------------------------------------
-
-juvseason <- ddply(juv,
-                   .(factor(LayYear),Season),
-                   summarize,
-                   RTL = median(RTL),
-                   TLse = se(RTL),
-                   Helper = mean(Helper,na.rm=T),
-                   Insect = mean(Insect,na.rm=T),
-                   Density = mean(Density),
-                   Lifespan = median(RemainingLife),
-                   LayYear = mean(CatchYear),
-                   Age = mean(Agemonths),
-                   n = length(TQ),
-                   TQ = mean(TQ,na.rm=T),
-                   Survived=mean(SurvivedNext)*100)
-juvseason <- subset(juvseason,n>4)
-
-with(juv,tapply(Died,LayYear,mean))
-juv9 <- subset(juv,LayYear<2009)
-juv13 <- subset(juv,LayYear<2013)
-
-
-juvseason9 <- ddply(juv9,
-                   .(factor(LayYear),Season),
-                   summarize,
-                   RTL = median(RTL),
-                   TLse = se(RTL),
-                   Helper = mean(Helper,na.rm=T),
-                   Insect = mean(Insect,na.rm=T),
-                   Density = mean(Density),
-                   Lifespan = median(RemainingLife),
-                   LayYear = mean(CatchYear),
-                   Age = mean(Agemonths),
-                   n = length(TQ),
-                   TQ = mean(TQ,na.rm=T),
-                   Survived=mean(SurvivedNext)*100)
-juvseason9 <- subset(juvseason9,n>4)
-
-
-
-
-
 
 
 # Longitudinal data for whole dataset -------------------------------------

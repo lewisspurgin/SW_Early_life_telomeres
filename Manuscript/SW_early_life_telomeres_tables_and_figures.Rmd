@@ -38,9 +38,9 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 
 **Figure 3** Factors affecting early-life RTL in Seychelles warblers. **A** Model averaged estimates and 95% confidence intervals for explanatory terms used in a linear mixed model with RTL as the response variable (see main text for details; TQ = territory quality). **B,C** Early-life RTL and age in relation to tarsus length (**B**) and sex (**C**). Lines and shaded areas in **B** are fitted values and 95% confidence limits from a general linear model.
 
-**Figure 4** Longitudinal telomere dynamics in juvenile Seychelles warblers. **A** Juvenile telomere length in relation to adult telomere length measured in the same individual. **B** $\Delta$RTL in relation to the time between sampling events. Lines and shaded areas represent fitted values and 95% confidence limits from general linear models. Raw data have been ommited from **B** for the sake of clarity, but are plotted in Figure S1.
+**Figure 4** Longitudinal telomere dynamics in subset(dd,Agemonths<12)enile Seychelles warblers. **A** subset(dd,Agemonths<12)enile telomere length in relation to adult telomere length measured in the same individual. **B** $\Delta$RTL in relation to the time between sampling events. Lines and shaded areas represent fitted values and 95% confidence limits from general linear models. Raw data have been ommited from **B** for the sake of clarity, but are plotted in Figure S1.
 
-**Figure 5** Factors affecting $\Delta$RTL in juvenile Seychelles warblers. **A** Model averaged estimates and 95% confidence intervals for explanatory terms used in a linear mixed model with $\Delta$RTL as the response variable (see main text for details; TQ = territory quality). **B** $\Delta$RTL in relation to tarsus length and sex.
+**Figure 5** Factors affecting $\Delta$RTL in subset(dd,Agemonths<12)enile Seychelles warblers. **A** Model averaged estimates and 95% confidence intervals for explanatory terms used in a linear mixed model with $\Delta$RTL as the response variable (see main text for details; TQ = territory quality). **B** $\Delta$RTL in relation to tarsus length and sex.
 
 
 
@@ -107,7 +107,7 @@ dev.off()
 
 ```{r Figure 2}
 
-temp <- juv
+temp <- subset(dd,Agemonths<12)
 temp$LayYear <- factor(temp$LayYear)
 
 Fig2 <- ggplot(temp,aes(x = LayYear,y = RTL))+
@@ -148,7 +148,7 @@ dev.off()
 
 ```{r Figure 3}
 
-temp <- juv
+temp <- dd
 
 #Run the model
 lm2 <- lmer(RTL ~ Agemonths * (Tarsus) + Helper + NonHelper + Sex + BodyMass  + TQ  + (1|FieldPeriodID) + (1|TerritoryID)+(1|PlateID),
@@ -201,7 +201,7 @@ Fig3A <- forestplot(table2)+
 
 
 
-temp <- juv
+temp <- subset(dd,Agemonths<12)
 
 temp[,'Helpers'] <- ifelse(temp$Helper>0,'Present', 'Absent')
 temp[,'Non helpers'] <- ifelse(temp$NonHelper>0,'Present', 'Absent')
@@ -281,7 +281,7 @@ Fig4A <- ggplot(temp,
            y = RTL1,
            col = LossF)) +
   ylab('Adult RTL') + 
-  xlab('Juvenile RTL') +
+  xlab('subset(dd,Agemonths<12)enile RTL') +
     xlim(c(0,3))+
   ylim(c(0,3))+
   theme_classic() +
@@ -356,11 +356,11 @@ Fig4C <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
   annotate('text',x = -2,y = 1,label = 'C')
 
 
-temp <- Loss
+temp <- dd3
 
-Fig4D <- ggplot(temp,aes(col=LossF,y = Loss,x = TimeDiff))+
+Fig4D <- ggplot(temp,aes(col=DeltaRTLF,y = DeltaRTL,x = TimeDiff))+
     geom_point()+
-  theme_classic()+
+  theme_classic()+ 
   xlab ('Follow up time (years)')+
   ylab(expression(Delta*'RTL'))+
   ylim(c(-2,2))+
@@ -391,3 +391,15 @@ dev.off()
 
 ```
 
+
+
+temp <- with(dd3,tapply(DeltaRTL,Agemonths,mean))
+tempSE <- with(dd3,tapply(DeltaRTL,Agemonths,se))*1.96
+
+plot(temp~names(temp),type = 'l',ylim = c(-0.8,0.8))
+points(temp+tempSE~names(temp),type = 'l',lty = 2)
+points(temp-tempSE~names(temp),type = 'l',lty = 2)
+abline(0,0,col = 'red',lwd = 2)
+
+
+plot(DeltaRTL~TimeDiff,data = dd3)

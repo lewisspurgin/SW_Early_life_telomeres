@@ -92,11 +92,12 @@ kable(tableS1,digits=2)
 **Table S2** Model selection table for analysis of factors affecting $\Delta$RTL in Seychelles warbler nestlings, using longitudinal data. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. TQ = territory quality.
 
 ```{r Table S2}
-temp <- Loss
+temp <- dd3
 
 #Run the model
-lm1 <- lmer(Loss ~ RTL+ Agemonths*(Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|FieldPeriodID) + (1|TerritoryID),
+lm1 <- glmer(DeltaRTLF ~ Agemonths+(Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|FieldPeriodID) + (1|TerritoryID),
             data = temp,
+            family = 'binomial',
             REML = FALSE)
 lm1 <- standardize(lm1)
 
