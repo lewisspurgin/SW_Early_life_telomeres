@@ -107,8 +107,8 @@ dd$Died <- ifelse(dd$DeathYear<2014,1,0)
 # Exclude weird seasons and early years ----------------------------------
 
 dd <- subset(dd,LayYear>1997)
-#dd <- subset(dd,Season == 'Major')
-dd <- subset(dd,FieldPeriodID != 27)
+dd <- subset(dd,Season == 'Major')
+#dd <- subset(dd,FieldPeriodID != 27)
 
 # Sex ---------------------------------------------------------------------
 
@@ -116,15 +116,6 @@ dd$Sex <- ifelse(dd$SexEstimate == 1,'Males','Females')
 
 
 
-
-
-
-
-# Subset juveniles --------------------------------------------------------------
-
-
-juv <- droplevels(subset(dd,Ageclass %in% c('CH','FL','OFL','SA')))
-adults <- droplevels(subset(dd,Ageclass == 'A'))
 
 
 
@@ -151,8 +142,6 @@ dd$coTLF <- ifelse(dd$cohortTL < mymed,'Short telomeres','Long telomeres')
 
 rm(mymed)
 
-dd <- subset(dd,!(is.na(cenTL)))
-
 # Helpers and social group size -------------------------------------------
 
 status <- subset(status,BreedGroupID %in% dd$BreedGroupID)
@@ -163,7 +152,6 @@ for(i in 1:nrow(dd))
   currentdata <- subset(subset(status,BreedGroupID == currentBG),BirdID !=dd$BirdID[i])
   dd$GroupSize[i] <- nrow(currentdata)
   dd$Helper[i] <- nrow(subset(currentdata,Status == 'H'))
-  dd$Otherdds[i] <- nrow(subset(currentdata,Status %in% c('CH','FL','OFL')))
   dd$NonHelper[i] <- nrow(subset(currentdata,Status %in% c('AB','ABX')))
 }
 
@@ -179,16 +167,13 @@ dd$Helper[dd$Helper>1] <- 1
 terr <- terr[complete.cases(terr),] #Get rid of blank rows
 insects <- subset(insects,FieldPeriodID != 26)
 dens$SPsize <- with(dens,(PsizeFP-mean(PsizeFP))/sd(PsizeFP))
-
+terr$LogTQ <- log10(terr$TQcorrected)
 
 dd$TQ <- NA
 dd$TQI <- NA
-dd$cenTQ <- NA
 dd$Insect <- NA
 dd$Density <- NA
-dd$SDensity <- NA
-dd$HatchDate <- NA
-
+dd$cenTQ <- NA
 
 for(i in 1:nrow(dd))
 {
@@ -197,10 +182,15 @@ for(i in 1:nrow(dd))
     cd <- subset(terr,TerritoryID == dd$TerritoryID[i])
     if(dd$FieldPeriodID[i] %in% cd$FieldPeriodID)
     {
-      dd$TQ[i] <- log10(subset(cd,FieldPeriodID == dd$FieldPeriodID[i])$TQcorrected)
-    } else
-    {
-      dd$TQ[i] <-log10(mean(cd$TQcorrected))
+      dd$TQ[i] <- subset(cd,FieldPeriodID == dd$FieldPeriodID[i])$LogTQ
+      cy <- subset(terr,FieldPeriodID == dd$FieldPeriodID[i])$LogTQ
+      
+      if(!is.na(dd$TQ[i]))
+      {
+        dd$cenTQ[i] <- (dd$TQ[i]-mean(cy))/sd(cy)
+      }
+
+              
     }
     dd$TQI[i] <- dd$TQ[i]/dd$GroupSize[i]
     
@@ -221,41 +211,19 @@ for(i in 1:nrow(dd))
     dd$SDensity[i] <- dens$SPsize[dens$FieldPeriodID == dd$FieldPeriodID[i]]
     
   }
-  
-  
-  if(dd$BirdID[i] %in% chickinfo$BirdID)
-  {
-    dd$HatchDate[i] <- paste(chickinfo$HatchDate[chickinfo$BirdID == dd$BirdID[i]])
-  }
-  
-  
 }
-
-
-dd$HatchDate <- as.Date(dd$HatchDate,"%d/%m/%Y")
-dd$Chickage <- as.numeric(dd$CatchDate-dd$HatchDate)
-dd$O_HatchDate <- as.POSIXlt(dd$HatchDate,format='%yyyy-%mm-%dd')$yday
-dd$O_CatchDate <- as.POSIXlt(dd$CatchDate,format='%yyyy-%mm-%dd')$yday
-#dd <- subset(dd,!(is.na(Density)))
-
 
 
 #Get rid of NAs and cross-fostered birds
 dd <- subset(dd,!is.na(Tarsus))
 dd <- subset(dd,!is.na(BodyMass))
-dd <- subset(dd,!is.na(TQ))
 dd <- subset(dd,Status!='XF')
-
-
-dd$Condition <- lm(BodyMass~Tarsus+Age+Sex,data=dd)$residuals
 
 
 # Get rid of stuff not to be used -----------------------------------------
 
 rm(status,helpers,hatchdate,x1,x2,x3,x4)
 
-
-# Field period average data for plots -----------------------------------------------
 
 
 # Longitudinal data for whole dataset -------------------------------------
@@ -328,8 +296,6 @@ for(i in 1:nrow(dd3_2))
   {
     nextbird <- subset(cd,birdpos == dd3_2$birdpos[i]+1)
     dd3_2$DeltaRTL[i] <- nextbird$RTL - dd3_2$RTL[i]
-    dd3_2$DeltaGAP[i] <- nextbird$CqGAPDH - dd3_2$CqGAPDH[i]
-    dd3_2$DeltaTL[i] <- nextbird$CqTelomere - dd3_2$CqTelomere[i]
     dd3_2$BloodID1[i] <- nextbird$BloodID
   }
   
@@ -352,4 +318,28 @@ ddL <- data.frame(BirdID = c(dd3$BirdID,dd3_2$BirdID),
                   Group = rep(c('Among samples','Within samples'),c(nrow(dd3),nrow(dd3_2))))
 
 rm(temp,dd3_2)
+
+
+
+
+
+# Subset birds with juvenile samples --------------------------------------
+
+juvdata <- subset(dd,Agemonths<12)
+addata <- subset(dd,Agemonths>11)
+juvdata <- juvdata[order(juvdata$Agemonths),]
+
+
+addata <- subset(addata, BirdID %in% juvdata$BirdID)
+
+
+toreplace <- c('TQ','Helper','NonHelper','GroupSize','Insect','Density','BodyMass','Tarsus')
+
+for(i in 1:nrow(addata))
+{
+  cd <- subset(juvdata,BirdID == addata$BirdID[i])[1,toreplace]
+  addata[i,toreplace] <- cd
+}
+
+juv <- rbind(juvdata,addata)
 

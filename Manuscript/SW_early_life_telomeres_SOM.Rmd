@@ -45,9 +45,11 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 
 ```{r Table S1}
 
+temp <- subset(juv,!is.na(cenTQ))
+
 #Run the model
-lm1 <- lmer(RTL ~ Agemonths * (Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|FieldPeriodID)+(1|TerritoryID)+(1|PlateID),
-            data = juv,
+lm1 <- lmer(RTL ~ Agemonths * (Tarsus + Helper + NonHelper + Sex + BodyMass  + cenTQ) + (1|BirdID)+(1|FieldPeriodID)+(1|TerritoryID),
+            data = temp,
             REML = FALSE)
 lm1 <- standardize(lm1)
 
@@ -95,9 +97,8 @@ kable(tableS1,digits=2)
 temp <- dd3
 
 #Run the model
-lm1 <- glmer(DeltaRTLF ~ Agemonths+(Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|FieldPeriodID) + (1|TerritoryID),
+lm1 <- lmer(DeltaRTL ~ Agemonths*(Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|BirdID) + (1|FieldPeriodID) + (1|TerritoryID),
             data = temp,
-            family = 'binomial',
             REML = FALSE)
 lm1 <- standardize(lm1)
 

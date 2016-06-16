@@ -38,9 +38,9 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 
 **Figure 3** Factors affecting early-life RTL in Seychelles warblers. **A** Model averaged estimates and 95% confidence intervals for explanatory terms used in a linear mixed model with RTL as the response variable (see main text for details; TQ = territory quality). **B,C** Early-life RTL and age in relation to tarsus length (**B**) and sex (**C**). Lines and shaded areas in **B** are fitted values and 95% confidence limits from a general linear model.
 
-**Figure 4** Longitudinal telomere dynamics in subset(dd,Agemonths<12)enile Seychelles warblers. **A** subset(dd,Agemonths<12)enile telomere length in relation to adult telomere length measured in the same individual. **B** $\Delta$RTL in relation to the time between sampling events. Lines and shaded areas represent fitted values and 95% confidence limits from general linear models. Raw data have been ommited from **B** for the sake of clarity, but are plotted in Figure S1.
+**Figure 4** Longitudinal telomere dynamics in juvenile Seychelles warblers. **A** juvenile telomere length in relation to adult telomere length measured in the same individual. **B** $\Delta$RTL in relation to the time between sampling events. Lines and shaded areas represent fitted values and 95% confidence limits from general linear models. Raw data have been ommited from **B** for the sake of clarity, but are plotted in Figure S1.
 
-**Figure 5** Factors affecting $\Delta$RTL in subset(dd,Agemonths<12)enile Seychelles warblers. **A** Model averaged estimates and 95% confidence intervals for explanatory terms used in a linear mixed model with $\Delta$RTL as the response variable (see main text for details; TQ = territory quality). **B** $\Delta$RTL in relation to tarsus length and sex.
+**Figure 5** Factors affecting $\Delta$RTL in juvenile Seychelles warblers. **A** Model averaged estimates and 95% confidence intervals for explanatory terms used in a linear mixed model with $\Delta$RTL as the response variable (see main text for details; TQ = territory quality). **B** $\Delta$RTL in relation to tarsus length and sex.
 
 
 
@@ -148,10 +148,12 @@ dev.off()
 
 ```{r Figure 3}
 
-temp <- dd
+temp <- subset(dd,!is.na(cenTQ))
+temp$LogAge <- log(temp$Agemonths)
+
 
 #Run the model
-lm2 <- lmer(RTL ~ Agemonths * (Tarsus) + Helper + NonHelper + Sex + BodyMass  + TQ  + (1|FieldPeriodID) + (1|TerritoryID)+(1|PlateID),
+lm2 <- lmer(RTL ~  LogAge* (Tarsus + NonHelper + Sex + BodyMass  + cenTQ)  + (1|FieldPeriodID) + (1|BirdID) + (1|TerritoryID),
             data = temp,
             REML = FALSE)
 lm2 <- standardize(lm2)
@@ -201,7 +203,6 @@ Fig3A <- forestplot(table2)+
 
 
 
-temp <- subset(dd,Agemonths<12)
 
 temp[,'Helpers'] <- ifelse(temp$Helper>0,'Present', 'Absent')
 temp[,'Non helpers'] <- ifelse(temp$NonHelper>0,'Present', 'Absent')
@@ -210,10 +211,7 @@ temp[,'Age (months)'] <- factor(temp$Agemonths)
   
 Fig3B <- ggplot(temp,
        aes(x = Tarsus,
-           y = RTL,
-           colour=`Age (months)`,
-           fill = `Age (months)`,
-           shape = `Age (months)`)) +
+           y = RTL)) +
   ylab('RTL') + 
   xlab('Tarsus length (mm)') +
   theme_classic() +
@@ -224,18 +222,16 @@ Fig3B <- ggplot(temp,
                 axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'top') +
-  geom_point()+
-  stat_smooth(method = 'lm')+
-  scale_colour_manual(values = c('grey','darkorange','darkgreen'))+
-  scale_fill_manual(values = c('grey','darkorange','darkgreen'))+
+  geom_point(col = 'grey')+
+  stat_smooth(method = 'lm',col = 'darkgrey')+
   annotate('text',x = 17,y = 2.1,label = 'B')
 
 
 Fig3C <- ggplot(temp,
-       aes(col = `Age (months)`,
-           fill =  `Age (months)`,
+       aes(
            y = RTL,
-           x=TQ)) +
+           x=Agemonths,
+       col = factor(Helper))) +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
@@ -245,7 +241,7 @@ Fig3C <- ggplot(temp,
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'top') +
   geom_point()+
-  stat_smooth(method = 'lm')+
+  stat_smooth(method = 'lm',formula = y~log(x))+
   scale_colour_manual(values = c('grey','darkorange','darkgreen'))+
   scale_fill_manual(values = c('grey','darkorange','darkgreen'))+
   annotate('text',x = 3,y = 2.1,label = 'C')
@@ -259,9 +255,6 @@ pdf('Figures/Figure 3.pdf',
 multiplot(Fig3A,Fig3B,Fig3C,layout = matrix(c(1,1,2,3),nrow = 2,byrow = T))
 dev.off()
 
-
-
-
 ```
 
 
@@ -272,7 +265,7 @@ dev.off()
 
 ```{r Figure 4}
 
-temp <- Loss
+temp <- dd3
 temp[,'Age (months)'] <- factor(temp$Agemonths)
 
 
@@ -281,7 +274,7 @@ Fig4A <- ggplot(temp,
            y = RTL1,
            col = LossF)) +
   ylab('Adult RTL') + 
-  xlab('subset(dd,Agemonths<12)enile RTL') +
+  xlab('juvenile RTL') +
     xlim(c(0,3))+
   ylim(c(0,3))+
   theme_classic() +
