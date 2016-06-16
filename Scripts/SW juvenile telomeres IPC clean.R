@@ -253,6 +253,7 @@ for(i in 1:nrow(dd3))
   {
     nextbird <- cd[birdpos+1,]
     dd3$DeltaRTL[i] <- nextbird$RTL - dd3$RTL[i]
+    dd3$RTL1[i] <- nextbird$RTL
     dd3$DeltaGAP[i] <- nextbird$CqGAPDH - dd3$CqGAPDH[i]
     dd3$DeltaTL[i] <- nextbird$CqTelomere - dd3$CqTelomere[i]
     dd3$TimeDiff[i] <- cd[birdpos+1,'Agemonths'] - dd3$Agemonths[i]

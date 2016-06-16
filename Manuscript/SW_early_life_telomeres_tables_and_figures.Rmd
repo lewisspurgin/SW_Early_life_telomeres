@@ -272,7 +272,7 @@ temp[,'Age (months)'] <- factor(temp$Agemonths)
 Fig4A <- ggplot(temp,
        aes(x = RTL,
            y = RTL1,
-           col = LossF)) +
+           col = factor(DeltaRTLF))) +
   ylab('Adult RTL') + 
   xlab('juvenile RTL') +
     xlim(c(0,3))+
@@ -351,7 +351,7 @@ Fig4C <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
 
 temp <- dd3
 
-Fig4D <- ggplot(temp,aes(col=DeltaRTLF,y = DeltaRTL,x = TimeDiff))+
+Fig4D <- ggplot(temp,aes(col=factor(DeltaRTLF),y = DeltaRTL,x = TimeDiff))+
     geom_point()+
   theme_classic()+ 
   xlab ('Follow up time (years)')+
