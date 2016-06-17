@@ -148,12 +148,12 @@ dev.off()
 
 ```{r Figure 3}
 
-temp <- subset(dd,!is.na(cenTQ))
+temp <- juv_r
 temp$LogAge <- log(temp$Agemonths)
 
 
 #Run the model
-lm2 <- lmer(RTL ~  LogAge* (Tarsus + NonHelper + Sex + BodyMass  + cenTQ)  + (1|FieldPeriodID) + (1|BirdID) + (1|TerritoryID),
+lm2 <- lmer(RTL ~  LogAge* (Helper)+Tarsus + NonHelper + Sex + BodyMass  +yday*LogAge + (1|FieldPeriodID) + (1|BirdID) + (1|TerritoryID),
             data = temp,
             REML = FALSE)
 lm2 <- standardize(lm2)
@@ -383,16 +383,3 @@ multiplot(Fig4A,Fig4B,Fig4C,Fig4D,layout=matrix(c(1,2,3,4),nrow=2,byrow=T))
 dev.off()
 
 ```
-
-
-
-temp <- with(dd3,tapply(DeltaRTL,Agemonths,mean))
-tempSE <- with(dd3,tapply(DeltaRTL,Agemonths,se))*1.96
-
-plot(temp~names(temp),type = 'l',ylim = c(-0.8,0.8))
-points(temp+tempSE~names(temp),type = 'l',lty = 2)
-points(temp-tempSE~names(temp),type = 'l',lty = 2)
-abline(0,0,col = 'red',lwd = 2)
-
-
-plot(DeltaRTL~TimeDiff,data = dd3)

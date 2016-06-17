@@ -26,13 +26,14 @@ dd$CatchYear <- as.numeric(substr(dd$CatchDate,7,10))
 dd$DeathYear <- as.numeric(substr(dd$DeathDate,7,10))
 dd$CatchDate <- as.Date(dd$CatchDate,"%d/%m/%Y")
 dd$DeathDate <- as.Date(dd$DeathDate,"%d/%m/%Y")
-
+dd$CatchMonth <- as.numeric(substr(dd$CatchDate,6,7))
 
 
 dd$Season <- ifelse(as.numeric(format(dd$CatchDate,'%m')) %in% c(4:10),
                     'Major','Minor')
 dd <- subset(dd,Season == 'Major')
-
+dd <- subset(dd,CatchMonth %in% c(6:9))
+dd$yday <- as.POSIXlt(dd$CatchDate)$yday - min(as.POSIXlt(dd$CatchDate)$yday)
 
 # Age data ----------------------------------------------------------------
 
@@ -85,12 +86,14 @@ dd$LeftTarsus <- NULL
 
 dd <- subset(dd,RTL > 0.05)
 dd <- subset(dd,CqTelomere <28)
-dd <- subset(dd,CqGAPDH < 28)
+dd <- subset(dd,CqGAPDH < 27)
+dd <- subset(dd,RTL<3)
 
 dd <- subset(dd,BodyMass>5)
 dd <- subset(dd,Tarsus>17)
 
-
+hist(dd$CqTelomere)
+hist(dd$CqGAPDH)
 
 
 # Survival and lifespan ---------------------------------------------------
@@ -342,5 +345,5 @@ for(i in 1:nrow(addata))
   addata[i,toreplace] <- cd
 }
 
-juv <- rbind(juvdata,addata)
-
+juv_r <- rbind(juvdata,addata)
+juv <- juvdata
