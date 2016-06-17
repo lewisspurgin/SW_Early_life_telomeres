@@ -152,3 +152,8 @@ We thank Nature Seychelles for facilitating the long-term Seychelles warbler pro
 
 ###References
 
+summary(lme(RTL~Agemonths,data = juv,random = ~1|BirdID))
+summary(lm(RTL~Agemonths,data = juv))
+
+anova(lm(RTL~Agemonths,data = juv),lme(RTL~Agemonths,data = juv,random = ~1|FieldPeriodID))
+
