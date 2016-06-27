@@ -60,9 +60,10 @@ Fig1A <- ggplot(temp,aes(x = Agemonths,y = RTL))+
                 axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'none')+
-  geom_point(col='grey')+
-  stat_smooth(method = 'lm',col='darkgrey')+
-  annotate('text',x = 1,y = 2.1,label = 'A')
+  geom_point()+
+    stat_smooth(col = 'darkgrey',lty = 3,se = F)+
+  stat_smooth(method = 'lm',col='darkgrey',formula = y~log(x),se = F)
+  annotate('text',x = 1,y = 2.8,label = 'A')
 
 
 
@@ -148,12 +149,12 @@ dev.off()
 
 ```{r Figure 3}
 
-temp <- juv_r
+temp <- subset(juv_r,Season == 'Major')
 temp$LogAge <- log(temp$Agemonths)
 
 
 #Run the model
-lm2 <- lmer(RTL ~  LogAge* (Helper)+Tarsus + NonHelper + Sex + BodyMass  +yday*LogAge + (1|FieldPeriodID) + (1|BirdID) + (1|TerritoryID),
+lm2 <- lmer(CqTelomere ~  LogAge* (Helper)+Tarsus + NonHelper + Sex + BodyMass  +yday*LogAge + (1|FieldPeriodID) + (1|BirdID) + (1|TerritoryID),
             data = temp,
             REML = FALSE)
 lm2 <- standardize(lm2)
@@ -207,11 +208,12 @@ Fig3A <- forestplot(table2)+
 temp[,'Helpers'] <- ifelse(temp$Helper>0,'Present', 'Absent')
 temp[,'Non helpers'] <- ifelse(temp$NonHelper>0,'Present', 'Absent')
 temp[,'Age (months)'] <- factor(temp$Agemonths) 
-
+temp$Age2 <- ifelse(temp$Ageclass == 'A','Adults','Juveniles')
   
 Fig3B <- ggplot(temp,
        aes(x = Tarsus,
-           y = RTL)) +
+           y = RTL,
+           col = Age2)) +
   ylab('RTL') + 
   xlab('Tarsus length (mm)') +
   theme_classic() +
@@ -222,16 +224,16 @@ Fig3B <- ggplot(temp,
                 axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'top') +
-  geom_point(col = 'grey')+
-  stat_smooth(method = 'lm',col = 'darkgrey')+
+  geom_point()+
+  stat_smooth(method = 'lm')+
   annotate('text',x = 17,y = 2.1,label = 'B')
 
 
 Fig3C <- ggplot(temp,
        aes(
            y = RTL,
-           x=Agemonths,
-       col = factor(Helper))) +
+           x=yday,
+       col = (Ageclass))) +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
@@ -241,9 +243,9 @@ Fig3C <- ggplot(temp,
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'top') +
   geom_point()+
-  stat_smooth(method = 'lm',formula = y~log(x))+
-  scale_colour_manual(values = c('grey','darkorange','darkgreen'))+
-  scale_fill_manual(values = c('grey','darkorange','darkgreen'))+
+   stat_smooth()+
+  # scale_colour_manual(values = c('grey','darkorange','darkgreen'))+
+  # scale_fill_manual(values = c('grey','darkorange','darkgreen'))+
   annotate('text',x = 3,y = 2.1,label = 'C')
 
 
@@ -301,19 +303,18 @@ temp <- subset(dd,DeltaAge !=0)
 reps <- tapply(temp$RTL,temp$BirdID,length)
 keep <- names(reps[reps>3])
 temp <- subset(temp,BirdID %in% keep)
+ temp <- subset(temp,!duplicated(paste0(BirdID,Agemonths)))
 
-mins <- tapply(temp$Agemonths,temp$BirdID,min)
-keep2 <- names(mins[mins <5])
-temp <- subset(temp,BirdID %in% keep2)
-temp <- subset(temp,!duplicated(paste0(BirdID,Agemonths)))
+ mins <- tapply(temp$Agemonths,temp$BirdID,min)
+ keep2 <- names(mins[mins <5])
+ temp <- subset(temp,BirdID %in% keep2)
 
 temp$Agemonths <- temp$Agemonths/12
 
 mycols <- topo.colors(length(keep2))
 
 Fig4B <- ggplot(temp,aes(x = Agemonths,y = RTL,group = BirdID,col=factor(BirdID)))+
-geom_point()+
-geom_line()+
+geom_line(col = 'darkgrey')+
   xlab('Age (years)') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
@@ -323,7 +324,7 @@ geom_line()+
         axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'none')+
-  scale_colour_brewer(palette = 'Set1')+
+  #scale_colour_brewer(palette = 'Set1')+
   annotate('text',x = 0,y = 2,label = 'B')
 
 

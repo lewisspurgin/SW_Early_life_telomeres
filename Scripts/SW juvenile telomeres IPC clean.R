@@ -37,7 +37,7 @@ dd$yday <- as.POSIXlt(dd$CatchDate)$yday - min(as.POSIXlt(dd$CatchDate)$yday)
 
 # Age data ----------------------------------------------------------------
 
-dd$Age <- (dd$CatchYear-dd$LayYear)+1
+dd$Age <- (dd$CatchYear-dd$LayYear)
 
 #Sort out and order ageclass levels
 dd <- droplevels(dd[dd$Ageclass != '',])
@@ -51,11 +51,10 @@ dd$Fledged <- factor(dd$Fledged,levels = c('Nestlings','Fledglings','Adults'))
 
 dd$Agemonths <- ifelse(dd$Ageclass == 'CH',1,
                        ifelse(dd$Ageclass == 'FL',6,
-                              ifelse(dd$Ageclass == 'SA',10,dd$Age*12)))
+                              ifelse(dd$Ageclass == 'SA',10,dd$Age*12+6)))
 
-dd <- subset(dd,Agemonths!=12)
 
-dd$Age[dd$Fledged != 'Adults'] <- 1
+  dd$Age[dd$Fledged != 'Adults'] <- 1
 
 
 
@@ -92,8 +91,7 @@ dd <- subset(dd,RTL<3)
 dd <- subset(dd,BodyMass>5)
 dd <- subset(dd,Tarsus>17)
 
-hist(dd$CqTelomere)
-hist(dd$CqGAPDH)
+
 
 
 # Survival and lifespan ---------------------------------------------------
@@ -101,7 +99,6 @@ hist(dd$CqGAPDH)
 dd$RemainingLife <- round(as.numeric(dd$DeathDate-dd$CatchDate)/365,0)
 dd$SurvivedNext <- ifelse(dd$RemainingLife<1,0,1)
 
-dd$SurvivedNext <- ifelse(dd$RemainingLife>1,1,0)
 dd$Lifespan <- (dd$DeathYear-dd$LayYear)+1
 dd$Died <- ifelse(dd$DeathYear<2014,1,0)
 
@@ -110,7 +107,7 @@ dd$Died <- ifelse(dd$DeathYear<2014,1,0)
 # Exclude weird seasons and early years ----------------------------------
 
 dd <- subset(dd,LayYear>1997)
-dd <- subset(dd,Season == 'Major')
+#dd <- subset(dd,Season == 'Major')
 #dd <- subset(dd,FieldPeriodID != 27)
 
 # Sex ---------------------------------------------------------------------
@@ -347,3 +344,7 @@ for(i in 1:nrow(addata))
 
 juv_r <- rbind(juvdata,addata)
 juv <- juvdata
+
+juv14 <- subset(juv,LayYear<2014)
+juv12 <- subset(juv,LayYear<2012)
+
