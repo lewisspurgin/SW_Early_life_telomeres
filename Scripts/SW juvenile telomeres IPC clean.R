@@ -345,6 +345,6 @@ for(i in 1:nrow(addata))
 juv_r <- rbind(juvdata,addata)
 juv <- juvdata
 
-juv14 <- subset(juv,LayYear<2014)
-juv12 <- subset(juv,LayYear<2012)
+juv14 <- subset(juv_r,LayYear<2014)
+juv12 <- subset(juv_r,LayYear<2012)
 
