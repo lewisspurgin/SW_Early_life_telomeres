@@ -155,6 +155,9 @@ temp$LogAge <- log(temp$Agemonths)
 
 #Run the model
 lm2 <- lmer(RTL ~  LogAge+Tarsus + Helper + NonHelper + Sex + BodyMass  +yday + (1|FieldPeriodID) + (1|BirdID) + (1|TerritoryID),
+            
+            
+            
             data = temp,
             REML = FALSE)
 lm2 <- standardize(lm2)
