@@ -4,7 +4,7 @@
 #################################################################################
 
 #Only use Ellie's samples
-dd0 <- subset(dd0,Whodunnit == 'EAF')
+#dd0 <- subset(dd0,Whodunnit == 'EAF')
 
 #Average repeats of blood samples
 dd0$RTL2 <- ave(dd0$RTL,c(dd0$BloodID,dd0$Status,dd0$PlateID))
@@ -54,7 +54,7 @@ dd$Agemonths <- ifelse(dd$Ageclass == 'CH',1,
                               ifelse(dd$Ageclass == 'SA',10,dd$Age*12+6)))
 
 
-  dd$Age[dd$Fledged != 'Adults'] <- 1
+  #dd$Age[dd$Fledged != 'Adults'] <- 1
 
 
 
@@ -102,13 +102,6 @@ dd$SurvivedNext <- ifelse(dd$RemainingLife<1,0,1)
 dd$Lifespan <- (dd$DeathYear-dd$LayYear)+1
 dd$Died <- ifelse(dd$DeathYear<2014,1,0)
 
-
-
-# Exclude weird seasons and early years ----------------------------------
-
-dd <- subset(dd,LayYear>1997)
-#dd <- subset(dd,Season == 'Major')
-#dd <- subset(dd,FieldPeriodID != 27)
 
 # Sex ---------------------------------------------------------------------
 
