@@ -4,7 +4,7 @@
 #################################################################################
 
 #Only use Ellie's samples
-#dd0 <- subset(dd0,Whodunnit == 'EAF')
+dd0 <- subset(dd0,Whodunnit == 'EAF')
 
 #Average repeats of blood samples
 dd0$RTL2 <- ave(dd0$RTL,c(dd0$BloodID,dd0$Status,dd0$PlateID))
@@ -211,6 +211,7 @@ for(i in 1:nrow(dd))
 dd <- subset(dd,!is.na(Tarsus))
 dd <- subset(dd,!is.na(BodyMass))
 dd <- subset(dd,Status!='XF')
+dd$Condition <- lm(BodyMass~Tarsus,data = dd)$residuals 
 
 
 # Get rid of stuff not to be used -----------------------------------------
@@ -231,6 +232,7 @@ dd3$DeltaRTL <- NA
 dd3$DeltaTL <- NA
 dd3$DeltaGAP <- NA
 dd3$BloodID1 <- NA
+dd3$SurvivedNext2 <- NA
 
 for(i in 1:nrow(dd3))
 {
@@ -251,6 +253,9 @@ for(i in 1:nrow(dd3))
     dd3$DeltaTL[i] <- nextbird$CqTelomere - dd3$CqTelomere[i]
     dd3$TimeDiff[i] <- cd[birdpos+1,'Agemonths'] - dd3$Agemonths[i]
     dd3$BloodID1[i] <- nextbird$BloodID
+    dd3$SurvivedNext2[i] <- nextbird$SurvivedNext
+    dd3$DeltaCondition[i] <- nextbird$Condition - dd3$Condition[i]
+    dd3$DeltaAge[i] <- nextbird$Agemonths - dd3$Agemonths
   }
   
   
@@ -290,6 +295,7 @@ for(i in 1:nrow(dd3_2))
   {
     nextbird <- subset(cd,birdpos == dd3_2$birdpos[i]+1)
     dd3_2$DeltaRTL[i] <- nextbird$RTL - dd3_2$RTL[i]
+    dd3_2$RTL1[i] <- nextbird$RTL
     dd3_2$BloodID1[i] <- nextbird$BloodID
   }
   
@@ -306,6 +312,8 @@ dd3$DeltaRTLF <- ifelse(dd3$DeltaRTL>0,1,0)
 ddL <- data.frame(BirdID = c(dd3$BirdID,dd3_2$BirdID),
                   BloodID = c(dd3$BloodID,dd3_2$BloodID),
                   BloodID1 = c(dd3$BloodID1,dd3_2$BloodID1),
+                  RTL = c(dd3$RTL,dd3_2$RTL),
+                  RTL1 = c(dd3$RTL1,dd3_2$RTL1),
                   DeltaRTL = c(dd3$DeltaRTL,dd3_2$DeltaRTL),
                   DeltaTL = c(dd3$DeltaTL,dd3_2$DeltaTL),
                   DeltaGAP = c(dd3$DeltaGAP,dd3_2$DeltaGAP),

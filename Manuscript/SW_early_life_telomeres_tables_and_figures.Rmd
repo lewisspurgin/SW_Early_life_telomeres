@@ -290,14 +290,13 @@ dev.off()
 
 ```{r Figure 4}
 
-temp <- dd3
+temp <- subset(dd3,Agemonths<12)
 temp[,'Age (months)'] <- factor(temp$Agemonths)
 
 
 Fig4A <- ggplot(temp,
        aes(x = RTL,
-           y = RTL1,
-           col = factor(DeltaRTLF))) +
+           y = RTL1)) +
   ylab('Adult RTL') + 
   xlab('juvenile RTL') +
     xlim(c(0,3))+
@@ -322,14 +321,14 @@ Fig4A <- ggplot(temp,
 
 
 
-temp <- subset(dd,DeltaAge !=0)
+temp <- subset(dd,Age<15)
 reps <- tapply(temp$RTL,temp$BirdID,length)
-keep <- names(reps[reps>3])
+keep <- names(reps[reps>0])
 temp <- subset(temp,BirdID %in% keep)
  temp <- subset(temp,!duplicated(paste0(BirdID,Agemonths)))
 
  mins <- tapply(temp$Agemonths,temp$BirdID,min)
- keep2 <- names(mins[mins <5])
+ keep2 <- names(mins[mins <400])
  temp <- subset(temp,BirdID %in% keep2)
 
 temp$Agemonths <- temp$Agemonths/12
@@ -337,7 +336,8 @@ temp$Agemonths <- temp$Agemonths/12
 mycols <- topo.colors(length(keep2))
 
 Fig4B <- ggplot(temp,aes(x = Agemonths,y = RTL,group = BirdID,col=factor(BirdID)))+
-geom_line(col = 'darkgrey')+
+  geom_point(alpha = 1,col='grey')+
+geom_line(col = 'darkgrey',alpha = 0.2)+
   xlab('Age (years)') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
@@ -348,7 +348,7 @@ geom_line(col = 'darkgrey')+
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'none')+
   #scale_colour_brewer(palette = 'Set1')+
-  annotate('text',x = 0,y = 2,label = 'B')
+  annotate('text',x = 0,y = 3,label = 'B')
 
 
 
@@ -409,11 +409,33 @@ dev.off()
 ```
 
 
+temp <- subset(dd,Age<15)
+reps <- tapply(temp$RTL,temp$BirdID,length)
+keep <- names(reps[reps>2])
+temp <- subset(temp,BirdID %in% keep)
+ temp <- subset(temp,!duplicated(paste0(BirdID,Agemonths)))
 
 
 
+ggplot(temp,aes(x = CatchYear,y = RTL,group = BirdID,col=factor(BirdID)))+
+  geom_point(alpha = 1,col='grey')+
+geom_line(col = 'darkgrey',alpha = 0.2)+
+  xlab('Age (years)') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'none')+
+  #scale_colour_brewer(palette = 'Set1')+
+  annotate('text',x = 1997,y = 2,label = 'B')
 
 
+ggplot(ddL,aes(x = DeltaRTL,y = RTL,col = Group))+
+geom_point()+
+stat_smooth(method = 'lm')
 
 
 

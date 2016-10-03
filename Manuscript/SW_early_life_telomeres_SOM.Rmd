@@ -15,7 +15,7 @@ output:
 rm(list=ls())
 
 #Load knitr
-library(knitr)
+library(knitr) 
 
 #Set some options
 options(na.action='na.fail')
@@ -95,12 +95,21 @@ kable(tableS1,digits=2)
 
 ```{r Table S2}
 temp <- dd3
+temp <- subset(temp,!is.na(TQ))
 
 #Run the model
-lm1 <- lmer(DeltaRTL ~ Agemonths*(Tarsus + Helper + NonHelper + Sex + BodyMass  + TQ) + (1|BirdID) + (1|FieldPeriodID) + (1|TerritoryID),
+lm1 <- lmer(DeltaRTL ~ Agemonths+(DeltaCondition + Sex + TQ) + (1|BirdID) + (1|FieldPeriodID) + (1|TerritoryID),
             data = temp,
             REML = FALSE)
+
+lm1 <- glmer(DeltaRTLF ~ Agemonths+(Tarsus + Helper + Sex + BodyMass +TQ) + (1|TerritoryID) + (1|BirdID),
+            data = temp,
+            family = 'binomial',
+            control = glmerControl(optimizer = 'bobyqa'))
+
 lm1 <- standardize(lm1)
+summary(lm1)
+confint.merMod(lm1)
 
 #Model averaging
 lm2 <- dredge(lm1)
@@ -136,6 +145,10 @@ tableS1[,3:5] <- lapply(tableS1[,3:5],as.numeric)
 kable(tableS1,digits=2)
 
 ```
+
+ggplot(dd3,aes(x = DeltaMass,y = (DeltaRTL)))+
+geom_point()+
+stat_smooth(method = 'lm')
 
 
 
