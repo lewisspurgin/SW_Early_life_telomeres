@@ -107,6 +107,7 @@ dev.off()
 ```{r Figure 2}
 
 temp <- subset(dd,LayYear>1995)
+temp$JA <- ifelse(temp$Ageclass == 'A','Adults','Juveniles')
 
 Fig2 <- ggplot(temp,aes(x = LayYear,y = RTL))+
   ylab('RTL') + 
@@ -121,21 +122,6 @@ Fig2 <- ggplot(temp,aes(x = LayYear,y = RTL))+
         legend.position = 'top')+
   geom_boxplot(aes(group = LayYear),outlier.colour = 'grey',notch=F,alpha=0)+
   geom_smooth()
-
-Fig2x <- ggplot(temp,aes(x = CatchYear,y = RTL))+
-  ylab('RTL') + 
-  xlab('Cohort') +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12,angle = 90), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-                axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'),
-        legend.position = 'top')+
-  geom_boxplot(aes(group = CatchYear),outlier.colour = 'grey',notch=F,alpha=0)+
-  geom_smooth()
-
 
 
 pdf('Figures/Figure 2.pdf',
@@ -159,41 +145,17 @@ dev.off()
 
 ```{r Figure 3}
 
-temp <- dd
+temp <- subset(dd,!is.na(Insect))
 temp$LogAge <- log(temp$Agemonths+1)
 
-temp2 <- subset(temp,CatchYear<2014)
-
-
-temp2$cenTL <- (temp2$RTL-tapply(temp2$RTL,temp2$Agemonths,mean)[as.character(temp2$Agemonths)])/tapply(temp2$RTL,temp2$Agemonths,sd)[as.character(temp2$Agemonths)]
-
-#temp2 <- subset(temp2,Whodunnit != 'EAF')
-temp2 <- subset(temp2,!is.na(Agemonths))
-temp2 <- subset(temp2,Agemonths>10)
-
-temp2$obs <- c(1:nrow(temp2))
-
-summary(glmer(SurvivedNext~RTL+Agemonths+(1|BirdID)+(1|obs),data=temp2,family = 'binomial',control = glmerControl(optimizer = "bobyqa")))
-summary(glm(SurvivedNext~RTL+Agemonths,data=temp2,family = 'binomial'))
-
-
-ggplot(temp2,aes(y = RTL,x = Agemonths,col = factor(SurvivedNext)))+
-  geom_point()+
-  stat_smooth()
-x <- tapply(temp2$RTL,list(temp2$SurvivedNext,factor(temp2$Agemonths)),mean)[,1:10]
-plot(x[1,],type = 'l')
-points(x[2,],type = 'l',lty = 2)
 
 #Run the model
-lm2 <- lmer(RTL ~  LogAge+Tarsus + Helper + NonHelper + Sex + BodyMass  +yday + (1|FieldPeriodID) + (1|BirdID) + (1|TerritoryID),
+lm2 <- lmer(RTL ~  LogAge+Tarsus + Helper + NonHelper + Sex + BodyMass  +yday + Insect + Density + (1|LayYear) + (1|BirdID) + (1|TerritoryID),
             data = temp,
             REML = FALSE)
 lm2 <- standardize(lm2)
+
 #Model averaging
-
-summary(lm2)
-confint.merMod(lm2)
-
 lm3 <- dredge(lm2)
 lm3 <- subset(lm3,delta <=6)
 lmavg <- model.avg(lm3,fit=T)
@@ -301,7 +263,7 @@ dev.off()
 
 ```{r Figure 4}
 
-temp <- subset(dd3,Agemonths<12)
+temp <- dd3
 temp[,'Age (months)'] <- factor(temp$Agemonths)
 
 
