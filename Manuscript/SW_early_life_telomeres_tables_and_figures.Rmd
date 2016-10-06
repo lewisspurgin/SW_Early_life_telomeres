@@ -46,10 +46,10 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 
 ```{r Figure 1}
 
-temp <- dd
+temp <- subset(dd,LayYear %in% c(2000:2008))
 
 
-Fig1A <- ggplot(temp,aes(x = Agemonths,y = RTL))+
+Fig1A <- ggplot(temp,aes(x = Agemonths,y = RTL,col=factor(LayYear)))+
   ylab('RTL') + 
   xlab('Age (months)') +
   theme_classic() +
@@ -60,8 +60,7 @@ Fig1A <- ggplot(temp,aes(x = Agemonths,y = RTL))+
                 axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'none')+
-  geom_point(col = 'darkgrey')+
-  stat_smooth(method = 'lm',col='darkblue',fill = 'darkblue',formula = y~log(x),se = T)+
+  stat_smooth(method = 'lm',formula = y~log(x),se=F)
   annotate('text',x = 1,y = 2.9,label = 'A')
 
 
@@ -107,8 +106,7 @@ dev.off()
 
 ```{r Figure 2}
 
-temp <- subset(dd,Agemonths<12)
-temp$LayYear <- factor(temp$LayYear)
+temp <- subset(dd,LayYear>1995)
 
 Fig2 <- ggplot(temp,aes(x = LayYear,y = RTL))+
   ylab('RTL') + 
@@ -121,9 +119,22 @@ Fig2 <- ggplot(temp,aes(x = LayYear,y = RTL))+
                 axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'top')+
-  geom_jitter(col = 'grey')+
-  geom_boxplot(outlier.colour = NA,notch=F,alpha=0)
+  geom_boxplot(aes(group = LayYear),outlier.colour = 'grey',notch=F,alpha=0)+
+  geom_smooth()
 
+Fig2x <- ggplot(temp,aes(x = CatchYear,y = RTL))+
+  ylab('RTL') + 
+  xlab('Cohort') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12,angle = 90), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+                axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'top')+
+  geom_boxplot(aes(group = CatchYear),outlier.colour = 'grey',notch=F,alpha=0)+
+  geom_smooth()
 
 
 
@@ -485,4 +496,19 @@ FigX
 
 
 ```
+
+
+temp <- dd
+temp$LogAge <- log(temp$Agemonths)
+
+m1 <- lm(RTL~LogAge,data=temp)
+m2 <- lmer(RTL~LogAge+(1|CatchYear),data=temp)
+m3 <- lmer(RTL~LogAge+(LogAge|CatchYear),data=temp)
+m4 <- lmer(RTL~LogAge+(1|LayYear),data=temp)
+m5 <- lmer(RTL~LogAge+(LogAge|LayYear),data=temp)
+
+
+anova(m2,m3,m4,m5)
+summary(m2)
+summary(m3)
 
