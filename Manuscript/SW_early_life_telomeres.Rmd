@@ -158,3 +158,10 @@ geom_boxplot(aes(group = Insect))+
 geom_smooth()+
 theme_bw()
 
+dd$LogAge <- log(dd$Agemonths)
+m1 <- lmer(RTL~LogAge+(1|BirdID),data=dd)
+m2 <- lmer(RTL~LogAge+(1|BirdID)+(1|TerritoryID),data=dd)
+m3 <- lmer(RTL~LogAge+(1|BirdID)+(1|LayYear),data=dd)
+m4 <- lmer(RTL~LogAge+(1|BirdID)+(1|CatchYear)+(1|LayYear),data=dd)
+
+anova(m1,m2,m3,m4)

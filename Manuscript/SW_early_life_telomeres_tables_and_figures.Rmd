@@ -44,35 +44,27 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 
 
 
+
 ```{r Figure 1}
 
-temp <- subset(dd,LayYear %in% c(2000:2008))
+temp <- subset(dd,Age<15)
+reps <- tapply(temp$RTL,temp$BirdID,length)
+keep <- names(reps[reps>0])
+temp <- subset(temp,BirdID %in% keep)
+temp <- subset(temp,!duplicated(paste0(BirdID,Agemonths)))
 
+ mins <- tapply(temp$Agemonths,temp$BirdID,min)
+ keep2 <- names(mins[mins <400])
+ temp <- subset(temp,BirdID %in% keep2)
 
-Fig1A <- ggplot(temp,aes(x = Agemonths,y = RTL,col=factor(LayYear)))+
-  ylab('RTL') + 
-  xlab('Age (months)') +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-                axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'),
-        legend.position = 'none')+
-  stat_smooth(method = 'lm',formula = y~log(x),se=F)
-  annotate('text',x = 1,y = 2.9,label = 'A')
+temp$Agemonths <- temp$Agemonths/12
 
 
 
-
-
-
-temp <- subset(dd,DeltaAge !=0)
-
-Fig1B <- ggplot(temp,aes(x = DeltaAge,y = RTL))+
-  ylab('RTL') + 
-  xlab(expression(Delta*' age (months)')) +
+Fig1A <- ggplot(temp,aes(x = Agemonths,y = RTL,group = BirdID,col=factor(BirdID)))+
+  geom_point(alpha = 1,col='grey')+
+geom_line(col = 'darkgrey',alpha = 0.2)+
+  xlab('Age (years)') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
@@ -81,22 +73,93 @@ Fig1B <- ggplot(temp,aes(x = DeltaAge,y = RTL))+
         axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'none')+
-  geom_point(col='grey')+
-  stat_smooth(method = 'lm',col = 'darkblue',fill = 'darkblue')+
-  annotate('text',x = -100,y = 2.9,label = 'B')
+  geom_smooth(col = 'black',fill = 'black',lwd = 0.5,aes(group = NULL),method = 'lm',formula = y~log(x))+
+  annotate('text',x = 0,y = 3,label = 'A')
+
+
+temp <- dd3
+
+Fig1B <- ggplot(temp,
+       aes(x = RTL,
+           y = RTL1)) +
+  ylab('Adult RTL') + 
+  xlab('juvenile RTL') +
+    xlim(c(0,3))+
+  ylim(c(0,3))+
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        legend.position = c('none'),
+        legend.title = element_text(size = 12),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black')) +
+    geom_point(col = 'grey')+
+  geom_abline(slope = 1,intercept = 0,lty = 2)+
+  annotate('text',x = 0,y = 3,label = 'B')
+
+
+
+
+
+
+
+
+
+
+Fig1C <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
+    geom_density(alpha = 0.2)+
+  theme_classic()+
+  ylab ('Scaled density')+
+  xlab(expression(Delta*'RTL'))+
+    theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        legend.position = 'none',
+        legend.title = element_blank(),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black')) +
+  scale_colour_manual(values = c('darkgrey','gold'))+
+  scale_fill_manual(values = c('darkgrey','gold'))+
+  geom_vline(xintercept = 0,lty = 2)+
+  annotate('text',x = -2,y = 1,label = 'C')
+
+
+temp <- dd3
+
+Fig1D <- ggplot(temp,aes(y = DeltaRTL,x = TimeDiff))+
+    geom_point(col = 'grey')+
+  theme_classic()+ 
+  xlab ('Follow up time (years)')+
+  ylab(expression(Delta*'RTL'))+
+  ylim(c(-2,2))+
+    theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        legend.position = c('none'),
+        legend.title = element_blank(),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black')) +
+    geom_abline(slope = 0,intercept = 0,lty = 2)+
+  annotate('text',x = 0,y = 2,label = 'D')
+
+
+
+
 
 
 
 pdf('Figures/Figure 1.pdf',
-    width = 4,
-    height = 8,
+    width = 8,
+    height = 7,
     paper = 'a4')
-multiplot(Fig1A,Fig1B,layout=matrix(c(1,2),nrow = 2,byrow=T))
+multiplot(Fig1A,Fig1B,Fig1C,Fig1D,layout=matrix(c(1,2,3,4),nrow=2,byrow=T))
 dev.off()
 
-
 ```
-
 
 
 
@@ -150,7 +213,7 @@ temp$LogAge <- log(temp$Agemonths+1)
 
 
 #Run the model
-lm2 <- lmer(RTL ~  LogAge+Tarsus + Helper + NonHelper + Sex + BodyMass  +yday + Insect + Density + (1|LayYear) + (1|BirdID) + (1|TerritoryID),
+lm2 <- lmer(RTL ~  LogAge+Tarsus + Helper + NonHelper + Sex + BodyMass  +yday + Insect + Density + (1|LayYear) + (1|BirdID),
             data = temp,
             REML = FALSE)
 lm2 <- standardize(lm2)
@@ -261,126 +324,6 @@ dev.off()
 
 
 
-```{r Figure 4}
-
-temp <- dd3
-temp[,'Age (months)'] <- factor(temp$Agemonths)
-
-
-Fig4A <- ggplot(temp,
-       aes(x = RTL,
-           y = RTL1)) +
-  ylab('Adult RTL') + 
-  xlab('juvenile RTL') +
-    xlim(c(0,3))+
-  ylim(c(0,3))+
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        legend.position = c('none'),
-        legend.title = element_text(size = 12),
-        axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black')) +
-  geom_abline(slope = 1,intercept = 0,lty = 2)+
-  geom_point()+
-  scale_colour_manual(values = c('navy','red'))+
-  annotate('text',x = 0,y = 3,label = 'A')
-
-
-
-
-
-
-
-temp <- subset(dd,Age<15)
-reps <- tapply(temp$RTL,temp$BirdID,length)
-keep <- names(reps[reps>0])
-temp <- subset(temp,BirdID %in% keep)
- temp <- subset(temp,!duplicated(paste0(BirdID,Agemonths)))
-
- mins <- tapply(temp$Agemonths,temp$BirdID,min)
- keep2 <- names(mins[mins <400])
- temp <- subset(temp,BirdID %in% keep2)
-
-temp$Agemonths <- temp$Agemonths/12
-
-mycols <- topo.colors(length(keep2))
-
-Fig4B <- ggplot(temp,aes(x = Agemonths,y = RTL,group = BirdID,col=factor(BirdID)))+
-  geom_point(alpha = 1,col='grey')+
-geom_line(col = 'darkgrey',alpha = 0.2)+
-  xlab('Age (years)') +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'),
-        legend.position = 'none')+
-  #scale_colour_brewer(palette = 'Set1')+
-  annotate('text',x = 0,y = 3,label = 'B')
-
-
-
-
-
-Fig4C <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
-    geom_density(alpha = 0.2)+
-  theme_classic()+
-  ylab ('Scaled density')+
-  xlab(expression(Delta*'RTL'))+
-    theme(axis.text.x = element_text(size = 12), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        legend.position = 'none',
-        legend.title = element_blank(),
-        axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black')) +
-  scale_colour_manual(values = c('darkgrey','gold'))+
-  scale_fill_manual(values = c('darkgrey','gold'))+
-  geom_vline(xintercept = 0,lty = 2)+
-  annotate('text',x = -2,y = 1,label = 'C')
-
-
-temp <- dd3
-
-Fig4D <- ggplot(temp,aes(col=factor(DeltaRTLF),y = DeltaRTL,x = TimeDiff))+
-    geom_point()+
-  theme_classic()+ 
-  xlab ('Follow up time (years)')+
-  ylab(expression(Delta*'RTL'))+
-  ylim(c(-2,2))+
-    theme(axis.text.x = element_text(size = 12), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        legend.position = c('none'),
-        legend.title = element_blank(),
-        axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black')) +
-  scale_colour_manual(values = c('navy','red'))+
-    geom_abline(slope = 0,intercept = 0,lty = 2)+
-  annotate('text',x = 0,y = 2,label = 'D')
-
-
-
-
-
-
-
-pdf('Figures/Figure 4.pdf',
-    width = 8,
-    height = 7,
-    paper = 'a4')
-multiplot(Fig4A,Fig4B,Fig4C,Fig4D,layout=matrix(c(1,2,3,4),nrow=2,byrow=T))
-dev.off()
-
-```
-
 
 temp <- subset(dd,Age<15)
 reps <- tapply(temp$RTL,temp$BirdID,length)
@@ -469,8 +412,18 @@ m3 <- lmer(RTL~LogAge+(LogAge|CatchYear),data=temp)
 m4 <- lmer(RTL~LogAge+(1|LayYear),data=temp)
 m5 <- lmer(RTL~LogAge+(LogAge|LayYear),data=temp)
 
+m1 <- lmer(RTL~(Agemonths)+(1|BirdID)+(1|LayYear),data=dd)
+m2 <- lmer(RTL~Ageclass+(1|BirdID)+(1|LayYear),data=dd)
+m3 <- lmer(RTL~LogAge+(1|BirdID)+(1|LayYear),data=dd)
 
-anova(m2,m3,m4,m5)
+
+anova(m1,m2,m3)
 summary(m2)
 summary(m3)
+
+dd3$LogAge <- log(dd3$Agemonths)
+m1 <- lmer(RTL1~RTL+(1|LayYear),data=dd3)
+summary(m1)
+
+
 
