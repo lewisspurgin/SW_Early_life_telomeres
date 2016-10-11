@@ -253,9 +253,12 @@ for(i in 1:nrow(dd3))
     dd3$DeltaTL[i] <- nextbird$CqTelomere - dd3$CqTelomere[i]
     dd3$TimeDiff[i] <- cd[birdpos+1,'Agemonths'] - dd3$Agemonths[i]
     dd3$BloodID1[i] <- nextbird$BloodID
-    dd3$SurvivedNext2[i] <- nextbird$SurvivedNext
+    dd3$SurvivedNext1[i] <- nextbird$SurvivedNext
+    dd3$RemainingLife1[i] <- nextbird$RemainingLife
+    dd3$Died1[i] <- nextbird$Died
     dd3$DeltaCondition[i] <- nextbird$Condition - dd3$Condition[i]
     dd3$DeltaAge[i] <- nextbird$Agemonths - dd3$Agemonths
+    dd3$Agemonths1[i] <- nextbird$Agemonths
   }
   
   
