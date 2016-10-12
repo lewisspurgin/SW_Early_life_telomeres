@@ -208,12 +208,12 @@ dev.off()
 
 ```{r Figure 3}
 
-temp <- subset(dd,!is.na(Insect))
+temp <- subset(subset(dd,!is.na(Insect)),!is.na(Malaria))
 temp$LogAge <- log(temp$Agemonths+1)
 
 
 #Run the model
-lm2 <- lmer(RTL ~  LogAge+Tarsus + Helper + NonHelper + Sex + BodyMass  +yday + Insect + Density + (1|LayYear) + (1|BirdID),
+lm2 <- lmer(RTL ~  LogAge+Tarsus + Helper + NonHelper + Sex + BodyMass  +yday + Insect + Density + Malaria + (1|LayYear) + (1|BirdID),
             data = temp,
             REML = FALSE)
 lm2 <- standardize(lm2)

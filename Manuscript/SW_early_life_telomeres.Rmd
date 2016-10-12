@@ -52,11 +52,11 @@ Lewis G. Spurgin^1^,  Kat Bebbington^1^, Eleanor A. Fairfield^1^, Martijn Hammer
 ###Abstract
 1. Understanding the costs individuals and populations face throughout their lifetimes is fundamental to understanding life-history evolution and population dynamics. Telomeres, the protective caps at the ends of chromosomes, shorten in response to oxidative stress, and telomere shortening is correlated with reduced survival. Thus, telomere dynamics may help us quantify individual variation in costs, and enhance our understanding individual variation in natural populations. 
 
-2. We provide a detailed analysis of how telomere dynamics vary over individual lifespans, and with spatiotemporal variation in the social and ecological environment, in the Seychelles warbler (*Acrocephalus sechellensis*). We use one of the largest longitudinal datasets to date, consisting of `r nrow(dd)` samples from multiple cohorts spanning `r max(juv$LayYear)-min(juv$LayYear)` years. 
+2. The Seychelles warbler (*Acrocephalus sechellensis*) is an excellent model system to the causes and consequences of individual variation in telomere dynamics. Here we combine this long-term ecological data with one the largest longitudinal telomere datasets to date, consisting of `r nrow(dd)` samples from multiple cohorts spanning `r max(juv$LayYear)-min(juv$LayYear)` years. We provide a detailed analysis of how telomere dynamics vary over individual lifespans, and with spatiotemporal variation in the social and ecological environment.
 
 3. We found that telomere length decreases with cross-sectional and longitudinal measures of age, and that telomere length decreases most rapidly early in life. However, both cross-sectional and longitudinal data suggested that telomere length increases occurs in some individuals, and using a large number of repeated measurements we show statistically that this increase is unlikely to be explained by qPCR measurement error.
 
-4. Temporal length and rates of shortening varied markedly both within and among cohorts. Aside from age-related measurements, the only significant ecological predictor of telomer length  was temporal variation in food availability. We also found that cohort and age effects led to spurious associations between telomere dynamics and survival.
+4. Telomere length and rates of shortening varied markedly both within and among cohorts. Telomere length  was positively associated with island-wide temporal variation in food availability. We also found that cohort and age effects led to spurious associations between telomere dynamics and survival.
 
 5. Our comprehensive, long-term data suggest that although telomeres shorten with age, in natural populations telomere dynamics vary enormously over both space and time, and that this variation cannot be attributed entirely to measurment error. Ascertaining what explains this variation will be a difficult but worthwhile task, and will require combining long-term ecological and quantitative genetic data.
 
@@ -176,3 +176,14 @@ fit <- coxph(Surv(RemainingLife, RemainingLife1, Died1) ~ Agemonths1 + RTL1,
               
 which(is.na(dd3$RemainingLife1))
 which(is.na(dd3$RTL1))
+
+
+plot(DeltaRTL~DeltaAge,data=dd3)
+
+summary(lm(DeltaRTL~DeltaInsect,data=subset(dd3,Ageclass !='A'),na.action=na.exclude))
+summary(lm(RTL~Insect,data=juv,na.action=na.exclude))
+
+
+ggplot(dd3,aes(x = DeltaInsect,y = DeltaRTL,col = Ageclass))+
+geom_point()+
+stat_smooth(method = 'lm')

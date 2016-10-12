@@ -165,8 +165,10 @@ terr$LogTQ <- log10(terr$TQcorrected)
 dd$TQ <- NA
 dd$TQI <- NA
 dd$Insect <- NA
+dd$BirthInsect
 dd$Density <- NA
 dd$cenTQ <- NA
+dd$Malaria <- NA
 
 for(i in 1:nrow(dd))
 {
@@ -203,6 +205,11 @@ for(i in 1:nrow(dd))
     dd$Density[i] <- dens$PsizeFP[dens$FieldPeriodID == dd$FieldPeriodID[i]]
     dd$SDensity[i] <- dens$SPsize[dens$FieldPeriodID == dd$FieldPeriodID[i]]
     
+  }
+  
+  if(dd$BloodID[i] %in% mal$BloodID)
+  {
+    dd$Malaria[i] <- mal$Consensus[which(mal$BloodID == dd$BloodID[i])]
   }
 }
 
@@ -257,7 +264,8 @@ for(i in 1:nrow(dd3))
     dd3$RemainingLife1[i] <- nextbird$RemainingLife
     dd3$Died1[i] <- nextbird$Died
     dd3$DeltaCondition[i] <- nextbird$Condition - dd3$Condition[i]
-    dd3$DeltaAge[i] <- nextbird$Agemonths - dd3$Agemonths
+    dd3$DeltaAge[i] <- nextbird$Agemonths - dd3$Agemonths[i]
+    dd3$DeltaInsect[i] <- nextbird$Insect - dd3$Insect[i]
     dd3$Agemonths1[i] <- nextbird$Agemonths
   }
   
