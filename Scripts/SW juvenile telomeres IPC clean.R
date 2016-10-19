@@ -213,7 +213,6 @@ for(i in 1:nrow(dd))
   }
 }
 
-
 #Get rid of NAs and cross-fostered birds
 dd <- subset(dd,!is.na(Tarsus))
 dd <- subset(dd,!is.na(BodyMass))

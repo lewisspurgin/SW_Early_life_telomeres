@@ -287,12 +287,11 @@ Fig3B <- ggplot(temp,
   stat_smooth(method = 'lm')+
   annotate('text',x = 17,y = 2.1,label = 'B')
 
-temp <- subset(juv_r,Season == 'Major')
+temp <- dd
 Fig3C <- ggplot(temp,
        aes(
            y = RTL,
-           x=yday,
-       col = (Ageclass))) +
+           x=Insect)) +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
@@ -302,7 +301,7 @@ Fig3C <- ggplot(temp,
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'top') +
   geom_point()+
-   stat_smooth(method = 'lm',formula = y~poly(x,2))+
+   stat_smooth(method = 'lm')+
   # scale_colour_manual(values = c('grey','darkorange','darkgreen'))+
   # scale_fill_manual(values = c('grey','darkorange','darkgreen'))+
   annotate('text',x = 3,y = 2.1,label = 'C')

@@ -148,38 +148,13 @@ We thank Nature Seychelles for facilitating the long-term Seychelles warbler pro
 
 ###References
 
-temp <- subset(dd,Ageclass !='CH')
 
-ggplot(temp,aes(x = Insect,y = RTL))+
-geom_boxplot(aes(group = Insect))+
-geom_smooth()+
-theme_bw()
-
-dd$LogAge <- log(dd$Agemonths)
-m1 <- lmer(RTL~LogAge+(1|BirdID),data=dd)
-m2 <- lmer(RTL~LogAge+(1|BirdID)+(1|TerritoryID),data=dd)
-m3 <- lmer(RTL~LogAge+(1|BirdID)+(1|LayYear),data=dd)
-m4 <- lmer(RTL~LogAge+(1|BirdID)+(1|CatchYear)+(1|LayYear),data=dd)
-
-anova(m1,m2,m3,m4)
+temp <- subset(dd3,BirdID %in% juv$BirdID)
+nrow(temp)
 
 
-head(dd3)
-fit <- coxph(Surv(RemainingLife, RemainingLife1, Died1) ~ Agemonths1 + RTL1,
-              data=dd3)
-              
- dd3 <- subset(dd3,RemainingLife-RemainingLife1 >0)            
-              
-which(is.na(dd3$RemainingLife1))
-which(is.na(dd3$RTL1))
 
 
-plot(DeltaRTL~DeltaAge,data=dd3)
-
-summary(lm(DeltaRTL~DeltaInsect,data=subset(dd3,Ageclass !='A'),na.action=na.exclude))
-summary(lm(RTL~Insect,data=juv,na.action=na.exclude))
 
 
-ggplot(dd3,aes(x = DeltaInsect,y = DeltaRTL,col = Ageclass))+
-geom_point()+
-stat_smooth(method = 'lm')
+
