@@ -208,12 +208,12 @@ dev.off()
 
 ```{r Figure 3}
 
-temp <- subset(subset(dd,!is.na(Insect)),!is.na(Malaria))
-temp$LogAge <- log(temp$Agemonths+1)
+temp <- subset(dd,!is.na(Insect))
+temp$LogAge <- log(temp$Agemonths)
 
 
 #Run the model
-lm2 <- lmer(RTL ~  LogAge+Tarsus + Helper + NonHelper + Sex + BodyMass  +yday + Insect + Density + Malaria + (1|LayYear) + (1|BirdID),
+lm2 <- lmer(RTL ~  LogAge + Tarsus + Helper + NonHelper + Sex + BodyMass  +CatchMonth + Insect + Density + (1|LayYear) + (1|BirdID) + (1|PlateID),
             data = temp,
             REML = FALSE)
 lm2 <- standardize(lm2)
@@ -234,20 +234,12 @@ table2 <- signif(table2,2)
 nams <- rownames(table2)
 nams[nams == 'z.NonHelper'] <- 'Non helpers'
 nams[nams == 'c.Sex'] <- 'Sex (males)'
-nams[nams == 'z.TQ'] <- 'TQ'
 nams[nams == 'c.Helper'] <- 'Helpers'
 nams[nams == 'z.BodyMass'] <- 'Body mass'
-nams[nams == 'z.Agemonths'] <- 'Age'
+nams[nams == 'z.LogAge'] <- 'Log age'
 nams[nams == 'z.Tarsus'] <- 'Tarsus'
-nams[nams == 'c.Season'] <- 'Season (minor)'
-nams[nams == 'c.Season:z.Agemonths'] <- 'Age x season'
-nams[nams == 'z.Agemonths:z.NonHelper'] <- 'Age x non helpers'
-nams[nams == 'c.Sex:z.Agemonths'] <- 'Age x sex'
-nams[nams == 'z.Agemonths:z.TQ'] <- 'Age x TQ'
-nams[nams == 'c.Helper:z.Agemonths'] <- 'Age x helpers'
-nams[nams == 'z.Agemonths:z.BodyMass'] <- 'Age x mass'
-nams[nams == 'z.Agemonths:z.Tarsus'] <- 'Age x tarsus'
-
+nams[nams == 'z.Insect'] <- 'Insect abundance'
+nams[nams == 'z.CatchMonth'] <- 'Month'
 
 rownames(table2) <- nams
 colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
@@ -261,13 +253,14 @@ Fig3A <- forestplot(table2)+
   theme(axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'))
 
+temp$Age2 <- ifelse(temp$Ageclass == 'A',
+                    ifelse(temp$Sex == 'Males',
+                           'Adult males',
+                           'Adult females'),
+                    ifelse(temp$Sex == 'Males',
+                           'Juvenule males',
+                           'Juvenile females'))
 
-
-
-temp[,'Helpers'] <- ifelse(temp$Helper>0,'Present', 'Absent')
-temp[,'Non helpers'] <- ifelse(temp$NonHelper>0,'Present', 'Absent')
-temp[,'Age (months)'] <- factor(temp$Agemonths) 
-temp$Age2 <- ifelse(temp$Ageclass == 'A','Adults','Juveniles')
   
 Fig3B <- ggplot(temp,
        aes(x = Tarsus,
@@ -283,15 +276,15 @@ Fig3B <- ggplot(temp,
                 axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'top') +
-  geom_point()+
-  stat_smooth(method = 'lm')+
+  stat_smooth(method = 'lm')
   annotate('text',x = 17,y = 2.1,label = 'B')
 
-temp <- dd
+temp$InsectF <- ifelse(temp$Insect>4,'High','Low')
 Fig3C <- ggplot(temp,
        aes(
            y = RTL,
-           x=Insect)) +
+           x=Agemonths,
+           col = InsectF)) +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
@@ -301,7 +294,7 @@ Fig3C <- ggplot(temp,
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'top') +
   geom_point()+
-   stat_smooth(method = 'lm')+
+   stat_smooth(method = 'lm',formula = y~log(x))
   # scale_colour_manual(values = c('grey','darkorange','darkgreen'))+
   # scale_fill_manual(values = c('grey','darkorange','darkgreen'))+
   annotate('text',x = 3,y = 2.1,label = 'C')
@@ -317,10 +310,11 @@ dev.off()
 
 ```
 
+anova(lm(RTL~Sex+Agemonths+factor(CatchYear)+Sex*factor(LayYear),data=dd))
 
 
-
-
+ggplot(dd,aes(x = factor(LayYear),y = RTL,col = Sex))+
+geom_boxplot(notch=F)
 
 
 
