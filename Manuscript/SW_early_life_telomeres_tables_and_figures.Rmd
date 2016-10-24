@@ -240,6 +240,7 @@ nams[nams == 'z.LogAge'] <- 'Log age'
 nams[nams == 'z.Tarsus'] <- 'Tarsus'
 nams[nams == 'z.Insect'] <- 'Insect abundance'
 nams[nams == 'z.CatchMonth'] <- 'Month'
+nams[nams == 'z.Density'] <- 'Density'
 
 rownames(table2) <- nams
 colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
@@ -263,11 +264,11 @@ temp$Age2 <- ifelse(temp$Ageclass == 'A',
 
   
 Fig3B <- ggplot(temp,
-       aes(x = Tarsus,
+       aes(x = Agemonths,
            y = RTL,
-           col = Age2)) +
+           col = Sex)) +
   ylab('RTL') + 
-  xlab('Tarsus length (mm)') +
+  xlab('') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
@@ -276,15 +277,15 @@ Fig3B <- ggplot(temp,
                 axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'top') +
-  stat_smooth(method = 'lm')
+  stat_smooth(method = 'lm',formula = y~log(x))
   annotate('text',x = 17,y = 2.1,label = 'B')
 
-temp$InsectF <- ifelse(temp$Insect>4,'High','Low')
+
 Fig3C <- ggplot(temp,
        aes(
            y = RTL,
-           x=Agemonths,
-           col = InsectF)) +
+           x=Insect,
+           col = Sex)) +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
@@ -310,113 +311,6 @@ dev.off()
 
 ```
 
-anova(lm(RTL~Sex+Agemonths+factor(CatchYear)+Sex*factor(LayYear),data=dd))
 
-
-ggplot(dd,aes(x = factor(LayYear),y = RTL,col = Sex))+
-geom_boxplot(notch=F)
-
-
-
-temp <- subset(dd,Age<15)
-reps <- tapply(temp$RTL,temp$BirdID,length)
-keep <- names(reps[reps>2])
-temp <- subset(temp,BirdID %in% keep)
- temp <- subset(temp,!duplicated(paste0(BirdID,Agemonths)))
-
-
-
-ggplot(temp,aes(x = CatchYear,y = RTL,group = BirdID,col=factor(BirdID)))+
-  geom_point(alpha = 1,col='grey')+
-geom_line(col = 'darkgrey',alpha = 0.2)+
-  xlab('Age (years)') +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'),
-        legend.position = 'none')+
-  #scale_colour_brewer(palette = 'Set1')+
-  annotate('text',x = 1997,y = 2,label = 'B')
-
-
-ggplot(ddL,aes(x = DeltaRTL,y = RTL,col = Group))+
-geom_point()+
-stat_smooth(method = 'lm')
-
-
-
-
-
-
-
-```{r Figure X}
-
-temp <- dd
-#temp$SurvivedNext <- factor(temp$SurvivedNext)
-temp$SN2 <- with(temp,paste(Sex,SurvivedNext))
-
-FigX <- ggplot(temp,aes(x = LayYear,y = RTL,col = SN2))+
-  ylab('RTL') + 
-  xlab('Cohort') +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12,angle = 90), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-                axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'),
-        legend.position = 'top')+
-  geom_point()+
-  stat_smooth()
-
-FigX
-
-
-
-FigX <- ggplot(subset(temp,Agemonths),aes(x = SN2,y = RTL))+
-  ylab('RTL') + 
-  xlab('Cohort') +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12,angle = 90), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-                axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'),
-        legend.position = 'top')+
-  geom_boxplot()
-
-FigX
-
-
-
-```
-
-
-temp <- dd
-temp$LogAge <- log(temp$Agemonths)
-
-m1 <- lm(RTL~LogAge,data=temp)
-m2 <- lmer(RTL~LogAge+(1|CatchYear),data=temp)
-m3 <- lmer(RTL~LogAge+(LogAge|CatchYear),data=temp)
-m4 <- lmer(RTL~LogAge+(1|LayYear),data=temp)
-m5 <- lmer(RTL~LogAge+(LogAge|LayYear),data=temp)
-
-m1 <- lmer(RTL~(Agemonths)+(1|BirdID)+(1|LayYear),data=dd)
-m2 <- lmer(RTL~Ageclass+(1|BirdID)+(1|LayYear),data=dd)
-m3 <- lmer(RTL~LogAge+(1|BirdID)+(1|LayYear),data=dd)
-
-
-anova(m1,m2,m3)
-summary(m2)
-summary(m3)
-
-dd3$LogAge <- log(dd3$Agemonths)
-m1 <- lmer(RTL1~RTL+(1|LayYear),data=dd3)
-summary(m1)
-
-
+plot(tapply(dd3$DeltaRTLF,dd3$TimeDiff,mean))
 

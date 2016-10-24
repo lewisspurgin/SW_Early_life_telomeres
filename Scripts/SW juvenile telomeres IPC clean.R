@@ -4,7 +4,7 @@
 #################################################################################
 
 #Only use Ellie's samples
-dd0 <- subset(dd0,Whodunnit == 'EAF')
+# dd0 <- subset(dd0,Whodunnit == 'EAF')
 
 #Average repeats of blood samples
 dd0$RTL2 <- ave(dd0$RTL,c(dd0$BloodID,dd0$Status,dd0$PlateID))
@@ -55,8 +55,8 @@ dd$Agemonths <- ifelse(dd$Ageclass == 'CH',1,
 
 
   #dd$Age[dd$Fledged != 'Adults'] <- 1
-
-
+dd$LogAge <- log10(dd$Agemonths)
+dd <- subset(dd,!is.na(LogAge))
 
 
 # Tarsus and delta age ------------------------------------------------------------------
