@@ -169,29 +169,39 @@ dev.off()
 
 ```{r Figure 2}
 
-temp <- subset(dd,LayYear>1995)
-temp$JA <- ifelse(temp$Ageclass == 'A','Adults','Juveniles')
+ys <- names(which(table(subset(dd,Ageclass == 'CH')$LayYear)>10))
+temp <- subset(dd,LayYear %in% ys)
+temp$Cohort <- factor(temp$LayYear)
 
-Fig2 <- ggplot(temp,aes(x = LayYear,y = RTL))+
-  ylab('RTL') + 
-  xlab('Cohort') +
+Fig2A <- ggplot(temp,aes(x = Agemonths,y = RTL,col = Cohort))+
+  xlab('Age (months)') +
   theme_classic() +
-  theme(axis.text.x = element_text(size = 12,angle = 90), 
+  theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
-                axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'),
-        legend.position = 'top')+
-  geom_boxplot(aes(group = LayYear),outlier.colour = 'grey',notch=F,alpha=0)+
-  geom_smooth()
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'))+
+  geom_smooth(method = 'lm',formula = y~log(x),se = F)+
+  annotate('text',x = 0,y = 1.3,label = 'A')
 
+Fig2B <- ggplot(temp,aes(x = Agemonths,y = RTL,col = Cohort))+
+  xlab('Age (months)') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'))+
+  geom_smooth(se = F)+
+  annotate('text',x = 0,y = 1.4,label = 'B')
 
 pdf('Figures/Figure 2.pdf',
-    width = 8,
-    height = 4,
-    paper = 'a4r')
-Fig2
+    width = 5,
+    height = 8,
+    paper = 'a4')
+multiplot(Fig2A,Fig2B)
 dev.off()
 
 
