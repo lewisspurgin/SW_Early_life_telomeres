@@ -6,6 +6,13 @@
 #Only use Ellie's samples
 # dd0 <- subset(dd0,Whodunnit == 'EAF')
 
+dd0 <- subset(dd0,RTL > 0.05) %>%
+  subset(CqTelomere <28) %>%
+  subset(CqGAPDH < 26) %>%
+  subset(CqGAPDH > 21) %>%
+  subset(RTL < 2.5)
+
+
 #Average repeats of blood samples
 dd0$RTL2 <- ave(dd0$RTL,c(dd0$BloodID,dd0$Status,dd0$PlateID))
 dd <- dd0[!(duplicated(dd0$BloodID)),]
@@ -83,10 +90,6 @@ dd$LeftTarsus <- NULL
 # Remove unwanted data/outliers ----------------------------------------------------
 
 
-dd <- subset(dd,RTL > 0.05)
-dd <- subset(dd,CqTelomere <28)
-dd <- subset(dd,CqGAPDH < 27)
-dd <- subset(dd,RTL<3)
 
 dd <- subset(dd,BodyMass>5)
 dd <- subset(dd,Tarsus>17)

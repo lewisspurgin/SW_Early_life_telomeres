@@ -46,7 +46,7 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 
 
 ```{r Figure 1}
-
+subset
 temp <- subset(dd,Age<15)
 reps <- tapply(temp$RTL,temp$BirdID,length)
 keep <- names(reps[reps>0])
@@ -187,6 +187,7 @@ Fig2A <- ggplot(temp,aes(x = Agemonths,y = RTL,col = Cohort))+
 
 Fig2B <- ggplot(temp,aes(x = Agemonths,y = RTL,col = Cohort))+
   xlab('Age (months)') +
+  geom_point()+
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
@@ -223,7 +224,7 @@ temp$LogAge <- log(temp$Agemonths)
 
 
 #Run the model
-lm2 <- lmer(RTL ~  LogAge + Tarsus + Helper + NonHelper + Sex + BodyMass  +CatchMonth + Insect + Density + (1|LayYear) + (1|BirdID) + (1|PlateID),
+lm2 <- lmer(RTL ~  LogAge + Tarsus + Helper + NonHelper + Sex + BodyMass + Insect + Density + (1|LayYear) + (1|BirdID) + (1|PlateID),
             data = temp,
             REML = FALSE)
 lm2 <- standardize(lm2)
@@ -264,21 +265,14 @@ Fig3A <- forestplot(table2)+
   theme(axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'))
 
-temp$Age2 <- ifelse(temp$Ageclass == 'A',
-                    ifelse(temp$Sex == 'Males',
-                           'Adult males',
-                           'Adult females'),
-                    ifelse(temp$Sex == 'Males',
-                           'Juvenule males',
-                           'Juvenile females'))
 
-  
-Fig3B <- ggplot(temp,
+  Fig3B <- ggplot(temp,
        aes(x = Agemonths,
            y = RTL,
            col = Sex)) +
+  geom_point()+
   ylab('RTL') + 
-  xlab('') +
+  xlab('Age (months)') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
@@ -286,16 +280,17 @@ Fig3B <- ggplot(temp,
         axis.title.x = element_text(size = 14),
                 axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'),
-        legend.position = 'top') +
-  stat_smooth(method = 'lm',formula = y~log(x))
-  annotate('text',x = 17,y = 2.1,label = 'B')
-
+        legend.position = 'none') +
+  stat_smooth(method = 'lm',formula = y~log(x))+
+  annotate('text',x = 1,y = 2.5,label = 'B')
 
 Fig3C <- ggplot(temp,
-       aes(
+       aes(x = Tarsus,
            y = RTL,
-           x=Insect,
            col = Sex)) +
+  geom_point()+
+  ylab('RTL') + 
+  xlab('Tarsus length (mm)') +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
@@ -303,24 +298,61 @@ Fig3C <- ggplot(temp,
         axis.title.x = element_text(size = 14),
                 axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'),
-        legend.position = 'top') +
-  geom_point()+
-   stat_smooth(method = 'lm',formula = y~log(x))
-  # scale_colour_manual(values = c('grey','darkorange','darkgreen'))+
-  # scale_fill_manual(values = c('grey','darkorange','darkgreen'))+
-  annotate('text',x = 3,y = 2.1,label = 'C')
+        legend.position = 'none') +
+  stat_smooth(method = 'lm')+
+  annotate('text',x = 17,y = 2.5,label = 'C')
+
+Fig3D <- ggplot(temp,
+       aes(
+           y = RTL,
+           x=Insect)) +
+    ylab('RTL') + 
+  xlab('Insect abundance') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+                axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'none') +
+  geom_boxplot(aes(group = Insect),outlier.shape = NA)+
+   stat_smooth(method = 'lm',col = 'darkgrey')+
+  annotate('text',x = 2.5,y = 2.5,label = 'D')
+
+Fig3E <- ggplot(temp,
+       aes(
+           y = RTL,
+           x=Density)) +
+    ylab('RTL') + 
+  xlab('Density') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+                axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'none') +
+  geom_boxplot(aes(group = Insect),outlier.shape = NA)+
+   stat_smooth(method = 'lm',col = 'darkgrey')+
+  annotate('text',x = 270,y = 2.5,label = 'E')
 
 
 
 pdf('Figures/Figure 3.pdf',
     width = 8,
-    height = 8,
-    paper = 'a4r')
-multiplot(Fig3A,Fig3B,Fig3C,layout = matrix(c(1,1,2,3),nrow = 2,byrow = T))
+    height = 12,
+    paper = 'a4')
+multiplot(Fig3A,Fig3B,Fig3C,Fig3D,Fig3E,layout = matrix(c(1,1,2,3,4,5),nrow = 3,byrow = T))
 dev.off()
 
 ```
 
 
 plot(tapply(dd3$DeltaRTLF,dd3$TimeDiff,mean))
+
+
+ggplot(dd,aes(col = Whodunnit,y = RTL,x = factor(LayYear)))+
+geom_boxplot()
 

@@ -154,6 +154,13 @@ m3 <- lmer(RTL~LogAge+(1|BirdID) + (LogAge|LayYear),data=dd)
 
 anova(m1,m2,m3)
 
+m1 <- lmer(RTL~Agemonths+(1|BirdID) + (1|LayYear),data=dd)
+m2 <- lmer(RTL~LogAge+(1|BirdID) + (1|LayYear),data=dd)
+m3 <- lmer(RTL~factor(Agemonths)+(1|BirdID) + (1|LayYear),data=dd)
+
+anova(m1,m2,m3)
+
+
 
 dd14 <- subset(dd,DeathYear<2015)
 dd14$RowID <- c(1:nrow(dd14))
