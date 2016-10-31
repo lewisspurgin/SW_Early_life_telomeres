@@ -82,8 +82,8 @@ temp <- dd3
 Fig1B <- ggplot(temp,
        aes(x = RTL,
            y = RTL1)) +
-  ylab('Adult RTL') + 
-  xlab('juvenile RTL') +
+  ylab(expression('RTL ('*italic(t)*' + 1)')) + 
+  xlab(expression('RTL ('*italic(t)*')')) +
     xlim(c(0,3))+
   ylim(c(0,3))+
   theme_classic() +
@@ -98,13 +98,6 @@ Fig1B <- ggplot(temp,
     geom_point(col = 'grey')+
   geom_abline(slope = 1,intercept = 0,lty = 2)+
   annotate('text',x = 0,y = 3,label = 'B')
-
-
-
-
-
-
-
 
 
 
@@ -221,7 +214,7 @@ dev.off()
 
 temp <- subset(dd,!is.na(Insect))
 temp$LogAge <- log(temp$Agemonths)
-
+temp$RTL <- log10(temp$RTL)
 
 #Run the model
 lm2 <- lmer(RTL ~  LogAge + Tarsus + Helper + NonHelper + Sex + BodyMass + Insect + Density + (1|LayYear) + (1|BirdID) + (1|PlateID),
@@ -350,9 +343,5 @@ dev.off()
 ```
 
 
-plot(tapply(dd3$DeltaRTLF,dd3$TimeDiff,mean))
-
-
-ggplot(dd,aes(col = Whodunnit,y = RTL,x = factor(LayYear)))+
-geom_boxplot()
-
+library(qqman)
+?manhattan
