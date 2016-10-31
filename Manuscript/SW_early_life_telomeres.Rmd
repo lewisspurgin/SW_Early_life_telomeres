@@ -163,11 +163,9 @@ anova(m1,m2,m3)
 
 
 dd14 <- subset(dd,DeathYear<2015)
-dd14$RowID <- c(1:nrow(dd14))
 
-summary(glmer(SurvivedNext~RTL * LogAge + Tarsus + Sex + (1|BirdID)+(1|LayYear),data=dd14,family = 'binomial'))
+summary(glmer(SurvivedNext~RTL*LogAge + (1|LayYear) + (1|BirdID),data=dd14,family = 'binomial'))
 
 
-ggplot(dd14,aes(x = Agemonths, col = factor(SurvivedNext),y = RTL))+
-geom_smooth(method = 'lm',formula = y~log(x))
-
+?coxph
+summary(coxph(Surv(RemainingLife,Died)~RTL*LogAge,data=dd14))
