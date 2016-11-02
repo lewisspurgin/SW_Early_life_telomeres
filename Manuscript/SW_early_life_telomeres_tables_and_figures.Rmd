@@ -342,6 +342,3 @@ dev.off()
 
 ```
 
-
-library(qqman)
-?manhattan

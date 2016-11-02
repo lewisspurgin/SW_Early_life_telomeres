@@ -241,7 +241,7 @@ dd3$DeltaRTL <- NA
 dd3$DeltaTL <- NA
 dd3$DeltaGAP <- NA
 dd3$BloodID1 <- NA
-dd3$SurvivedNext2 <- NA
+dd3$SurvivedNext1 <- NA
 
 for(i in 1:nrow(dd3))
 {
@@ -361,4 +361,7 @@ juv <- juvdata
 
 juv14 <- subset(juv_r,LayYear<2014)
 juv12 <- subset(juv_r,LayYear<2012)
+
+dd14 <- subset(dd,LayYear<2014)
+dd12 <- subset(dd,LayYear<2012)
 
