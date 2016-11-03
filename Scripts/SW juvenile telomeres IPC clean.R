@@ -7,17 +7,19 @@
 # dd0 <- subset(dd0,Whodunnit == 'EAF')
 
 dd0 <- subset(dd0,RTL > 0.05) %>%
-  subset(CqTelomere <28) %>%
+  subset(CqTelomere < 28) %>%
   subset(CqGAPDH < 26) %>%
   subset(CqGAPDH > 21) %>%
-  subset(RTL < 2.5)
+  subset(RTL < 3)
 
-
+dd0$RTL <- sqrt(dd0$RTL)
 #Average repeats of blood samples
 dd0$RTL2 <- ave(dd0$RTL,c(dd0$BloodID,dd0$Status,dd0$PlateID))
+
 dd <- dd0[!(duplicated(dd0$BloodID)),]
 dd$RTL <- dd$RTL2
 dd$RTL2 <- NULL
+
 
 # Weird variable names ----------------------------------------------------
 

@@ -73,7 +73,7 @@ geom_line(col = 'darkgrey',alpha = 0.2)+
         axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'none')+
-  geom_smooth(col = 'black',fill = 'black',lwd = 0.5,aes(group = NULL),method = 'lm',formula = y~log(x))+
+  geom_smooth(col = 'black',fill = 'black',lwd = 0.5,aes(group = NULL),method = 'lm',formula = y~log(x))
   annotate('text',x = 0,y = 3,label = 'A')
 
 
@@ -84,8 +84,6 @@ Fig1B <- ggplot(temp,
            y = RTL1)) +
   ylab(expression('RTL ('*italic(t)*' + 1)')) + 
   xlab(expression('RTL ('*italic(t)*')')) +
-    xlim(c(0,3))+
-  ylim(c(0,3))+
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
@@ -96,7 +94,7 @@ Fig1B <- ggplot(temp,
         axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black')) +
     geom_point(col = 'grey')+
-  geom_abline(slope = 1,intercept = 0,lty = 2)+
+  geom_abline(slope = 1,intercept = 0,lty = 2)
   annotate('text',x = 0,y = 3,label = 'B')
 
 
@@ -116,7 +114,7 @@ Fig1C <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
         axis.line.y = element_line(colour = 'black')) +
   scale_colour_manual(values = c('darkgrey','gold'))+
   scale_fill_manual(values = c('darkgrey','gold'))+
-  geom_vline(xintercept = 0,lty = 2)+
+  geom_vline(xintercept = 0,lty = 2)
   annotate('text',x = -2,y = 1,label = 'C')
 
 
@@ -127,7 +125,6 @@ Fig1D <- ggplot(temp,aes(y = DeltaRTL,x = TimeDiff))+
   theme_classic()+ 
   xlab ('Follow up time (years)')+
   ylab(expression(Delta*'RTL'))+
-  ylim(c(-2,2))+
     theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
         axis.title.y = element_text(size = 14,vjust=0.8),
@@ -136,7 +133,7 @@ Fig1D <- ggplot(temp,aes(y = DeltaRTL,x = TimeDiff))+
         legend.title = element_blank(),
         axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black')) +
-    geom_abline(slope = 0,intercept = 0,lty = 2)+
+    geom_abline(slope = 0,intercept = 0,lty = 2)
   annotate('text',x = 0,y = 2,label = 'D')
 
 
@@ -175,20 +172,26 @@ Fig2A <- ggplot(temp,aes(x = Agemonths,y = RTL,col = Cohort))+
         axis.title.x = element_text(size = 14),
         axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'))+
-  geom_smooth(method = 'lm',formula = y~log(x),se = F)+
+  geom_smooth(method = 'lm',formula = y~log(x),se = F)
   annotate('text',x = 0,y = 1.3,label = 'A')
 
-Fig2B <- ggplot(temp,aes(x = Agemonths,y = RTL,col = Cohort))+
+  
+temp2 <- ddply(temp,
+               .(Agemonths,Cohort),
+               summarise,
+               MedianRTL = mean(RTL))  %>%
+  subset(Agemonths < 20)
+
+Fig2B <- ggplot(temp2,aes(x = Agemonths,y = MedianRTL,col = Cohort))+
   xlab('Age (months)') +
-  geom_point()+
+  geom_line()+
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
         axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'))+
-  geom_smooth(se = F)+
+        axis.line.y = element_line(colour = 'black'))
   annotate('text',x = 0,y = 1.4,label = 'B')
 
 pdf('Figures/Figure 2.pdf',
@@ -214,7 +217,7 @@ dev.off()
 
 temp <- subset(dd,!is.na(Insect))
 temp$LogAge <- log(temp$Agemonths)
-temp$RTL <- log10(temp$RTL)
+
 
 #Run the model
 lm2 <- lmer(RTL ~  LogAge + Tarsus + Helper + NonHelper + Sex + BodyMass + Insect + Density + (1|LayYear) + (1|BirdID) + (1|PlateID),
@@ -254,7 +257,7 @@ table2 <- data.frame(table2,myx=row.names(table2))
 table2$myx <- factor(table2$myx,levels = table2$myx[order(table2$Estimate,decreasing = T)])
 
 Fig3A <- forestplot(table2)+
-  annotate('text',x = 0.6,y = 0.25,label = 'A')+
+  annotate('text',x = 0.6,y = 0.05,label = 'A')+
   theme(axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'))
 
@@ -274,7 +277,7 @@ Fig3A <- forestplot(table2)+
                 axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'none') +
-  stat_smooth(method = 'lm',formula = y~log(x))+
+  stat_smooth(method = 'lm',formula = y~log(x))
   annotate('text',x = 1,y = 2.5,label = 'B')
 
 Fig3C <- ggplot(temp,
@@ -292,7 +295,7 @@ Fig3C <- ggplot(temp,
                 axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'none') +
-  stat_smooth(method = 'lm')+
+  stat_smooth(method = 'lm')
   annotate('text',x = 17,y = 2.5,label = 'C')
 
 Fig3D <- ggplot(temp,
@@ -310,7 +313,7 @@ Fig3D <- ggplot(temp,
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'none') +
   geom_boxplot(aes(group = Insect),outlier.shape = NA)+
-   stat_smooth(method = 'lm',col = 'darkgrey')+
+   stat_smooth(method = 'lm',col = 'darkgrey')
   annotate('text',x = 2.5,y = 2.5,label = 'D')
 
 Fig3E <- ggplot(temp,
@@ -328,7 +331,7 @@ Fig3E <- ggplot(temp,
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'none') +
   geom_boxplot(aes(group = Insect),outlier.shape = NA)+
-   stat_smooth(method = 'lm',col = 'darkgrey')+
+   stat_smooth(method = 'lm',col = 'darkgrey')
   annotate('text',x = 270,y = 2.5,label = 'E')
 
 
