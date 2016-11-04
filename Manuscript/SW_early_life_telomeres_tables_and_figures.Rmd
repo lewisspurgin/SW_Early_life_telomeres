@@ -119,8 +119,14 @@ Fig1C <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
 
 
 temp <- dd3
+dd3
+props <- tapply(dd3$DeltaRTLF,dd3$TimeDiff,mean)
+propn <- tapply(dd3$DeltaRTLF,dd3$TimeDiff,length)
+temp <- data.frame(props,propn,TimeDiff = as.numeric(names(props))/12) %>%
+  subset(propn > 10)
+  
 
-Fig1D <- ggplot(temp,aes(y = DeltaRTL,x = TimeDiff))+
+Fig1D <- ggplot(temp,aes(y = props,x = TimeDiff))+
     geom_point(col = 'grey')+
   theme_classic()+ 
   xlab ('Follow up time (years)')+
@@ -135,8 +141,6 @@ Fig1D <- ggplot(temp,aes(y = DeltaRTL,x = TimeDiff))+
         axis.line.y = element_line(colour = 'black')) +
     geom_abline(slope = 0,intercept = 0,lty = 2)
   annotate('text',x = 0,y = 2,label = 'D')
-
-
 
 
 
