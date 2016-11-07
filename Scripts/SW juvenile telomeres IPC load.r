@@ -19,9 +19,10 @@ library(nlme)
 library(magrittr)
 library(car)
 library(rptR)
+library(Rmisc)
 
 # Load data ---------------------------------------------------------------
-  dd0 <- read.csv('Data/REL_TL_EB_EAF_24 May aft TL queries.csv') #main dataset
+dd0 <- read.csv('Data/REL_TL_EB_EAF_24 May aft TL queries.csv') #main dataset
 terr <- read.csv('Data/SW TL all territories.csv')
 status <- read.csv('Data/SW TL all breedstatus.csv')
 insects <- read.csv('Data/Insects.csv')

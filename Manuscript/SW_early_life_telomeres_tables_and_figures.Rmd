@@ -163,7 +163,7 @@ dev.off()
 
 ```{r Figure 2}
 
-ys <- names(which(table(subset(dd,Ageclass == 'CH')$LayYear)>10))
+ys <- names(which(table(subset(dd,Ageclass == 'CH')$LayYear)>5))
 temp <- subset(dd,LayYear %in% ys)
 temp$Cohort <- factor(temp$LayYear)
 

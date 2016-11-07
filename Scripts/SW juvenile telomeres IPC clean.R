@@ -6,15 +6,27 @@
 #Only use Ellie's samples
 # dd0 <- subset(dd0,Whodunnit == 'EAF')
 
-dd0 <- subset(dd0,RTL > 0.05) %>%
-  subset(CqTelomere < 28) %>%
+dd0 <- subset(dd0,CqTelomere < 100) %>%
   subset(CqGAPDH < 26) %>%
-  subset(CqGAPDH > 21) %>%
-  subset(RTL < 3)
+subset(DiffGAPDH < 0.5) %>%
+  subset(DiffTelomere < 0.5) %>%
+  subset(EffGAPDH < 2) %>%
+  subset(RTL < 3) %>%
+  subset(BloodID>7) %>%
+  subset(!duplicated(paste0(CqTelomere,CqGAPDH)))
+
 
 dd0$RTL <- sqrt(dd0$RTL)
+
+
+
 #Average repeats of blood samples
 dd0$RTL2 <- ave(dd0$RTL,c(dd0$BloodID,dd0$Status,dd0$PlateID))
+
+# rpt(RTL~(1|BloodID),grname = 'BloodID',data = dd0,nboot = 50)
+# rpt(RTL~(1|BloodID),grname = 'BloodID',data = subset(dd0,Whodunnit == "EB"),nboot = 50)
+# rpt(RTL~(1|BloodID),grname = 'BloodID',data = subset(dd0,Whodunnit == "EAF"),nboot = 50)
+
 
 dd <- dd0[!(duplicated(dd0$BloodID)),]
 dd$RTL <- dd$RTL2
