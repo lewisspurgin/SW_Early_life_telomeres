@@ -314,13 +314,53 @@ dev.off()
 
 
 
-x <- subset(subset(dd,Ageclass 'A'))
 
-summary(lm(RTL~Tarsus,data = x))
 
-dd$Sex2 <- paste(dd$Fledged,dd$Sex)
+```{r Figure 3}
 
-ggplot(dd,aes(x = Tarsus, y = RTL,col = Sex2))+
-geom_smooth(method = 'lm')
+temp <- dd14
+
+Fig4A <- ggplot(temp,
+       aes(x = Agemonths,
+           col = factor(SurvivedNext),
+           y = RTL)) +
+  ylab('RTL') + 
+  xlab('Survival probability') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+                axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'none') +
+  geom_smooth(method = 'lm')
+  annotate('text',x = 17,y = 2.5,label = 'C')
+
+
+temp <- ddply(juv14,
+              .(LayYear,Fledged),
+              summarise,
+              MeanTL = median(RTL),
+              Survived = mean(SurvivedNext),
+              n = length(RTL)) %>%
+  subset(n > 9)
+
+ggplot(temp,aes(x = MeanTL,y = Survived,col = Fledged))+
+  geom_point()+
+  stat_smooth(method = 'lm')
+
+Fig4B <- ??
+
+pdf('Figures/Figure 4.pdf',
+    width = 8,
+    height = 8,
+    paper = 'a4')
+multiplot(Fig4A,Fig4B,layout = matrix(c(1,2),nrow = 2,byrow = T))
+dev.off()
+
+```
+
+
 
 
