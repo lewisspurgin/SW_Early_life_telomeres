@@ -382,11 +382,11 @@ juv12 <- subset(juv_r,LayYear<2012)
 
 dd14 <- subset(dd,LayYear<2014) %>%
   transform(r = sample(order(RTL))) %>%
-  arrange(BirdID,r) %>%
+  arrange(BirdID,desc(CatchDate)) %>%
   subset(!duplicated(BirdID))
 
 dd8 <- subset(dd,LayYear<2008) %>%
   transform(r = sample(order(RTL))) %>%
-  arrange(BirdID,CatchDate) %>%
+  arrange(BirdID,desc(CatchDate)) %>%
   subset(!duplicated(BirdID))
 

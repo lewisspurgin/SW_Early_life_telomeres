@@ -127,8 +127,23 @@ dev.off()
 
 ```{r Figure 2}
 
-  
-Fig2 <- ddply(dd,
+
+Fig2A <- transform(juv,Cohort = factor(LayYear)) %>%
+  subset(Agemonths>1) %>%
+  ggplot(aes(y = RTL,x = Cohort))+
+  xlab('Cohort') +
+  geom_boxplot() +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12,angle = 90), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'))
+  annotate('text',x = 0,y = 1.4,label = 'B')
+
+
+Fig2B <- ddply(dd,
                .(Agemonths,LayYear),
                summarise,
                meanRTL = mean(RTL),
@@ -137,11 +152,12 @@ Fig2 <- ddply(dd,
         mutate,
         nAges = length(meanRTL),
         minAge = min(Agemonths)) %>%
-  subset(minAge == 1) %>%
-  subset(n > 5) %>%
+  subset(LayYear %in% c(2001:2009)) %>%
+  subset(n>4) %>%
   transform(Cohort = factor(LayYear)) %>%
   ggplot(aes(x = Agemonths,y = meanRTL,col = Cohort))+
   xlab('Age (months)') +
+  ylab('Mean RTL') +
   geom_point()+
   geom_line()+
   theme_classic() +
@@ -150,7 +166,8 @@ Fig2 <- ddply(dd,
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
         axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'))
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'none')
   annotate('text',x = 0,y = 1.4,label = 'B')
 
 pdf('Figures/Figure 2.pdf',
@@ -265,13 +282,8 @@ dev.off()
 
 
 ```{r Figure 4}
-dd14$r <- sample(1:nrow(dd14),replace = F)
-temp <- dd14[order(dd14$BirdID,dd14$r,decreasing = F),] %>%
-  subset(!duplicated(BirdID)) %>%
-  subset(Died == 1)
-
-Fig4A <- ggplot(temp,
-       aes(x = Sex,
+Fig4A <- ggplot(dd14,
+       aes(x = Agemonths,
            col = factor(SurvivedNext),
            y = RTL)) +
   ylab('RTL') + 
@@ -284,23 +296,29 @@ Fig4A <- ggplot(temp,
                 axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'top') +
-  geom_boxplot(notch=T)
+  geom_point()+
+  geom_smooth(method = 'lm',formula = y~log(x))
   annotate('text',x = 17,y = 2.5,label = 'C')
 
 
-temp <- ddply(juv14,
-              .(LayYear,Fledged),
-              summarise,
-              MeanTL = median(RTL),
-              Survived = mean(SurvivedNext),
-              n = length(RTL)) %>%
-  subset(n > 9)
-
-ggplot(temp,aes(x = MeanTL,y = Survived,col = Fledged))+
+Fig4B <- ggplot(dd8,
+       aes(x = RTL,
+           y = RemainingLife,
+           col = Fledged)) +
+  ylab('RTL') + 
+  xlab('Age (months)') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+                axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'top') +
   geom_point()+
-  stat_smooth(method = 'lm')
+  geom_smooth(method = 'lm')
+  annotate('text',x = 17,y = 2.5,label = 'C')
 
-Fig4B <- ??
 
 pdf('Figures/Figure 4.pdf',
     width = 8,
@@ -310,14 +328,4 @@ multiplot(Fig4A,Fig4B,layout = matrix(c(1,2),nrow = 2,byrow = T))
 dev.off()
 
 ```
-
-
-x <- subset(dd14,Fledged == 'Fledglings')
-
-table(x$Sex,x$LayYear)
-
-dd14$SexAge <- paste(dd14$Fledged,dd14$Sex)
-
-ggplot(dd14,aes(x = Tarsus,y = RTL,col = SexAge))+
-geom_smooth(method = 'lm')
 
