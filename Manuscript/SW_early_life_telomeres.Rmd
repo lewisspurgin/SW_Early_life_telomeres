@@ -126,8 +126,9 @@ Within cohorts, the top model explaining variation in early-life RTL contained a
 #####Telomere dynamics and survival
 Early-life RTL was not related to survival to adulthood (estimate = `r round2(summary(glmer(SurvivedNext~RTL+LogAge+(1|PlateID)+(1|TerritoryID)+(1|LayYear),data=dd14,family = 'binomial'))$coefficients[2,1])`; P = `r round2(summary(glmer(SurvivedNext~RTL+LogAge+(1|TerritoryID)+(1|LayYear),data=dd14,family = 'binomial'))$coefficients[2,4])`), with no interaction effect between RTL and  age (estimate = `r round2(summary(glmer(SurvivedNext~RTL*LogAge+(1|TerritoryID)+(1|LayYear),data=dd14,family = 'binomial'))$coefficients[4,1])`; P = `r round2(summary(glmer(SurvivedNext~RTL*LogAge+(1|TerritoryID)+(1|LayYear),data=dd14,family = 'binomial'))$coefficients[4,4])`), suggesting that there were no age-specific effects of juvenile RTL on survival to adulthood.
 
-summary(glmer(SurvivedNext1~DeltaRTL+LogAge+(1|LayYear),data=dd3,family = 'binomial'))
+summary(glmer(SurvivedNext~RTL+LogAge+Sex+Tarsus+(1|LayYear),data=subset(dd14,Agemonths>30),family = 'binomial'))
 
+summary(coxph(Surv(RemainingLife,Died)~RTL+LogAge,data=dd8))
 
 ###Discussion
 Here we use one of the largest datasets to date to assess the relationships between early-life conditions, telomere dynamics and survival in a closed population of Seychelles warblers. We found that, as in other studies, telomeres are lost at the greatest rate early in life. We found that telomere dynamics are subject to strong cohort effects. Within cohorts, we found little evidence that the ecological or social environment influenced telomere dynamics, and we found no evidence that early-life telomere length is related to juvenile or later-life survival.
