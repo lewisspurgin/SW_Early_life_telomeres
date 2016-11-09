@@ -10,16 +10,16 @@ rm(list=ls())
 
 # Load relevant libraries -------------------------------------------------
 library(MuMIn)
-library(arm)
 library(plyr)
 library(ggplot2)
-library(gvlma)
 library(survival)
 library(nlme)
 library(magrittr)
-library(car)
 library(rptR)
 library(Rmisc)
+library(sjPlot)
+library(lme4)
+library(arm)
 
 # Load data ---------------------------------------------------------------
 dd0 <- read.csv('Data/REL_TL_EB_EAF_24 May aft TL queries.csv') #main dataset

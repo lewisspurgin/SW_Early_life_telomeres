@@ -13,18 +13,17 @@ dd0 <- subset(dd0,CqTelomere < 25) %>%
   subset(DiffGAPDH < 0.5) %>%
   subset(DiffTelomere < 0.5) %>%
   subset(RTL < 3) %>%
-  subset(BloodID>7) %>%
-  subset(!duplicated(paste0(CqTelomere,CqGAPDH)))
-
+  subset(BloodID>0)
 
 dd0$RTL <- sqrt(dd0$RTL)
+
 
 
 
 #Average repeats of blood samples
 dd0$RTL2 <- ave(dd0$RTL,c(dd0$BloodID,dd0$Status,dd0$PlateID))
 
-# rpt(RTL~(1|BloodID),grname = 'BloodID',data = dd0,nboot = 50)
+rptall <- rpt(RTL~(1|BloodID),grname = 'BloodID',data = dd0,nboot = 50)
 # rpt(RTL~(1|BloodID),grname = 'BloodID',data = subset(dd0,Whodunnit == "EB"),nboot = 50)
 # rpt(RTL~(1|BloodID),grname = 'BloodID',data = subset(dd0,Whodunnit == "EAF"),nboot = 50)
 # 
@@ -76,7 +75,7 @@ dd$Fledged <- factor(dd$Fledged,levels = c('Nestlings','Fledglings','Adults'))
 
 dd$Agemonths <- ifelse(dd$Ageclass == 'CH',1,
                        ifelse(dd$Ageclass == 'FL',6,
-                              ifelse(dd$Ageclass == 'SA',10,dd$Age*12+6)))
+                              ifelse(dd$Ageclass == 'SA',10,dd$Age*12+6)))/12
 
 
   #dd$Age[dd$Fledged != 'Adults'] <- 1

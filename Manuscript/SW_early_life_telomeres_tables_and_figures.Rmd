@@ -30,6 +30,23 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 
 ```
 
+
+**Table1**
+```{r Table 1}
+temp <- subset(dd,!is.na(Insect))
+
+
+#Run the model
+lm2 <- lmer(RTL ~  LogAge + Tarsus + Helper + GroupSize + Sex + BodyMass + Insect + Density + (1|LayYear) + (1|BirdID) + (1|PlateID),
+            data = temp,
+            REML = FALSE)
+CIs <- confint.merMod(lm2)
+t1 <- data.frame(Estimate = fixef(lm2), s.e. = se.fixef(lm2), LCI = CIs[5:nrow(CIs),1], UCI = CIs[5:nrow(CIs),2])
+kable(t1)
+
+```
+
+
 **Figure Legends**
 
 **Figure 1** RTL in relation to **(A)** age and **(B)** $\Delta$Age in Seychelles warblers. Lines and shaded areas are fitted values and 95% confidence limits from linear regressions.
@@ -53,8 +70,7 @@ Fig1A <- subset(dd,Age<15) %>%
         nreps = length(RTL)) %>%
   subset(nreps>0) %>%
   subset(!duplicated(paste0(BirdID,Agemonths))) %>%
-  transform(Agemonthsdec = Agemonths/12) %>%
-  ggplot(aes(x = Agemonthsdec,y = RTL,group = BirdID,col=factor(BirdID)))+
+  ggplot(aes(x = Agemonths,y = RTL,group = BirdID,col=factor(BirdID)))+
   geom_point(alpha = 1,col='grey')+
 geom_line(col = 'darkgrey',alpha = 0.2)+
   xlab('Age (years)') +
@@ -129,7 +145,7 @@ dev.off()
 
 
 Fig2A <- transform(juv,Cohort = factor(LayYear)) %>%
-  subset(Agemonths>1) %>%
+  subset(Agemonths>(1/12)) %>%
   ggplot(aes(y = RTL,x = Cohort))+
   xlab('Cohort') +
   geom_boxplot() +
@@ -156,7 +172,7 @@ Fig2B <- ddply(dd,
   subset(n>4) %>%
   transform(Cohort = factor(LayYear)) %>%
   ggplot(aes(x = Agemonths,y = meanRTL,col = Cohort))+
-  xlab('Age (months)') +
+  xlab('Age (years)') +
   ylab('Mean RTL') +
   geom_point()+
   geom_line()+
@@ -184,54 +200,7 @@ dev.off()
 
 ```{r Figure 3}
 
-temp <- subset(dd,!is.na(Insect))
-temp$LogAge <- log(temp$Agemonths)
-
-
-#Run the model
-lm2 <- lmer(RTL ~  LogAge + Tarsus + Helper + GroupSize + Sex + BodyMass + Insect + Density + (1|LayYear) + (1|BirdID) + (1|PlateID),
-            data = temp,
-            REML = FALSE)
-lm2 <- standardize(lm2)
-
-#Model averaging
-lm3 <- dredge(lm2)
-lm3 <- subset(lm3,delta <=6)
-lmavg <- model.avg(lm3,fit=T)
-myimp <- importance(lmavg) #Relative importance of each explanatory variable
-  
-
-#Put it all into a nice table
-table2 <- imptable(lmavg,myimp)
-table2 <- signif(table2,2)
-
-
-#Sort out row/col names
-nams <- rownames(table2)
-nams[nams == 'z.GroupSize'] <- 'Group Size'
-nams[nams == 'c.Sex'] <- 'Sex (males)'
-nams[nams == 'c.Helper'] <- 'Helpers'
-nams[nams == 'z.BodyMass'] <- 'Body mass'
-nams[nams == 'z.LogAge'] <- 'Log age'
-nams[nams == 'z.Tarsus'] <- 'Tarsus'
-nams[nams == 'z.Insect'] <- 'Insect abundance'
-nams[nams == 'z.CatchMonth'] <- 'Month'
-nams[nams == 'z.Density'] <- 'Density'
-
-rownames(table2) <- nams
-colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
-
-
-table2 <- data.frame(table2,myx=row.names(table2))
-table2$myx <- factor(table2$myx,levels = table2$myx[order(table2$Estimate,decreasing = T)])
-
-Fig3A <- forestplot(table2)+
-  annotate('text',x = 0.6,y = 0.05,label = 'A')+
-  theme(axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'))
-
-
-Fig3B <- ggplot(temp,
+Fig3A <- ggplot(temp,
        aes(x = Tarsus,
            y = RTL,
            col = Sex)) +
@@ -249,7 +218,7 @@ Fig3B <- ggplot(temp,
   stat_smooth(method = 'lm')
   annotate('text',x = 17,y = 2.5,label = 'C')
 
-Fig3C <- ggplot(temp,
+Fig3B <- ggplot(temp,
        aes(
            y = RTL,
            x=Insect)) +
@@ -269,63 +238,14 @@ Fig3C <- ggplot(temp,
 
 
 pdf('Figures/Figure 3.pdf',
-    width = 8,
+    width = 5,
     height = 8,
     paper = 'a4')
-multiplot(Fig3A,Fig3B,Fig3C,layout = matrix(c(1,1,2,3),nrow = 2,byrow = T))
+multiplot(Fig3A,Fig3B)
 dev.off()
 
 ```
 
 
 
-
-
-```{r Figure 4}
-Fig4A <- ggplot(dd14,
-       aes(x = Agemonths,
-           col = factor(SurvivedNext),
-           y = RTL)) +
-  ylab('RTL') + 
-  xlab('Age (months)') +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-                axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'),
-        legend.position = 'top') +
-  geom_point()+
-  geom_smooth(method = 'lm',formula = y~log(x))
-  annotate('text',x = 17,y = 2.5,label = 'C')
-
-
-Fig4B <- ggplot(dd8,
-       aes(x = RTL,
-           y = RemainingLife,
-           col = Fledged)) +
-  ylab('RTL') + 
-  xlab('Age (months)') +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-                axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'),
-        legend.position = 'top') +
-  geom_point()+
-  geom_smooth(method = 'lm')
-  annotate('text',x = 17,y = 2.5,label = 'C')
-
-
-pdf('Figures/Figure 4.pdf',
-    width = 8,
-    height = 8,
-    paper = 'a4')
-multiplot(Fig4A,Fig4B,layout = matrix(c(1,2),nrow = 2,byrow = T))
-dev.off()
-
-```
 

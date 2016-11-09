@@ -45,36 +45,32 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 
 ```{r Table S1}
 
-temp <- subset(juv,!is.na(cenTQ))
 
 #Run the model
-lm1 <- lmer(RTL ~ Agemonths * (Tarsus + Helper + NonHelper + Sex + BodyMass  + cenTQ) + (1|BirdID)+(1|FieldPeriodID)+(1|TerritoryID),
+temp <- subset(dd,!is.na(Insect))
+
+#Run the model
+lm2 <- lmer(RTL ~  LogAge + Tarsus + Helper + GroupSize + Sex + BodyMass + Insect + Density + (1|LayYear) + (1|BirdID) + (1|PlateID),
             data = temp,
             REML = FALSE)
-lm1 <- standardize(lm1)
+lm2 <- standardize(lm2)
 
 #Model averaging
-lm2 <- dredge(lm1)
-t1 <- as.matrix(subset(lm2, delta<=6))
+lm3 <- dredge(lm2)
+t1 <- as.matrix(subset(lm3, delta<=6))
 
 #Sort out row/col names
 nams <- colnames(t1)
 
-nams[nams == 'z.NonHelper'] <- 'Non helpers'
-nams[nams == 'c.Sex'] <- 'Sex'
-nams[nams == 'z.TQ'] <- 'TQ'
+nams[nams == 'z.GroupSize'] <- 'Group Size'
+nams[nams == 'c.Sex'] <- 'Sex (males)'
 nams[nams == 'c.Helper'] <- 'Helpers'
 nams[nams == 'z.BodyMass'] <- 'Body mass'
-nams[nams == 'z.Agemonths'] <- 'Age'
+nams[nams == 'z.LogAge'] <- 'Log age'
 nams[nams == 'z.Tarsus'] <- 'Tarsus'
-nams[nams == 'c.Season'] <- 'Season'
-nams[nams == 'c.Season:z.Agemonths'] <- 'Age x season'
-nams[nams == 'z.Agemonths:z.NonHelper'] <- 'Age x non helpers'
-nams[nams == 'c.Sex:z.Agemonths'] <- 'Age x sex'
-nams[nams == 'z.Agemonths:z.TQ'] <- 'Age x TQ'
-nams[nams == 'c.Helper:z.Agemonths'] <- 'Age x helpers'
-nams[nams == 'z.Agemonths:z.BodyMass'] <- 'Age x mass'
-nams[nams == 'z.Agemonths:z.Tarsus'] <- 'Age x tarsus'
+nams[nams == 'z.Insect'] <- 'Insect abundance'
+nams[nams == 'z.CatchMonth'] <- 'Month'
+nams[nams == 'z.Density'] <- 'Density'
 
 
 colnames(t1) <- nams
@@ -94,45 +90,31 @@ kable(tableS1,digits=2)
 **Table S2** Model selection table for analysis of factors affecting $\Delta$RTL in Seychelles warbler nestlings, using longitudinal data. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. TQ = territory quality.
 
 ```{r Table S2}
-temp <- dd3
-temp <- subset(temp,!is.na(TQ))
+#Run the model
+temp <- subset(dd3,!is.na(Insect))
 
 #Run the model
-lm1 <- lmer(DeltaRTL ~ Agemonths+(DeltaCondition + Sex + TQ) + (1|BirdID) + (1|FieldPeriodID) + (1|TerritoryID),
+lm2 <- lmer(DeltaRTL ~  LogAge + Tarsus + Helper + GroupSize + Sex + BodyMass + Insect + Density + (1|LayYear) + (1|PlateID),
             data = temp,
             REML = FALSE)
-
-lm1 <- glmer(DeltaRTLF ~ Agemonths+(Tarsus + Helper + Sex + BodyMass +TQ) + (1|TerritoryID) + (1|BirdID),
-            data = temp,
-            family = 'binomial',
-            control = glmerControl(optimizer = 'bobyqa'))
-
-lm1 <- standardize(lm1)
-summary(lm1)
-confint.merMod(lm1)
+lm2 <- standardize(lm2)
 
 #Model averaging
-lm2 <- dredge(lm1)
-t1 <- as.matrix(subset(lm2, delta<=6))
+lm3 <- dredge(lm2)
+t1 <- as.matrix(subset(lm3, delta<=6))
 
 #Sort out row/col names
 nams <- colnames(t1)
 
-nams[nams == 'z.NonHelper'] <- 'Non helpers'
-nams[nams == 'c.Sex'] <- 'Sex'
-nams[nams == 'z.TQ'] <- 'TQ'
+nams[nams == 'z.GroupSize'] <- 'Group Size'
+nams[nams == 'c.Sex'] <- 'Sex (males)'
 nams[nams == 'c.Helper'] <- 'Helpers'
 nams[nams == 'z.BodyMass'] <- 'Body mass'
-nams[nams == 'z.Agemonths'] <- 'Age'
+nams[nams == 'z.LogAge'] <- 'Log age'
 nams[nams == 'z.Tarsus'] <- 'Tarsus'
-nams[nams == 'c.Season'] <- 'Season'
-nams[nams == 'c.Season:z.Agemonths'] <- 'Age x season'
-nams[nams == 'z.Agemonths:z.NonHelper'] <- 'Age x non helpers'
-nams[nams == 'c.Sex:z.Agemonths'] <- 'Age x sex'
-nams[nams == 'z.Agemonths:z.TQ'] <- 'Age x TQ'
-nams[nams == 'c.Helper:z.Agemonths'] <- 'Age x helpers'
-nams[nams == 'z.Agemonths:z.BodyMass'] <- 'Age x mass'
-nams[nams == 'z.Agemonths:z.Tarsus'] <- 'Age x tarsus'
+nams[nams == 'z.Insect'] <- 'Insect abundance'
+nams[nams == 'z.CatchMonth'] <- 'Month'
+nams[nams == 'z.Density'] <- 'Density'
 
 
 colnames(t1) <- nams
@@ -146,43 +128,110 @@ kable(tableS1,digits=2)
 
 ```
 
-ggplot(dd3,aes(x = DeltaMass,y = (DeltaRTL)))+
-geom_point()+
-stat_smooth(method = 'lm')
-
-
 
 **Figure S1** $\Delta$RTL in relation to the time between sampling events. Lines and shaded areas represent fitted values and 95% confidence limits from general linear models. See also Figure 4, main text.
 
 
+
 ```{r Figure S1}
-
-temp <- Loss
-temp[,'Age (months)'] <- factor(temp$Agemonths)
-temp$LayYear <- factor(temp$LayYear)
-temp$TimeDiff <- temp$TimeDiff/365
+temp <- subset(dd,!is.na(Insect))
+temp$LogAge <- log(temp$Agemonths)
 
 
-FigS1 <- ggplot(temp,
-       aes(x = TimeDiff,
-           y = Loss,
-           colour=`Age (months)`,
-           fill = `Age (months)`)) +
-  ylab(expression(Delta*'RTL')) + 
-  xlab('Time (years)') +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        legend.position = 'top') +
-  geom_point()+
-  stat_smooth(method = 'lm')+
-  scale_colour_manual(values = c('grey','darkorange','darkgreen'))+
-  scale_fill_manual(values = c('grey','darkorange','darkgreen'))+
-    geom_abline(slope = 0,intercept = 0,lty = 2)+
-  annotate('text',x = 0,y = 1.75,label = 'B')
+#Run the model
+lm2 <- lmer(RTL ~  LogAge + Tarsus + Helper + GroupSize + Sex + BodyMass + Insect + Density + (1|LayYear) + (1|BirdID) + (1|PlateID),
+            data = temp,
+            REML = FALSE)
+lm2 <- standardize(lm2)
+
+#Model averaging
+lm3 <- dredge(lm2)
+lm3 <- subset(lm3,delta <=6)
+lmavg <- model.avg(lm3,fit=T)
+myimp <- importance(lmavg) #Relative importance of each explanatory variable
+  
+
+#Put it all into a nice table
+table2 <- imptable(lmavg,myimp)
+table2 <- signif(table2,2)
+
+
+#Sort out row/col names
+nams <- rownames(table2)
+nams[nams == 'z.GroupSize'] <- 'Group Size'
+nams[nams == 'c.Sex'] <- 'Sex (males)'
+nams[nams == 'c.Helper'] <- 'Helpers'
+nams[nams == 'z.BodyMass'] <- 'Body mass'
+nams[nams == 'z.LogAge'] <- 'Log age'
+nams[nams == 'z.Tarsus'] <- 'Tarsus'
+nams[nams == 'z.Insect'] <- 'Insect abundance'
+nams[nams == 'z.CatchMonth'] <- 'Month'
+nams[nams == 'z.Density'] <- 'Density'
+
+rownames(table2) <- nams
+colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
+
+
+table2 <- data.frame(table2,myx=row.names(table2))
+table2$myx <- factor(table2$myx,levels = table2$myx[order(table2$Estimate,decreasing = T)])
+
+FigS1 <- forestplot(table2)+
+  annotate('text',x = 0.6,y = 0.05,label = 'A')+
+  theme(axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'))
 
 FigS1
+
+
+```
+
+```{r Figure S2}
+
+#Run the model
+temp <- subset(dd3,!is.na(Insect))
+
+#Run the model
+lm2 <- lmer(DeltaRTL ~  LogAge + Tarsus + Helper + GroupSize + Sex + BodyMass + Insect + Density + (1|LayYear) + (1|PlateID),
+            data = temp,
+            REML = FALSE)
+lm2 <- standardize(lm2)
+
+#Model averaging
+lm3 <- dredge(lm2)
+lm3 <- subset(lm3,delta <=6)
+lmavg <- model.avg(lm3,fit=T)
+myimp <- importance(lmavg) #Relative importance of each explanatory variable
+  
+
+#Put it all into a nice table
+table2 <- imptable(lmavg,myimp)
+table2 <- signif(table2,2)
+
+
+#Sort out row/col names
+nams <- rownames(table2)
+nams[nams == 'z.GroupSize'] <- 'Group Size'
+nams[nams == 'c.Sex'] <- 'Sex (males)'
+nams[nams == 'c.Helper'] <- 'Helpers'
+nams[nams == 'z.BodyMass'] <- 'Body mass'
+nams[nams == 'z.LogAge'] <- 'Log age'
+nams[nams == 'z.Tarsus'] <- 'Tarsus'
+nams[nams == 'z.Insect'] <- 'Insect abundance'
+nams[nams == 'z.CatchMonth'] <- 'Month'
+nams[nams == 'z.Density'] <- 'Density'
+
+rownames(table2) <- nams
+colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
+
+
+table2 <- data.frame(table2,myx=row.names(table2))
+table2$myx <- factor(table2$myx,levels = table2$myx[order(table2$Estimate,decreasing = T)])
+
+FigS2 <- forestplot(table2)+
+  annotate('text',x = 0.6,y = 0.05,label = 'A')+
+  theme(axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'))
+
+FigS2
 
 ```
