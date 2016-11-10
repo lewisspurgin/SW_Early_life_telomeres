@@ -49,23 +49,18 @@ kable(t1)
 
 **Figure Legends**
 
-**Figure 1** RTL in relation to **(A)** age and **(B)** $\Delta$Age in Seychelles warblers. Lines and shaded areas are fitted values and 95% confidence limits from linear regressions.
+**Figure 1** Telomere length in relation to age in Seychelles warblers. Points and  thin grey lines represent individual samples and birds, respectively. The thick line and shaded area represent the fitted values and 95% confidence limits of a linea regression of RTL and log-transformed age.
 
-**Figure 2** Cohort effects on early-life RTL in Seychelles warblers. **A** temporal variation RTL in major and minor cohorts, **B** temporal variation in adult population size, and **C** early-life RTL in relation to cohort-level variation in adult population size. Lines and shaded areas in **C** are fitted values and 95% confidence limits from general linear models.
+**Figure 2** Longitudinal telomere dynamics in the Seychelles warbler. **A** Variation in RTL within individuals sampled at different time points. The dotted line represents parity, and thus points above and below the line represent increases and decreases in RTL, respectively. **B** Scaled density plots of repeated RTL measurements among individual samples, and among different samples taken from the same individual.
 
-**Figure 3** Factors affecting early-life RTL in Seychelles warblers. **A** Model averaged estimates and 95% confidence intervals for explanatory terms used in a linear mixed model with RTL as the response variable (see main text for details; TQ = territory quality). **B,C** Early-life RTL and age in relation to tarsus length (**B**) and sex (**C**). Lines and shaded areas in **B** are fitted values and 95% confidence limits from a general linear model.
+**Figure 3** Cohort variaiton in telomere length in the Seychelles warbler. **A** Bocplot of RTL among all Seychelles warbler cohorts. **B** Relationship between RTL and age in individual cohorts. Only cohorts with samples of at least 10 nestlings were included. Lines represent represents the fitted values from a linear regression of RTL and log-transformed age.
 
-**Figure 4** Longitudinal telomere dynamics in juvenile Seychelles warblers. **A** juvenile telomere length in relation to adult telomere length measured in the same individual. **B** $\Delta$RTL in relation to the time between sampling events. Lines and shaded areas represent fitted values and 95% confidence limits from general linear models. Raw data have been ommited from **B** for the sake of clarity, but are plotted in Figure S1.
-
-**Figure 5** Factors affecting $\Delta$RTL in juvenile Seychelles warblers. **A** Model averaged estimates and 95% confidence intervals for explanatory terms used in a linear mixed model with $\Delta$RTL as the response variable (see main text for details; TQ = territory quality). **B** $\Delta$RTL in relation to tarsus length and sex.
-
-
-
+**Figure 4** Individual variation in telomere length in Seychelles warbler. **A** RTL in relation to tarsus length and sex. **B** RTL in relation to variation in annual food availability. Lines and shaded areas represent the fitted values and 95% confidence limits from linear regressions.
 
 ```{r Figure 1}
 
-Fig1A <- subset(dd,Age<15) %>%
-  ddply(.(BirdID),
+Fig1 <- ddply(dd,
+               .(BirdID),
         mutate,
         nreps = length(RTL)) %>%
   subset(nreps>0) %>%
@@ -86,7 +81,21 @@ geom_line(col = 'darkgrey',alpha = 0.2)+
   annotate('text',x = 0,y = 3,label = 'A')
 
 
-Fig1B <- ggplot(dd3,
+
+
+pdf('Figures/Figure 1.pdf',
+    width = 4,
+    height = 4,
+    paper = 'a4')
+Fig1
+dev.off()
+
+```
+
+
+```{r Figure 2}
+
+Fig2A <- ggplot(dd3,
        aes(x = RTL,
            y = RTL1)) +
   ylab(expression('RTL ('*italic(t)*' + 1)')) + 
@@ -106,7 +115,7 @@ Fig1B <- ggplot(dd3,
 
 
 
-Fig1C <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
+Fig2B <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
     geom_density(alpha = 0.2)+
   theme_classic()+
   ylab ('Scaled density')+
@@ -124,27 +133,22 @@ Fig1C <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
   geom_vline(xintercept = 0,lty = 2)
   annotate('text',x = -2,y = 1,label = 'C')
 
-
-
-pdf('Figures/Figure 1.pdf',
-    width = 8,
+pdf('Figures/Figure 2.pdf',
+    width = 5,
     height = 8,
     paper = 'a4')
-multiplot(Fig1A,Fig1B,Fig1C,layout=matrix(c(1,1,1,1,2,3),nrow=3,byrow=T))
+multiplot(Fig2A,Fig2B)
 dev.off()
 
+  
 ```
 
 
 
+```{r Figure 3}
 
 
-
-
-```{r Figure 2}
-
-
-Fig2A <- transform(juv,Cohort = factor(LayYear)) %>%
+Fig3A <- transform(juv,Cohort = factor(LayYear)) %>%
   subset(Agemonths>(1/12)) %>%
   ggplot(aes(y = RTL,x = Cohort))+
   xlab('Cohort') +
@@ -159,38 +163,28 @@ Fig2A <- transform(juv,Cohort = factor(LayYear)) %>%
   annotate('text',x = 0,y = 1.4,label = 'B')
 
 
-Fig2B <- ddply(dd,
-               .(Agemonths,LayYear),
-               summarise,
-               meanRTL = mean(RTL),
-               n = length(RTL))  %>%
-  ddply(.(LayYear),
+Fig3B <- transform(dd,Cohort = factor(LayYear)) %>%
+  ddply(.(Cohort),
         mutate,
-        nAges = length(meanRTL),
-        minAge = min(Agemonths)) %>%
-  subset(LayYear %in% c(2001:2009)) %>%
-  subset(n>4) %>%
-  transform(Cohort = factor(LayYear)) %>%
-  ggplot(aes(x = Agemonths,y = meanRTL,col = Cohort))+
+        nc = length(which(Agemonths ==1/12))) %>%
+  subset(nc > 11) %>%
+  ggplot(aes(y = RTL,x = Agemonths, col = Cohort))+
   xlab('Age (years)') +
-  ylab('Mean RTL') +
-  geom_point()+
-  geom_line()+
+  geom_smooth(method = 'lm', formula = y~log(x),se = F) +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
         axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'),
-        legend.position = 'none')
+        axis.line.y = element_line(colour = 'black'))
   annotate('text',x = 0,y = 1.4,label = 'B')
 
-pdf('Figures/Figure 2.pdf',
+pdf('Figures/Figure 3.pdf',
     width = 5,
     height = 8,
     paper = 'a4')
-multiplot(Fig2A,Fig2B)
+multiplot(Fig3A,Fig3B)
 dev.off()
 
 
@@ -198,9 +192,9 @@ dev.off()
 
 
 
-```{r Figure 3}
+```{r Figure 4}
 
-Fig3A <- ggplot(temp,
+Fig4A <- ggplot(temp,
        aes(x = Tarsus,
            y = RTL,
            col = Sex)) +
@@ -218,7 +212,7 @@ Fig3A <- ggplot(temp,
   stat_smooth(method = 'lm')
   annotate('text',x = 17,y = 2.5,label = 'C')
 
-Fig3B <- ggplot(temp,
+Fig4B <- ggplot(temp,
        aes(
            y = RTL,
            x=Insect)) +
@@ -237,11 +231,11 @@ Fig3B <- ggplot(temp,
   annotate('text',x = 2.5,y = 2.5,label = 'D')
 
 
-pdf('Figures/Figure 3.pdf',
-    width = 5,
+pdf('Figures/Figure 4.pdf',
+    width = 4,
     height = 8,
     paper = 'a4')
-multiplot(Fig3A,Fig3B)
+multiplot(Fig4A,Fig4B)
 dev.off()
 
 ```
