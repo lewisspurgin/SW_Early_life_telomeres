@@ -46,6 +46,21 @@ kable(t1)
 
 ```
 
+**Table 2**
+
+```{r Table 2}
+temp <- subset(dd3,!is.na(Insect))
+
+
+#Run the model
+lm2 <- lmer(DeltaRTL ~  LogAge + Tarsus + Helper + GroupSize + Sex + BodyMass + Insect + Density + (1|LayYear) + (1|BirdID) + (1|PlateID),
+            data = temp,
+            REML = FALSE)
+CIs <- confint.merMod(lm2)
+t1 <- data.frame(Estimate = fixef(lm2), s.e. = se.fixef(lm2), LCI = CIs[5:nrow(CIs),1], UCI = CIs[5:nrow(CIs),2])
+kable(t1)
+
+```
 
 **Figure Legends**
 
