@@ -163,7 +163,7 @@ dev.off()
 ```{r Figure 3}
 
 
-Fig3A <- transform(juv,Cohort = factor(LayYear)) %>%
+Fig3A <- transform(juv,Cohort = factor(CatchYear)) %>%
   subset(Agemonths>(1/12)) %>%
   ggplot(aes(y = RTL,x = Cohort))+
   xlab('Cohort') +
@@ -178,7 +178,7 @@ Fig3A <- transform(juv,Cohort = factor(LayYear)) %>%
   annotate('text',x = 0,y = 1.4,label = 'B')
 
 
-Fig3B <- transform(dd,Cohort = factor(LayYear)) %>%
+Fig3B <- transform(dd,Cohort = factor(CatchYear)) %>%
   ddply(.(Cohort),
         mutate,
         nc = length(which(Agemonths ==1/12))) %>%

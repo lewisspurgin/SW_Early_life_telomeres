@@ -457,3 +457,7 @@ give.n <- function(x)
   return(c(y = median(x)*0.96, label = length(x)))
   }
 
+CIwald <- function(model)
+{
+  confint.merMod(model,method = 'Wald')
+}
