@@ -33,15 +33,10 @@ source('Scripts/SW juvenile telomeres IPC clean.r')
 
 **Table1**
 ```{r Table 1}
-temp <- subset(dd,!is.na(Insect))
 
-
-#Run the model
-lm2 <- lmer(RTL ~  LogAge + Tarsus + Helper + GroupSize + Sex + BodyMass + Insect + Density + (1|LayYear) + (1|BirdID) + (1|PlateID),
-            data = temp,
-            REML = FALSE)
-CIs <- confint.merMod(lm2)
-t1 <- data.frame(Estimate = fixef(lm2), s.e. = se.fixef(lm2), LCI = CIs[5:nrow(CIs),1], UCI = CIs[5:nrow(CIs),2])
+ 
+CIs <- CIwald(RTL_Full)
+t1 <- data.frame(Estimate = fixef(RTL_Full), LCI = CIs[6:nrow(CIs),1], UCI = CIs[6:nrow(CIs),2])
 kable(t1)
 
 ```
@@ -49,15 +44,13 @@ kable(t1)
 **Table 2**
 
 ```{r Table 2}
+
 temp <- subset(dd3,!is.na(Insect))
 
 
 #Run the model
-lm2 <- lmer(DeltaRTL ~  LogAge + Tarsus + Helper + GroupSize + Sex + BodyMass + Insect + Density + (1|LayYear) + (1|BirdID) + (1|PlateID),
-            data = temp,
-            REML = FALSE)
-CIs <- confint.merMod(lm2)
-t1 <- data.frame(Estimate = fixef(lm2), s.e. = se.fixef(lm2), LCI = CIs[5:nrow(CIs),1], UCI = CIs[5:nrow(CIs),2])
+CIs <- CIwald(DeltaRTL_Full)
+t1 <- data.frame(Estimate = fixef(DeltaRTL_Full), LCI = CIs[4:nrow(CIs),1], UCI = CIs[4:nrow(CIs),2])
 kable(t1)
 
 ```
