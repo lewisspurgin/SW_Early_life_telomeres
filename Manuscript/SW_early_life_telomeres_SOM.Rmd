@@ -176,7 +176,6 @@ table2 <- data.frame(table2,myx=row.names(table2))
 table2$myx <- factor(table2$myx,levels = table2$myx[order(table2$Estimate,decreasing = T)])
 
 FigS1 <- forestplot(table2)+
-  annotate('text',x = 0.6,y = 0.05,label = 'A')+
   theme(axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'))
 
@@ -228,7 +227,6 @@ table2 <- data.frame(table2,myx=row.names(table2))
 table2$myx <- factor(table2$myx,levels = table2$myx[order(table2$Estimate,decreasing = T)])
 
 FigS2 <- forestplot(table2)+
-  annotate('text',x = 0.6,y = 0.05,label = 'A')+
   theme(axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'))
 

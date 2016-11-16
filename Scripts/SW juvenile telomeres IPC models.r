@@ -28,7 +28,9 @@ RTL_Full <- lmer(RTL ~  LogAge + Tarsus + Helper + GroupSize + Sex + BodyMass + 
 RTL_Full_NoTarsus <- lmer(RTL ~  LogAge + Helper + GroupSize + Sex + BodyMass + Insect + Density + (Agemonths|CatchYear) + (1|BirdID),
                           data = subset(dd,!is.na(Insect)),
                           REML = FALSE)
-
+RTL_Full_SexTarsus <- lmer(RTL ~  LogAge + Helper + GroupSize + Sex + BodyMass + Insect + Density + Sex*Tarsus + (Agemonths|CatchYear) + (1|BirdID),
+                          data = subset(dd,!is.na(Insect)),
+                          REML = FALSE)
 DeltaRTL_Full <- lmer(DeltaRTL ~  LogAge + Tarsus + Helper + GroupSize + Sex + BodyMass + Insect + Density + (1|CatchYear) + (1|BirdID),
                              data = subset(dd3,!is.na(Insect)),
                              REML = FALSE)
