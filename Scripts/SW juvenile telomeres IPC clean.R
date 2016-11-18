@@ -9,11 +9,11 @@
 
 dd0 <- subset(dd0,CqTelomere < 25) %>%
   subset(CqGAPDH < 26) %>%
-  subset(CqGAPDH > 19) %>%
+  subset(CqGAPDH > 21) %>%
   subset(DiffGAPDH < 0.5) %>%
   subset(DiffTelomere < 0.5) %>%
   subset(RTL < 3) %>%
-  subset(BloodID>0)
+  subset(BloodID>6)
 
 dd0$RTL <- sqrt(dd0$RTL)
 

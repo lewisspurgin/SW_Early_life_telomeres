@@ -26,7 +26,7 @@ opts_chunk$set(include=FALSE,
 source('Scripts/SW juvenile telomeres IPC load.r')
 source('Scripts/SW juvenile telomeres IPC functions.r')
 source('Scripts/SW juvenile telomeres IPC clean.r')
-
+source('Scripts/SW juvenile telomeres IPC models.r')
 
 ```
 
@@ -101,9 +101,56 @@ dev.off()
 ```
 
 
+
 ```{r Figure 2}
 
-Fig2A <- ggplot(dd3,
+
+Fig2A <- transform(juv,Cohort = factor(CatchYear)) %>%
+  subset(Agemonths>(1/12)) %>%
+  ggplot(aes(y = RTL,x = Cohort))+
+  xlab('Cohort') +
+  geom_boxplot() +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12,angle = 90), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'))
+  annotate('text',x = 0,y = 1.4,label = 'B')
+
+
+Fig2B <- transform(dd,Cohort = factor(CatchYear)) %>%
+  ddply(.(Cohort),
+        mutate,
+        nc = length(which(Agemonths ==1/12))) %>%
+  subset(nc > 11) %>%
+  ggplot(aes(y = RTL,x = Agemonths, col = Cohort))+
+  xlab('Age (years)') +
+  geom_smooth(method = 'lm', formula = y~log(x),se = F) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'))
+  annotate('text',x = 0,y = 1.4,label = 'B')
+
+pdf('Figures/Figure 2.pdf',
+    width = 5,
+    height = 8,
+    paper = 'a4')
+multiplot(Fig2A,Fig2B)
+dev.off()
+
+
+```
+
+
+```{r Figure 3}
+
+Fig3A <- ggplot(dd3,
        aes(x = RTL,
            y = RTL1)) +
   ylab(expression('RTL ('*italic(t)*' + 1)')) + 
@@ -123,7 +170,7 @@ Fig2A <- ggplot(dd3,
 
 
 
-Fig2B <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
+Fig3B <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
     geom_density(alpha = 0.2)+
   theme_classic()+
   ylab ('Scaled density')+
@@ -141,53 +188,6 @@ Fig2B <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
   geom_vline(xintercept = 0,lty = 2)
   annotate('text',x = -2,y = 1,label = 'C')
 
-pdf('Figures/Figure 2.pdf',
-    width = 5,
-    height = 8,
-    paper = 'a4')
-multiplot(Fig2A,Fig2B)
-dev.off()
-
-  
-```
-
-
-
-```{r Figure 3}
-
-
-Fig3A <- transform(juv,Cohort = factor(CatchYear)) %>%
-  subset(Agemonths>(1/12)) %>%
-  ggplot(aes(y = RTL,x = Cohort))+
-  xlab('Cohort') +
-  geom_boxplot() +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12,angle = 90), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'))
-  annotate('text',x = 0,y = 1.4,label = 'B')
-
-
-Fig3B <- transform(dd,Cohort = factor(CatchYear)) %>%
-  ddply(.(Cohort),
-        mutate,
-        nc = length(which(Agemonths ==1/12))) %>%
-  subset(nc > 11) %>%
-  ggplot(aes(y = RTL,x = Agemonths, col = Cohort))+
-  xlab('Age (years)') +
-  geom_smooth(method = 'lm', formula = y~log(x),se = F) +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'))
-  annotate('text',x = 0,y = 1.4,label = 'B')
-
 pdf('Figures/Figure 3.pdf',
     width = 5,
     height = 8,
@@ -195,7 +195,7 @@ pdf('Figures/Figure 3.pdf',
 multiplot(Fig3A,Fig3B)
 dev.off()
 
-
+  
 ```
 
 
