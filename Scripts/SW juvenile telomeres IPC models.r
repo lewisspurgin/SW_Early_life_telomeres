@@ -22,15 +22,20 @@ RTL_DeltaAge_AgeCY <- lmer(RTL~DeltaAge + (1|BirdID) + (DeltaAge|CatchYear),data
 
 # RTL and ecology ---------------------------------------------------------
 
-RTL_Full <- lmer(RTL ~  LogAge + Tarsus + Helper + GroupSize + Sex + BodyMass + Insect + Density + (Agemonths|CatchYear) + (1|BirdID) + (1|PlateID),
-                 data = subset(dd,!is.na(Insect)),
+ddNA <- subset(subset(dd,!is.na(Insect)),!is.na(TQ))
+dd3NA <- subset(subset(dd3,!is.na(Insect)),!is.na(TQ))
+
+RTL_Full <- lmer(RTL ~  LogAge + Tarsus + Helper + GroupSize + Sex + BodyMass + Insect + Density + TQ + (Agemonths|CatchYear) + (1|BirdID) + (1|PlateID),
+                 data = ddNA,
                  REML = FALSE)
-RTL_Full_NoTarsus <- lmer(RTL ~  LogAge + Helper + GroupSize + Sex + BodyMass + Insect + Density + (Agemonths|CatchYear) + (1|BirdID) + (1|PlateID),
-                          data = subset(dd,!is.na(Insect)),
+RTL_Full_NoTarsus <- lmer(RTL ~  LogAge + Helper + GroupSize + Sex + BodyMass + Insect + Density + TQ + (Agemonths|CatchYear) + (1|BirdID) + (1|PlateID),
+                          data = ddNA,
                           REML = FALSE)
-RTL_Full_SexTarsus <- lmer(RTL ~  LogAge + Helper + GroupSize + Sex + BodyMass + Insect + Density + Sex*Tarsus + (Agemonths|CatchYear) + (1|BirdID) + (1|PlateID),
-                          data = subset(dd,!is.na(Insect)),
+RTL_Full_SexTarsus <- lmer(RTL ~  LogAge + Helper + GroupSize + Sex + BodyMass + Insect + Density + Sex*Tarsus + TQ + (Agemonths|CatchYear) + (1|BirdID) + (1|PlateID),
+                          data = ddNA,
                           REML = FALSE)
-DeltaRTL_Full <- lmer(DeltaRTL ~  LogAge + Tarsus + Helper + GroupSize + Sex + BodyMass + Insect + Density + (1|CatchYear) + (1|BirdID),
-                             data = subset(dd3,!is.na(Insect)),
+DeltaRTL_Full <- lmer(DeltaRTL ~  LogAge + Tarsus + Helper + GroupSize + Sex + BodyMass + Insect + Density + TQ + (1|CatchYear) + (1|BirdID),
+                      data = dd3NA,
                              REML = FALSE)
+
+

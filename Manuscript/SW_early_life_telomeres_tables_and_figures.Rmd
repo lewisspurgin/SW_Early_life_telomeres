@@ -30,13 +30,36 @@ source('Scripts/SW juvenile telomeres IPC models.r')
 
 ```
 
-
-**Table1**
+**Table 1**
 ```{r Table 1}
 
  
+AIC(RTL_LogAge)
+AIC(RTL_LogAge_LY)
+
+
+```
+
+
+**Table 2**
+```{r Table 2}
+
+ 
 CIs <- CIwald(RTL_Full)
-t1 <- data.frame(Estimate = fixef(RTL_Full), LCI = CIs[6:nrow(CIs),1], UCI = CIs[6:nrow(CIs),2])
+t1 <- data.frame(Estimate = fixef(RTL_Full), LCI = CIs[7:nrow(CIs),1], UCI = CIs[7:nrow(CIs),2])
+
+nams <- row.names(t1)
+nams[nams == 'LogAge'] <- 'Age'
+nams[nams == 'Tarsus'] <- 'Tarsus length'
+nams[nams == 'Helper'] <- 'Number helpers'
+nams[nams == 'GroupSize'] <- 'Group size'
+nams[nams == 'SexMales'] <- 'Sex (males)'
+nams[nams == 'BodyMass'] <- 'Body mass'
+nams[nams == 'Insect'] <- 'Annual food availability'
+nams[nams == 'TQ'] <- 'Territory quality'
+
+row.names(t1) <- nams
+
 kable(t1)
 
 ```
@@ -45,12 +68,22 @@ kable(t1)
 
 ```{r Table 2}
 
-temp <- subset(dd3,!is.na(Insect))
-
-
 #Run the model
 CIs <- CIwald(DeltaRTL_Full)
 t1 <- data.frame(Estimate = fixef(DeltaRTL_Full), LCI = CIs[4:nrow(CIs),1], UCI = CIs[4:nrow(CIs),2])
+
+nams <- row.names(t1)
+nams[nams == 'LogAge'] <- 'Age'
+nams[nams == 'Tarsus'] <- 'Tarsus length'
+nams[nams == 'Helper'] <- 'Number helpers'
+nams[nams == 'GroupSize'] <- 'Group size'
+nams[nams == 'SexMales'] <- 'Sex (males)'
+nams[nams == 'BodyMass'] <- 'Body mass'
+nams[nams == 'Insect'] <- 'Annual food availability'
+nams[nams == 'TQ'] <- 'Territory quality'
+
+row.names(t1) <- nams
+
 kable(t1)
 
 ```
@@ -67,7 +100,7 @@ kable(t1)
 
 ```{r Figure 1}
 
-Fig1 <- ddply(dd,
+Fig1A <- ddply(dd,
                .(BirdID),
         mutate,
         nreps = length(RTL)) %>%
@@ -85,17 +118,31 @@ geom_line(col = 'darkgrey',alpha = 0.2)+
         axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'none')+
-  geom_smooth(col = 'black',fill = 'black',lwd = 0.5,aes(group = NULL),method = 'lm',formula = y~log(x))
-  annotate('text',x = 0,y = 3,label = 'A')
+  geom_smooth(col = 'black',fill = 'black',lwd = 0.5,aes(group = NULL),method = 'lm',formula = y~log(x))+
+  annotate('text',x = 0,y = 1.7,label = 'A')
 
+
+  Fig1B <- ggplot(dd3, aes(x = DeltaAge,y = RTL))+
+  geom_point(alpha = 1,col='grey')+
+  xlab(expression(Delta*'Age (years)')) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'none')+
+  geom_smooth(col = 'black',method = 'lm')+
+  annotate('text',x = -7.5,y = 1.7,label = 'B')
 
 
 
 pdf('Figures/Figure 1.pdf',
     width = 4,
-    height = 4,
+    height = 8,
     paper = 'a4')
-Fig1
+multiplot(Fig1A,Fig1B)
 dev.off()
 
 ```
@@ -103,28 +150,36 @@ dev.off()
 
 
 ```{r Figure 2}
+c15 <- c("dodgerblue2","#E31A1C", # red
+                "green4",
+                "#FF7F00", # orange
+                "gold1",
+                "skyblue2", # lt pink
+                "palegreen2",
+                "#FDBF6F", # lt orange
+                "gray70", "khaki2","blue1","steelblue4",
+                "darkturquoise",
+                "darkorange4","brown")
 
-
-Fig2A <- transform(juv,Cohort = factor(CatchYear)) %>%
-  subset(Agemonths>(1/12)) %>%
-  ggplot(aes(y = RTL,x = Cohort))+
-  xlab('Cohort') +
-  geom_boxplot() +
+Fig2A <- transform(dd,Cohort = factor(LayYear)) %>%
+  subset(Cohort %in% c(2002:2011)) %>%
+  ggplot(aes(y = RTL,x = Cohort,fill = Cohort))+
+  xlab('Birth year') +
+  geom_boxplot(notch=T) +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12,angle = 90), 
         axis.text.y = element_text(size = 12), 
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
         axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'))
-  annotate('text',x = 0,y = 1.4,label = 'B')
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'none')+
+  scale_fill_manual(values = c15)+
+  annotate('text',x = 1,y = 1.7,label = 'A')
 
 
-Fig2B <- transform(dd,Cohort = factor(CatchYear)) %>%
-  ddply(.(Cohort),
-        mutate,
-        nc = length(which(Agemonths ==1/12))) %>%
-  subset(nc > 11) %>%
+Fig2B <- transform(dd,Cohort = factor(LayYear)) %>%
+  subset(Cohort %in% c(2002:2011)) %>%
   ggplot(aes(y = RTL,x = Agemonths, col = Cohort))+
   xlab('Age (years)') +
   geom_smooth(method = 'lm', formula = y~log(x),se = F) +
@@ -134,18 +189,156 @@ Fig2B <- transform(dd,Cohort = factor(CatchYear)) %>%
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
         axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'))
-  annotate('text',x = 0,y = 1.4,label = 'B')
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'none') +
+    scale_color_manual(values = c15)+
+  annotate('text',x = 0,y = 1.15,label = 'B')
 
+Fig2C <- transform(dd,Cohort = factor(CatchYear)) %>%
+  subset(Cohort %in% c(2002:2011)) %>%
+  ggplot(aes(y = RTL,x = Cohort,fill = Cohort))+
+  xlab('Sampling year') +
+  geom_boxplot(notch=T) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12,angle = 90), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'none') + 
+    scale_fill_manual(values = c15)+
+  annotate('text',x = 1,y = 1.7,label = 'C')
+
+
+Fig2D <- transform(dd,Cohort = factor(CatchYear)) %>%
+  subset(Cohort %in% c(2002:2011)) %>%
+  ggplot(aes(y = RTL,x = Agemonths, col = Cohort))+
+  xlab('Age (years)') +
+  geom_smooth(method = 'lm', formula = y~log(x),se = F) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'none') +
+    scale_color_manual(values = c15)+
+  annotate('text',x = 0,y = 1.15,label = 'D')  
+  
 pdf('Figures/Figure 2.pdf',
-    width = 5,
+    width = 8,
     height = 8,
     paper = 'a4')
-multiplot(Fig2A,Fig2B)
+multiplot(Fig2A,Fig2B,Fig2C,Fig2D,layout = matrix(1:4, 2, 2,byrow = T))
 dev.off()
 
 
 ```
+
+
+
+
+
+
+
+
+```{r Figure 2}
+
+c15 <- c("dodgerblue2","#E31A1C", # red
+                "green4",
+                "#FF7F00", # orange
+                "gold1",
+                "skyblue2", # lt pink
+                "palegreen2",
+                "#FDBF6F", # lt orange
+                "gray70", "khaki2","blue1","steelblue4",
+                "darkturquoise",
+                "darkorange4","brown")
+
+Fig2A <- transform(dd,Cohort = factor(LayYear)) %>%
+  subset(Cohort %in% c(2002:2011)) %>%
+  ggplot(aes(y = RTL,x = Cohort,fill = Cohort))+
+  xlab('Birth year') +
+  geom_boxplot(notch=T) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12,angle = 90), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'none')+
+  scale_fill_manual(values = c15)+
+  annotate('text',x = 1,y = 1.7,label = 'A')
+
+
+Fig2B <- transform(dd3,Cohort = factor(LayYear)) %>%
+  subset(Cohort %in% c(2002:2011)) %>%
+  ggplot(aes(y = RTL,x = DeltaAge, col = Cohort))+
+  xlab('Age (years)') +
+  geom_smooth(method = 'lm', formula = y~(x),se = F) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'none') +
+    scale_color_manual(values = c15)+
+  annotate('text',x = 0,y = 1.15,label = 'B')
+
+Fig2C <- transform(dd,Cohort = factor(CatchYear)) %>%
+  subset(Cohort %in% c(2002:2011)) %>%
+  ggplot(aes(y = RTL,x = Cohort,fill = Cohort))+
+  xlab('Sampling year') +
+  geom_boxplot(notch=T) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12,angle = 90), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'none') + 
+    scale_fill_manual(values = c15)+
+  annotate('text',x = 1,y = 1.7,label = 'C')
+
+
+Fig2D <- transform(dd,Cohort = factor(CatchYear)) %>%
+  subset(Cohort %in% c(2002:2011)) %>%
+  ggplot(aes(y = RTL,x = DeltaAge, col = Cohort))+
+  xlab('Age (years)') +
+  geom_smooth(method = 'lm', formula = y~(x),se = F) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'none') +
+    scale_color_manual(values = c15)+
+  annotate('text',x = 0,y = 1.15,label = 'D')  
+  
+pdf('Figures/Figure 2.pdf',
+    width = 8,
+    height = 8,
+    paper = 'a4')
+multiplot(Fig2A,Fig2B,Fig2C,Fig2D,layout = matrix(1:4, 2, 2,byrow = T))
+dev.off()
+
+
+```
+
+
+
+
+
+
+
 
 
 ```{r Figure 3}
@@ -165,8 +358,8 @@ Fig3A <- ggplot(dd3,
         axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black')) +
     geom_point(col = 'grey')+
-  geom_abline(slope = 1,intercept = 0,lty = 2)
-  annotate('text',x = 0,y = 3,label = 'B')
+  geom_abline(slope = 1,intercept = 0,lty = 2) +
+  annotate('text',x = 0.3,y = 1.7,label = 'A')
 
 
 
@@ -185,11 +378,11 @@ Fig3B <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
         axis.line.y = element_line(colour = 'black')) +
   scale_colour_manual(values = c('darkgrey','gold'))+
   scale_fill_manual(values = c('darkgrey','gold'))+
-  geom_vline(xintercept = 0,lty = 2)
-  annotate('text',x = -2,y = 1,label = 'C')
+  geom_vline(xintercept = 0,lty = 2) +
+  annotate('text',x = -1,y = 1,label = 'B')
 
 pdf('Figures/Figure 3.pdf',
-    width = 5,
+    width = 4,
     height = 8,
     paper = 'a4')
 multiplot(Fig3A,Fig3B)
@@ -202,7 +395,7 @@ dev.off()
 
 ```{r Figure 4}
 
-Fig4A <- ggplot(temp,
+Fig4A <- ggplot(dd,
        aes(x = Tarsus,
            y = RTL,
            col = Sex)) +
@@ -217,12 +410,12 @@ Fig4A <- ggplot(temp,
                 axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'none') +
-  stat_smooth(method = 'lm')
-  annotate('text',x = 17,y = 2.5,label = 'C')
+  stat_smooth(method = 'lm') +
+  scale_color_manual(values = c('gold2','red'))+
+  annotate('text',x = 17,y = 1.7,label = 'A')
 
-Fig4B <- ggplot(temp,
-       aes(
-           y = RTL,
+Fig4B <- ggplot(dd,
+       aes(y = RTL,
            x=Insect)) +
     ylab('RTL') + 
   xlab('Insect abundance') +
@@ -235,9 +428,8 @@ Fig4B <- ggplot(temp,
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'none') +
   geom_boxplot(aes(group = Insect),outlier.shape = NA)+
-   stat_smooth(method = 'lm',col = 'darkgrey')
-  annotate('text',x = 2.5,y = 2.5,label = 'D')
-
+   stat_smooth(method = 'lm',col = 'darkgrey') +
+  annotate('text',x = 2.5,y = 1.6,label = 'B')
 
 pdf('Figures/Figure 4.pdf',
     width = 4,

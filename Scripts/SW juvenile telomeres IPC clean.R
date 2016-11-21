@@ -283,7 +283,6 @@ for(i in 1:nrow(dd3))
     dd3$RemainingLife1[i] <- nextbird$RemainingLife
     dd3$Died1[i] <- nextbird$Died
     dd3$DeltaCondition[i] <- nextbird$Condition - dd3$Condition[i]
-    dd3$DeltaAge[i] <- nextbird$Agemonths - dd3$Agemonths[i]
     dd3$DeltaInsect[i] <- nextbird$Insect - dd3$Insect[i]
     dd3$Agemonths1[i] <- nextbird$Agemonths
   }

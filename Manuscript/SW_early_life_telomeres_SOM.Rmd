@@ -38,17 +38,18 @@ source('Scripts/SW juvenile telomeres IPC load.r')
 source('Scripts/SW juvenile telomeres IPC functions.r')
 source('Scripts/SW juvenile telomeres IPC clean.r')
 source('Scripts/SW juvenile telomeres IPC models.r')
+source('Scripts/SW juvenile telomeres IPC model averaging.r')
 
 ```
 
-**Table S1** Model selection table for analysis of factors affecting early life telomere length in juvenile Seychelles warblers. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. TQ = territory quality.
+**Table S1** Model selection table for analysis of factors affecting early life telomere length in juvenile Seychelles warblers. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here.
 
 ```{r Table S1}
 
 
 #Model averaging
 
-t1 <- as.matrix(subset(lm3, delta<=6))
+t1 <- as.matrix(RTL_Full_Dredge)
 
 #Sort out row/col names
 nams <- colnames(t1)
@@ -62,11 +63,12 @@ nams[nams == 'z.Tarsus'] <- 'Tarsus'
 nams[nams == 'z.Insect'] <- 'Insect abundance'
 nams[nams == 'z.CatchMonth'] <- 'Month'
 nams[nams == 'z.Density'] <- 'Density'
+nams[nams == 'z.TQ'] <- 'Territory quality'
 
 
 colnames(t1) <- nams
 
-tableS1 <- data.frame(Model = apply(t1,1,getterms,c(2:14)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+tableS1 <- data.frame(Model = apply(t1,1,getterms,c(2:10)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
 colnames(tableS1) <- c('Model','df','AICc', 'Delta AICc','Weight')
 rownames(tableS1) <- NULL
 tableS1$Model[tableS1$Model == ''] <- 'Null model'
@@ -83,8 +85,7 @@ kable(tableS1,digits=2)
 ```{r Table S2}
 
 #Model averaging
-lm3 <- dredge(DeltaRTL_Full)
-t1 <- as.matrix(subset(lm3, delta<=6))
+t1 <- as.matrix(DeltaRTL_Full_Dredge)
 
 #Sort out row/col names
 nams <- colnames(t1)
@@ -98,39 +99,26 @@ nams[nams == 'z.Tarsus'] <- 'Tarsus'
 nams[nams == 'z.Insect'] <- 'Insect abundance'
 nams[nams == 'z.CatchMonth'] <- 'Month'
 nams[nams == 'z.Density'] <- 'Density'
-
+nams[nams == 'z.TQ'] <- 'Territory quality'
 
 colnames(t1) <- nams
 
-tableS1 <- data.frame(Model = apply(t1,1,getterms,c(2:14)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
-colnames(tableS1) <- c('Model','df','AICc', 'Delta AICc','Weight')
-rownames(tableS1) <- NULL
-tableS1$Model[tableS1$Model == ''] <- 'Null model'
-tableS1[,3:5] <- lapply(tableS1[,3:5],as.numeric)
-kable(tableS1,digits=2)
+tableS2 <- data.frame(Model = apply(t1,1,getterms,c(2:10)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+colnames(tableS2) <- c('Model','df','AICc', 'Delta AICc','Weight')
+rownames(tableS2) <- NULL
+tableS2$Model[tableS2$Model == ''] <- 'Null model'
+tableS2[,3:5] <- lapply(tableS2[,3:5],as.numeric)
+kable(tableS2,digits=2)
 
 ```
 
 
-**Figure S1** $\Delta$RTL in relation to the time between sampling events. Lines and shaded areas represent fitted values and 95% confidence limits from general linear models. See also Figure 4, main text.
-
-
+**Figure S1** Model averaged estimates and 95% cofidence intervals for social and ecological environmental variables in relation to RTL in Seychelles warblers. 
 
 ```{r Figure S1}
-temp <- subset(dd,!is.na(Insect))
-temp$LogAge <- log(temp$Agemonths)
-
-
-#Run the model
-lm2 <- lmer(RTL ~  LogAge + Tarsus + Helper + GroupSize + Sex + BodyMass + Insect + Density + (1|LayYear) + (1|BirdID) + (1|PlateID),
-            data = temp,
-            REML = FALSE)
-lm2 <- standardize(lm2)
 
 #Model averaging
-lm3 <- dredge(lm2)
-lm3 <- subset(lm3,delta <=6)
-lmavg <- model.avg(lm3,fit=T)
+lmavg <- model.avg(RTL_Full_Dredge,fit=T)
 myimp <- importance(lmavg) #Relative importance of each explanatory variable
   
 
@@ -150,6 +138,7 @@ nams[nams == 'z.Tarsus'] <- 'Tarsus'
 nams[nams == 'z.Insect'] <- 'Insect abundance'
 nams[nams == 'z.CatchMonth'] <- 'Month'
 nams[nams == 'z.Density'] <- 'Density'
+nams[nams == 'z.TQ'] <- 'Territory quality'
 
 rownames(table2) <- nams
 colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
@@ -167,25 +156,19 @@ FigS1
 
 ```
 
+
+
+
+**Figure S2** Model averaged estimates and 95% cofidence intervals for social and ecological environmental variables in relation to $\Delta$RTL in Seychelles warblers, using longitudinal data. 
+
 ```{r Figure S2}
 
-#Run the model
-temp <- subset(dd3,!is.na(Insect))
-
-#Run the model
-lm2 <- lmer(DeltaRTL ~  LogAge + Tarsus + Helper + GroupSize + Sex + BodyMass + Insect + Density + (1|LayYear) + (1|PlateID),
-            data = temp,
-            REML = FALSE)
-lm2 <- standardize(lm2)
-
 #Model averaging
-lm3 <- dredge(lm2)
-lm3 <- subset(lm3,delta <=6)
-lmavg <- model.avg(lm3,fit=T)
+lmavg <- model.avg(DeltaRTL_Full_Dredge,fit=T)
 myimp <- importance(lmavg) #Relative importance of each explanatory variable
   
 
-#Put it all into a nice table
+#Put it all into a table
 table2 <- imptable(lmavg,myimp)
 table2 <- signif(table2,2)
 
@@ -201,10 +184,10 @@ nams[nams == 'z.Tarsus'] <- 'Tarsus'
 nams[nams == 'z.Insect'] <- 'Insect abundance'
 nams[nams == 'z.CatchMonth'] <- 'Month'
 nams[nams == 'z.Density'] <- 'Density'
+nams[nams == 'z.TQ'] <- 'Territory quality'
 
 rownames(table2) <- nams
 colnames(table2) <- c('Estimate','SE','2.5%','97.5%','RI')
-
 
 table2 <- data.frame(table2,myx=row.names(table2))
 table2$myx <- factor(table2$myx,levels = table2$myx[order(table2$Estimate,decreasing = T)])
