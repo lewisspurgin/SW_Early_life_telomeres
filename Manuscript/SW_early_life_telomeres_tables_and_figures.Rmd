@@ -261,7 +261,7 @@ Fig2A <- transform(dd,Cohort = factor(LayYear)) %>%
   subset(Cohort %in% c(2002:2011)) %>%
   ggplot(aes(y = RTL,x = Cohort,fill = Cohort))+
   xlab('Birth year') +
-  geom_boxplot(notch=T) +
+  geom_boxplot(notch=T,aes(outlier.colour = Cohort)) +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12,angle = 90), 
         axis.text.y = element_text(size = 12), 
@@ -276,9 +276,9 @@ Fig2A <- transform(dd,Cohort = factor(LayYear)) %>%
 
 Fig2B <- transform(dd3,Cohort = factor(LayYear)) %>%
   subset(Cohort %in% c(2002:2011)) %>%
-  ggplot(aes(y = RTL,x = DeltaAge, col = Cohort))+
+  ggplot(aes(y = RTL,x = Agemonths, col = Cohort))+
   xlab('Age (years)') +
-  geom_smooth(method = 'lm', formula = y~(x),se = F) +
+  geom_smooth(method = 'lm', formula = y~log(x),se = F) +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
@@ -290,44 +290,11 @@ Fig2B <- transform(dd3,Cohort = factor(LayYear)) %>%
     scale_color_manual(values = c15)+
   annotate('text',x = 0,y = 1.15,label = 'B')
 
-Fig2C <- transform(dd,Cohort = factor(CatchYear)) %>%
-  subset(Cohort %in% c(2002:2011)) %>%
-  ggplot(aes(y = RTL,x = Cohort,fill = Cohort))+
-  xlab('Sampling year') +
-  geom_boxplot(notch=T) +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12,angle = 90), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'),
-        legend.position = 'none') + 
-    scale_fill_manual(values = c15)+
-  annotate('text',x = 1,y = 1.7,label = 'C')
-
-
-Fig2D <- transform(dd,Cohort = factor(CatchYear)) %>%
-  subset(Cohort %in% c(2002:2011)) %>%
-  ggplot(aes(y = RTL,x = DeltaAge, col = Cohort))+
-  xlab('Age (years)') +
-  geom_smooth(method = 'lm', formula = y~(x),se = F) +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'),
-        legend.position = 'none') +
-    scale_color_manual(values = c15)+
-  annotate('text',x = 0,y = 1.15,label = 'D')  
-  
 pdf('Figures/Figure 2.pdf',
-    width = 8,
+    width = 4,
     height = 8,
     paper = 'a4')
-multiplot(Fig2A,Fig2B,Fig2C,Fig2D,layout = matrix(1:4, 2, 2,byrow = T))
+multiplot(Fig2A,Fig2B)
 dev.off()
 
 
@@ -440,3 +407,11 @@ dev.off()
 
 ```
 
+dd$FAge <- factor(dd$Agemonths)
+dd$Cohort <- factor(dd$LayYear)
+
+lm1 <- lmer(RTL ~ Cohort*(Agemonths + LogAge + FAge) + (1|BirdID) + (1|CatchYear) + (1|PlateID),data=dd,REML = FALSE)
+
+lm2 <- dredge(lm1,subset = !(LogAge & FAge) & !(LogAge & Agemonths ) & !(Agemonths & FAge))
+
+lm2

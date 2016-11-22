@@ -78,7 +78,6 @@ dd$Agemonths <- ifelse(dd$Ageclass == 'CH',1,
                               ifelse(dd$Ageclass == 'SA',10,dd$Age*12+6)))/12
 
 
-  #dd$Age[dd$Fledged != 'Adults'] <- 1
 dd$LogAge <- log10(dd$Agemonths)
 dd <- subset(dd,!is.na(LogAge))
 
@@ -129,31 +128,6 @@ dd$Sex <- ifelse(dd$SexEstimate == 1,'Males','Females')
 
 
 
-
-
-
-#Centre telomere length by birth year
-dd$cenTL <- NA
-dd$cohortTL <- NA
-for(i in 1:nrow(dd))
-{
-  currentdata <- subset(dd,FieldPeriodID == FieldPeriodID[i])
-  if(nrow(currentdata>4))
-  {
-    dd$cenTL[i] <- (dd$RTL[i] - mean(currentdata$RTL))/sd(currentdata$RTL)
-    dd$cohortTL[i] <- median(currentdata$RTL)  
-  }
-
-}
-
-mymed <- median(dd$cenTL,na.rm=T)
-dd$cenTLF <- ifelse(dd$cenTL < mymed,'Short telomeres','Long telomeres')
-
-mymed <- median(dd$cohortTL,na.rm=T)
-dd$coTLF <- ifelse(dd$cohortTL < mymed,'Short telomeres','Long telomeres')
-
-
-rm(mymed)
 
 # Helpers and social group size -------------------------------------------
 
