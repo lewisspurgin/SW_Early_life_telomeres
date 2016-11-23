@@ -6,8 +6,12 @@
 
 # Telomere length, age and cohort -----------------------------------------
 
-RTL_Age <- lmer(RTL ~ Cohort*(Agemonths + LogAge + FAge) + (1|BirdID) + (1|CatchYear) + (1|PlateID),
+RTL_Age <- lmer(RTL ~ Cohort*(Agemonths + LogAge + FAge + Age2) + (1|BirdID) + (1|CatchYear) + (1|PlateID),
                 data=dd,
+                REML = FALSE)
+
+RTL_DeltaAge <- lmer(RTL ~ Cohort*(DeltaAge + DeltaLogAge + DeltaAge2) + (1|BirdID) + (1|CatchYear) + (1|PlateID),
+                data=dd3,
                 REML = FALSE)
 
 # RTL and ecology ---------------------------------------------------------

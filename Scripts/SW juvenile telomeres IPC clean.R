@@ -80,7 +80,9 @@ dd$Agemonths <- ifelse(dd$Ageclass == 'CH',1,
 
 dd$LogAge <- log10(dd$Agemonths)
 dd <- subset(dd,!is.na(LogAge))
-
+dd$Cohort <- factor(dd$LayYear)
+dd$FAge <- factor(dd$Age)
+dd$Age2 <- poly(dd$Agemonths,2)[,2]
 
 # Tarsus and delta age ------------------------------------------------------------------
 
@@ -96,7 +98,11 @@ for(i in 1:nrow(dd))
          dd$Tarsus[i] <- dd$RightTarsus[i])
   
   dd$DeltaAge[i] <- dd$Agemonths[i] - mean(subset(dd,BirdID == dd$BirdID[i])$Agemonths)
+  dd$DeltaLogAge[i] <- dd$LogAge[i] - mean(subset(dd,BirdID == dd$BirdID[i])$LogAge)
+  dd$DeltaAge2[i] <- dd$Age2[i] - mean(subset(dd,BirdID == dd$BirdID[i])$Age2)
 }
+
+dd$FDeltaAge <- factor(dd$DeltaAge)
 
 dd$RightTarsus <- NULL
 dd$LeftTarsus <- NULL
@@ -324,10 +330,6 @@ ddL <- data.frame(BirdID = c(dd3$BirdID,dd3_2$BirdID),
 
 rm(temp,dd3_2)
 
-
-
-dd$Cohort <- factor(dd$LayYear)
-dd$FAge <- factor(dd$Age)
 
 # Subset birds with juvenile samples --------------------------------------
 

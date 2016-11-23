@@ -28,35 +28,79 @@ source('Scripts/SW juvenile telomeres IPC functions.r')
 source('Scripts/SW juvenile telomeres IPC clean.r')
 source('Scripts/SW juvenile telomeres IPC models.r')
 
+
 ```
 
 **Table 1**
 ```{r Table 1}
-
+RTL_Age_Dredge <- dredge(RTL_Age,
+                         subset = !(LogAge & FAge) & 
+                           !(LogAge & Agemonths) &
+                           !(LogAge & Age2) &
+                           !(Agemonths & FAge) & 
+                           !(Agemonths & Age2) &
+                           !(FAge & Age2))
  
 t1 <- as.matrix(RTL_Age_Dredge)
 
 #Sort out row/col names
 nams <- colnames(t1)
 
-nams[nams == 'Agemonths'] <- 'Age (continuous)'
-nams[nams == 'LogAge'] <- 'Log age'
+nams[nams == 'Agemonths'] <- 'Age (linear)'
+nams[nams == 'LogAge'] <- 'Age (log)'
 nams[nams == 'FAge'] <- 'Age (factor)'
 nams[nams == 'Cohort:FAge'] <- 'Age (factor)*cohort'
-nams[nams == 'Cohort:Agemonths'] <- 'Age (continuous)*cohort'
-nams[nams == 'Cohort:LogAge'] <- 'Log age*cohort'
+nams[nams == 'Agemonths:Cohort'] <- 'Age (continuous)*cohort'
+nams[nams == 'Cohort:LogAge'] <- 'Age (log)*cohort'
+nams[nams == 'Age2:Cohort'] <- 'Age (quadratic)*cohort'
+nams[nams == 'Age2'] <- 'Age (quadratic)'
 
 colnames(t1) <- nams
 
-tableS1 <- data.frame(Model = apply(t1,1,getterms,c(2:8)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
-colnames(tableS1) <- c('Model','df','AICc', 'Delta AICc','Weight')
-rownames(tableS1) <- NULL
-tableS1$Model[tableS1$Model == ''] <- 'Null model'
-tableS1[,3:5] <- lapply(tableS1[,3:5],as.numeric)
-kable(tableS1,digits=3)
+tableS1A <- data.frame(Model = apply(t1,1,getterms,c(2:10)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+colnames(tableS1A) <- c('Model','df','AICc', 'Delta AICc','Weight')
+rownames(tableS1A) <- NULL
+tableS1A$Model[tableS1A$Model == ''] <- 'Null model'
+tableS1A[,3:5] <- lapply(tableS1A[,3:5],as.numeric)
 
 
 
+
+
+
+
+
+
+
+
+RTL_DeltaAge_Dredge <- dredge(RTL_DeltaAge,
+                         subset = !(DeltaLogAge & DeltaAge) &
+                           !(DeltaLogAge & DeltaAge2) &
+                           !(DeltaAge & DeltaAge2))
+ 
+t1 <- as.matrix(RTL_DeltaAge_Dredge)
+
+#Sort out row/col names
+nams <- colnames(t1)
+
+nams[nams == 'DeltaAge'] <- 'Delta age (linear)'
+nams[nams == 'DeltaLogAge'] <- 'Delta age (log)'
+nams[nams == 'Cohort:DeltaAge'] <- 'Delta age (continuous)*cohort'
+nams[nams == 'Cohort:DeltaLogAge'] <- 'Delta age (log)*cohort'
+nams[nams == 'Cohort:DeltaAge2'] <- 'Delta age (quadratic)*cohort'
+nams[nams == 'DeltaAge2'] <- 'Delta age (quadratic)'
+
+colnames(t1) <- nams
+
+tableS1B <- data.frame(Model = apply(t1,1,getterms,c(2:8)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+colnames(tableS1B) <- c('Model','df','AICc', 'Delta AICc','Weight')
+rownames(tableS1B) <- NULL
+tableS1B$Model[tableS1B$Model == ''] <- 'Null model'
+tableS1B[,3:5] <- lapply(tableS1B[,3:5],as.numeric)
+
+tableS1 <- rbind(c('A',rep(' ',4)),tableS1A,c('--',rep(' ',4)),c('B',rep(' ',4)),tableS1B)
+
+kable(tableS1,digits = 3)
 ```
 
 
@@ -65,9 +109,14 @@ kable(tableS1,digits=3)
 
  
 CIs <- CIwald(RTL_Full)
-t1 <- data.frame(Estimate = fixef(RTL_Full), LCI = CIs[7:nrow(CIs),1], UCI = CIs[7:nrow(CIs),2])
+t1a <- data.frame(Variable = row.names(CIs)[7:nrow(CIs)],
+                  Estimate = fixef(RTL_Full),
+                  LCI = CIs[7:nrow(CIs),1],
+                  UCI = CIs[7:nrow(CIs),2],
+                  row.names = NULL,
+                  stringsAsFactors = F)
 
-nams <- row.names(t1)
+nams <- t1a$Variable
 nams[nams == 'LogAge'] <- 'Age'
 nams[nams == 'Tarsus'] <- 'Tarsus length'
 nams[nams == 'Helper'] <- 'Number helpers'
@@ -77,21 +126,19 @@ nams[nams == 'BodyMass'] <- 'Body mass'
 nams[nams == 'Insect'] <- 'Annual food availability'
 nams[nams == 'TQ'] <- 'Territory quality'
 
-row.names(t1) <- nams
+t1a$Variable <- nams
 
-kable(t1)
-
-```
-
-**Table 2**
-
-```{r Table 2}
 
 #Run the model
 CIs <- CIwald(DeltaRTL_Full)
-t1 <- data.frame(Estimate = fixef(DeltaRTL_Full), LCI = CIs[4:nrow(CIs),1], UCI = CIs[4:nrow(CIs),2])
+t1b <- data.frame(Variable = row.names(CIs)[4:nrow(CIs)],
+                  Estimate = fixef(DeltaRTL_Full),
+                  LCI = CIs[4:nrow(CIs),1],
+                  UCI = CIs[4:nrow(CIs),2],
+                  row.names = NULL,
+                  stringsAsFactors = F)
 
-nams <- row.names(t1)
+nams <- t1b$Variable
 nams[nams == 'LogAge'] <- 'Age'
 nams[nams == 'Tarsus'] <- 'Tarsus length'
 nams[nams == 'Helper'] <- 'Number helpers'
@@ -101,9 +148,11 @@ nams[nams == 'BodyMass'] <- 'Body mass'
 nams[nams == 'Insect'] <- 'Annual food availability'
 nams[nams == 'TQ'] <- 'Territory quality'
 
-row.names(t1) <- nams
+t1b$Variable <- nams
 
-kable(t1)
+tableS2 <- rbind(c('A',rep(' ',4)),t1a,c('--',rep(' ',4)),c('B',rep(' ',4)),t1b)
+
+kable(tableS2)
 
 ```
 
