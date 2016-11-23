@@ -47,8 +47,6 @@ source('Scripts/SW juvenile telomeres IPC model averaging.r')
 ```{r Table S1}
 
 
-#Model averaging
-
 t1 <- as.matrix(RTL_Full_Dredge)
 
 #Sort out row/col names

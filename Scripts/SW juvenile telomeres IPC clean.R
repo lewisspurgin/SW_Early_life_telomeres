@@ -326,7 +326,8 @@ rm(temp,dd3_2)
 
 
 
-
+dd$Cohort <- factor(dd$LayYear)
+dd$FAge <- factor(dd$Age)
 
 # Subset birds with juvenile samples --------------------------------------
 

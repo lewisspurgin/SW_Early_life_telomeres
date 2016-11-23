@@ -34,8 +34,27 @@ source('Scripts/SW juvenile telomeres IPC models.r')
 ```{r Table 1}
 
  
-AIC(RTL_LogAge)
-AIC(RTL_LogAge_LY)
+t1 <- as.matrix(RTL_Age_Dredge)
+
+#Sort out row/col names
+nams <- colnames(t1)
+
+nams[nams == 'Agemonths'] <- 'Age (continuous)'
+nams[nams == 'LogAge'] <- 'Log age'
+nams[nams == 'FAge'] <- 'Age (factor)'
+nams[nams == 'Cohort:FAge'] <- 'Age (factor)*cohort'
+nams[nams == 'Cohort:Agemonths'] <- 'Age (continuous)*cohort'
+nams[nams == 'Cohort:LogAge'] <- 'Log age*cohort'
+
+colnames(t1) <- nams
+
+tableS1 <- data.frame(Model = apply(t1,1,getterms,c(2:8)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+colnames(tableS1) <- c('Model','df','AICc', 'Delta AICc','Weight')
+rownames(tableS1) <- NULL
+tableS1$Model[tableS1$Model == ''] <- 'Null model'
+tableS1[,3:5] <- lapply(tableS1[,3:5],as.numeric)
+kable(tableS1,digits=3)
+
 
 
 ```
@@ -406,12 +425,3 @@ multiplot(Fig4A,Fig4B)
 dev.off()
 
 ```
-
-dd$FAge <- factor(dd$Agemonths)
-dd$Cohort <- factor(dd$LayYear)
-
-lm1 <- lmer(RTL ~ Cohort*(Agemonths + LogAge + FAge) + (1|BirdID) + (1|CatchYear) + (1|PlateID),data=dd,REML = FALSE)
-
-lm2 <- dredge(lm1,subset = !(LogAge & FAge) & !(LogAge & Agemonths ) & !(Agemonths & FAge))
-
-lm2
