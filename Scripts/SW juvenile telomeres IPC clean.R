@@ -59,6 +59,8 @@ dd <- subset(dd,Season == 'Major')
 dd <- subset(dd,CatchMonth %in% c(6:9))
 dd$yday <- as.POSIXlt(dd$CatchDate)$yday - min(as.POSIXlt(dd$CatchDate)$yday)
 
+dd <- subset(dd,LayYear > 1992)
+
 # Age data ----------------------------------------------------------------
 
 dd$Age <- (dd$CatchYear-dd$LayYear)

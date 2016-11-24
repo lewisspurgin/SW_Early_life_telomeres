@@ -4,7 +4,7 @@ output:
     reference_docx: myref.docx
 ---
 
-###Supplementary information for Spurgin *et al.* "Telomeres reveal silver spoon effects in a wild population"
+###Supplementary information for Spurgin *et al.* "Spatiotemporal variation in lifelong telomere dynamics in a long-term ecological study"
 
 
 
@@ -76,11 +76,39 @@ kable(tableS1,digits=2)
 ```
 
 
-
-
-**Table S2** Model selection table for analysis of factors affecting $\Delta$RTL in Seychelles warbler nestlings, using longitudinal data. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. TQ = territory quality.
-
+**Table S2** Full model of factors affecting $\Delta$RTL in Seychelles warblers, using longitudinal data.
 ```{r Table S2}
+
+#Run the model
+CIs <- CIwald(DeltaRTL_Full)
+t1b <- data.frame(Variable = row.names(CIs)[3:nrow(CIs)],
+                  Estimate = fixef(DeltaRTL_Full),
+                  LCI = CIs[3:nrow(CIs),1],
+                  UCI = CIs[3:nrow(CIs),2],
+                  row.names = NULL,
+                  stringsAsFactors = F)
+
+nams <- t1b$Variable
+nams[nams == 'z.LogAge'] <- 'Age'
+nams[nams == 'z.Tarsus'] <- 'Tarsus length'
+nams[nams == 'c.Helper'] <- 'Number helpers'
+nams[nams == 'z.GroupSize'] <- 'Group size'
+nams[nams == 'c.Sex'] <- 'Sex (males)'
+nams[nams == 'z.BodyMass'] <- 'Body mass'
+nams[nams == 'z.Insect'] <- 'Insect abundance'
+nams[nams == 'z.TQ'] <- 'Territory quality'
+nams[nams == 'z.Density'] <- 'Density'
+
+t1b$Variable <- nams
+
+kable(t1b,digits = 3)
+
+```
+
+
+**Table S3** Model selection table for analysis of factors affecting $\Delta$RTL in Seychelles warblers, using longitudinal data. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. TQ = territory quality.
+
+```{r Table S3}
 
 #Model averaging
 t1 <- as.matrix(DeltaRTL_Full_Dredge)
@@ -88,7 +116,7 @@ t1 <- as.matrix(DeltaRTL_Full_Dredge)
 #Sort out row/col names
 nams <- colnames(t1)
 
-nams[nams == 'z.GroupSize'] <- 'Group Size'
+nams[nams == 'z.GroupSize'] <- 'Group size'
 nams[nams == 'c.Sex'] <- 'Sex (males)'
 nams[nams == 'c.Helper'] <- 'Helpers'
 nams[nams == 'z.BodyMass'] <- 'Body mass'
@@ -101,12 +129,12 @@ nams[nams == 'z.TQ'] <- 'Territory quality'
 
 colnames(t1) <- nams
 
-tableS2 <- data.frame(Model = apply(t1,1,getterms,c(2:10)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
-colnames(tableS2) <- c('Model','df','AICc', 'Delta AICc','Weight')
-rownames(tableS2) <- NULL
-tableS2$Model[tableS2$Model == ''] <- 'Null model'
-tableS2[,3:5] <- lapply(tableS2[,3:5],as.numeric)
-kable(tableS2,digits=2)
+tableS3 <- data.frame(Model = apply(t1,1,getterms,c(2:10)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+colnames(tableS3) <- c('Model','df','AICc', 'Delta AICc','Weight')
+rownames(tableS3) <- NULL
+tableS3$Model[tableS3$Model == ''] <- 'Null model'
+tableS3[,3:5] <- lapply(tableS3[,3:5],as.numeric)
+kable(tableS3,digits=2)
 
 ```
 
@@ -127,7 +155,7 @@ table2 <- signif(table2,2)
 
 #Sort out row/col names
 nams <- rownames(table2)
-nams[nams == 'z.GroupSize'] <- 'Group Size'
+nams[nams == 'z.GroupSize'] <- 'Group size'
 nams[nams == 'c.Sex'] <- 'Sex (males)'
 nams[nams == 'c.Helper'] <- 'Helpers'
 nams[nams == 'z.BodyMass'] <- 'Body mass'
@@ -173,7 +201,7 @@ table2 <- signif(table2,2)
 
 #Sort out row/col names
 nams <- rownames(table2)
-nams[nams == 'z.GroupSize'] <- 'Group Size'
+nams[nams == 'z.GroupSize'] <- 'Group size'
 nams[nams == 'c.Sex'] <- 'Sex (males)'
 nams[nams == 'c.Helper'] <- 'Helpers'
 nams[nams == 'z.BodyMass'] <- 'Body mass'

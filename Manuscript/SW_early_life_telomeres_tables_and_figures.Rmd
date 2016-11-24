@@ -31,8 +31,16 @@ source('Scripts/SW juvenile telomeres IPC models.r')
 
 ```
 
-**Table 1**
-```{r Table 1}
+
+
+
+
+
+
+
+**Table 1** Telomere dynamics and age in Seychelles warbler cohorts. Linear mixed models were created with RTL as the response variable, and different measures of age, cohort ID, and cohort x age interactions as explanatory variables (see methods for details). Models are ranked by AICc, with best models at the top of the table.
+
+```{r Table 1,include = T,echo = F,warning = F}
 RTL_Age_Dredge <- dredge(RTL_Age,
                          subset = !(LogAge & FAge) & 
                            !(LogAge & Agemonths) &
@@ -57,19 +65,11 @@ nams[nams == 'Age2'] <- 'Age (quadratic)'
 
 colnames(t1) <- nams
 
-tableS1A <- data.frame(Model = apply(t1,1,getterms,c(2:10)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
-colnames(tableS1A) <- c('Model','df','AICc', 'Delta AICc','Weight')
-rownames(tableS1A) <- NULL
-tableS1A$Model[tableS1A$Model == ''] <- 'Null model'
-tableS1A[,3:5] <- lapply(tableS1A[,3:5],as.numeric)
-
-
-
-
-
-
-
-
+table1A <- data.frame(Model = apply(t1,1,getterms,c(2:10)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+colnames(table1A) <- c('Model','df','AICc', 'Delta AICc','Weight')
+rownames(table1A) <- NULL
+table1A$Model[table1A$Model == ''] <- 'Null model'
+table1A[,3:5] <- lapply(table1A[,3:5],as.numeric)
 
 
 
@@ -92,79 +92,31 @@ nams[nams == 'DeltaAge2'] <- 'Delta age (quadratic)'
 
 colnames(t1) <- nams
 
-tableS1B <- data.frame(Model = apply(t1,1,getterms,c(2:8)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
-colnames(tableS1B) <- c('Model','df','AICc', 'Delta AICc','Weight')
-rownames(tableS1B) <- NULL
-tableS1B$Model[tableS1B$Model == ''] <- 'Null model'
-tableS1B[,3:5] <- lapply(tableS1B[,3:5],as.numeric)
+table1B <- data.frame(Model = apply(t1,1,getterms,c(2:8)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+colnames(table1B) <- c('Model','df','AICc', 'Delta AICc','Weight')
+rownames(table1B) <- NULL
+table1B$Model[table1B$Model == ''] <- 'Null model'
+table1B[,3:5] <- lapply(table1B[,3:5],as.numeric)
 
-tableS1 <- rbind(c('A',rep(' ',4)),tableS1A,c('--',rep(' ',4)),c('B',rep(' ',4)),tableS1B)
+#Sort out rounding and exlcude NAs from blank spaces. Clunky but works
+table1 <- rbind(c('A',rep(' ',4)),table1A,c('--',rep(' ',4)),c('B',rep(' ',4)),table1B)
+table1[,3:5] <- lapply(table1[,3:5],as.numeric)
+table1[,3:5] <- round(table1[,3:5],3)
+table1[,3:5] <- lapply(table1[,3:5],as.character)
+table1[is.na(table1)] <- " "
 
-kable(tableS1,digits = 3)
+kable(table1,digits = 3)
 ```
 
 
-**Table 2**
-```{r Table 2}
-
- 
-CIs <- CIwald(RTL_Full)
-t1a <- data.frame(Variable = row.names(CIs)[7:nrow(CIs)],
-                  Estimate = fixef(RTL_Full),
-                  LCI = CIs[7:nrow(CIs),1],
-                  UCI = CIs[7:nrow(CIs),2],
-                  row.names = NULL,
-                  stringsAsFactors = F)
-
-nams <- t1a$Variable
-nams[nams == 'LogAge'] <- 'Age'
-nams[nams == 'Tarsus'] <- 'Tarsus length'
-nams[nams == 'Helper'] <- 'Number helpers'
-nams[nams == 'GroupSize'] <- 'Group size'
-nams[nams == 'SexMales'] <- 'Sex (males)'
-nams[nams == 'BodyMass'] <- 'Body mass'
-nams[nams == 'Insect'] <- 'Annual food availability'
-nams[nams == 'TQ'] <- 'Territory quality'
-
-t1a$Variable <- nams
-
-
-#Run the model
-CIs <- CIwald(DeltaRTL_Full)
-t1b <- data.frame(Variable = row.names(CIs)[4:nrow(CIs)],
-                  Estimate = fixef(DeltaRTL_Full),
-                  LCI = CIs[4:nrow(CIs),1],
-                  UCI = CIs[4:nrow(CIs),2],
-                  row.names = NULL,
-                  stringsAsFactors = F)
-
-nams <- t1b$Variable
-nams[nams == 'LogAge'] <- 'Age'
-nams[nams == 'Tarsus'] <- 'Tarsus length'
-nams[nams == 'Helper'] <- 'Number helpers'
-nams[nams == 'GroupSize'] <- 'Group size'
-nams[nams == 'SexMales'] <- 'Sex (males)'
-nams[nams == 'BodyMass'] <- 'Body mass'
-nams[nams == 'Insect'] <- 'Annual food availability'
-nams[nams == 'TQ'] <- 'Territory quality'
-
-t1b$Variable <- nams
-
-tableS2 <- rbind(c('A',rep(' ',4)),t1a,c('--',rep(' ',4)),c('B',rep(' ',4)),t1b)
-
-kable(tableS2)
-
-```
 
 **Figure Legends**
 
-**Figure 1** Telomere length in relation to age in Seychelles warblers. Points and  thin grey lines represent individual samples and birds, respectively. The thick line and shaded area represent the fitted values and 95% confidence limits of a linea regression of RTL and log-transformed age.
+**Figure 1** Telomere dynamics in relation to age in Seychelles warbler cohorts. **A** RTL and age across all individuals. Points and  thin grey lines represent individual samples and birds, respectively. The thick line and shaded area represent the fitted values and 95% confidence limits of a linear regression of RTL and log-transformed age.**B** Boxplot of variation in RTL among cohorts. For visualisation purposes a selection of cohorts with large sample sizes across a wide age range was chosen, but all cohorts were included in models. **C** RTL and age among cohorts. Lines represent fitted values from a linear regression and log-transformed age, and colours correspond to **B**. **D** RTL in relation to and $\Delta$Log age (i.e. within indiviual variation in log age).
 
 **Figure 2** Longitudinal telomere dynamics in the Seychelles warbler. **A** Variation in RTL within individuals sampled at different time points. The dotted line represents parity, and thus points above and below the line represent increases and decreases in RTL, respectively. **B** Scaled density plots of repeated RTL measurements among individual samples, and among different samples taken from the same individual.
 
-**Figure 3** Cohort variaiton in telomere length in the Seychelles warbler. **A** Bocplot of RTL among all Seychelles warbler cohorts. **B** Relationship between RTL and age in individual cohorts. Only cohorts with samples of at least 10 nestlings were included. Lines represent represents the fitted values from a linear regression of RTL and log-transformed age.
-
-**Figure 4** Individual variation in telomere length in Seychelles warbler. **A** RTL in relation to tarsus length and sex. **B** RTL in relation to variation in annual food availability. Lines and shaded areas represent the fitted values and 95% confidence limits from linear regressions.
+**Figure 3** Telomere length in relation to the social and ecological environment in the Seychelles warbler. **A** Estimates and 95% confidence intervals for all explanatory variables fitted in a linear mixed model (see methods for details). **B** RTL in relation to tarsus length and sex. **C** RTL in relation to variation in annual food availability. Lines and shaded areas represent the fitted values and 95% confidence limits from linear regressions.
 
 ```{r Figure 1}
 
@@ -190,9 +142,56 @@ geom_line(col = 'darkgrey',alpha = 0.2)+
   annotate('text',x = 0,y = 1.7,label = 'A')
 
 
-  Fig1B <- ggplot(dd3, aes(x = DeltaAge,y = RTL))+
+
+c15 <- c("dodgerblue2","#E31A1C", # red
+                "green4",
+                "#FF7F00", # orange
+                "gold1",
+                "skyblue2", # lt pink
+                "palegreen2",
+                "#FDBF6F", # lt orange
+                "gray70", "khaki2","blue1","steelblue4",
+                "darkturquoise",
+                "darkorange4","brown","navy",
+         'yellow','green','khaki3','blue','pink','orange')
+
+Fig1B <- transform(dd,Cohort = factor(LayYear)) %>%
+  ggplot(aes(y = RTL,x = Cohort, fill = Cohort))+
+  xlab('Birth year') +
+  geom_boxplot(outlier.shape = NA) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12,angle = 90), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'none') +
+        scale_fill_manual(values = c15)+
+  annotate('text',x = 1,y = 1.6,label = 'B')
+
+
+Fig1C <- transform(dd,Cohort = factor(LayYear)) %>%
+  ggplot(aes(y = RTL,x = Agemonths, col = Cohort,fill = Cohort))+
+  xlab('Age (years)') +
+  geom_smooth(method = 'lm', formula = y~log(x),se = F) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'none') +
+    scale_color_manual(values = c15)+
+        scale_fill_manual(values = c15)+
+  annotate('text',x = 0,y = 1.3,label = 'C')
+
+
+
+  Fig1D <- ggplot(dd3, aes(x = DeltaLogAge,y = RTL))+
   geom_point(alpha = 1,col='grey')+
-  xlab(expression(Delta*'Age (years)')) +
+  xlab(expression(Delta*'Log age (years)')) +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12), 
         axis.text.y = element_text(size = 12), 
@@ -202,108 +201,19 @@ geom_line(col = 'darkgrey',alpha = 0.2)+
         axis.line.y = element_line(colour = 'black'),
         legend.position = 'none')+
   geom_smooth(col = 'black',method = 'lm')+
-  annotate('text',x = -7.5,y = 1.7,label = 'B')
-
+  annotate('text',x = -1.5,y = 1.7,label = 'D')
 
 
 pdf('Figures/Figure 1.pdf',
-    width = 4,
-    height = 8,
-    paper = 'a4')
-multiplot(Fig1A,Fig1B)
-dev.off()
-
-```
-
-
-
-```{r Figure 2}
-c15 <- c("dodgerblue2","#E31A1C", # red
-                "green4",
-                "#FF7F00", # orange
-                "gold1",
-                "skyblue2", # lt pink
-                "palegreen2",
-                "#FDBF6F", # lt orange
-                "gray70", "khaki2","blue1","steelblue4",
-                "darkturquoise",
-                "darkorange4","brown")
-
-Fig2A <- transform(dd,Cohort = factor(LayYear)) %>%
-  subset(Cohort %in% c(2002:2011)) %>%
-  ggplot(aes(y = RTL,x = Cohort,fill = Cohort))+
-  xlab('Birth year') +
-  geom_boxplot(notch=T) +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12,angle = 90), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'),
-        legend.position = 'none')+
-  scale_fill_manual(values = c15)+
-  annotate('text',x = 1,y = 1.7,label = 'A')
-
-
-Fig2B <- transform(dd,Cohort = factor(LayYear)) %>%
-  subset(Cohort %in% c(2002:2011)) %>%
-  ggplot(aes(y = RTL,x = Agemonths, col = Cohort))+
-  xlab('Age (years)') +
-  geom_smooth(method = 'lm', formula = y~log(x),se = F) +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'),
-        legend.position = 'none') +
-    scale_color_manual(values = c15)+
-  annotate('text',x = 0,y = 1.15,label = 'B')
-
-Fig2C <- transform(dd,Cohort = factor(CatchYear)) %>%
-  subset(Cohort %in% c(2002:2011)) %>%
-  ggplot(aes(y = RTL,x = Cohort,fill = Cohort))+
-  xlab('Sampling year') +
-  geom_boxplot(notch=T) +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12,angle = 90), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'),
-        legend.position = 'none') + 
-    scale_fill_manual(values = c15)+
-  annotate('text',x = 1,y = 1.7,label = 'C')
-
-
-Fig2D <- transform(dd,Cohort = factor(CatchYear)) %>%
-  subset(Cohort %in% c(2002:2011)) %>%
-  ggplot(aes(y = RTL,x = Agemonths, col = Cohort))+
-  xlab('Age (years)') +
-  geom_smooth(method = 'lm', formula = y~log(x),se = F) +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'),
-        legend.position = 'none') +
-    scale_color_manual(values = c15)+
-  annotate('text',x = 0,y = 1.15,label = 'D')  
-  
-pdf('Figures/Figure 2.pdf',
     width = 8,
     height = 8,
     paper = 'a4')
-multiplot(Fig2A,Fig2B,Fig2C,Fig2D,layout = matrix(1:4, 2, 2,byrow = T))
+multiplot(Fig1A,Fig1B,Fig1C,Fig1D,layout = matrix(1:4,2,2,byrow = T))
 dev.off()
 
 
 ```
+
 
 
 
@@ -314,71 +224,7 @@ dev.off()
 
 ```{r Figure 2}
 
-c15 <- c("dodgerblue2","#E31A1C", # red
-                "green4",
-                "#FF7F00", # orange
-                "gold1",
-                "skyblue2", # lt pink
-                "palegreen2",
-                "#FDBF6F", # lt orange
-                "gray70", "khaki2","blue1","steelblue4",
-                "darkturquoise",
-                "darkorange4","brown")
-
-Fig2A <- transform(dd,Cohort = factor(LayYear)) %>%
-  subset(Cohort %in% c(2002:2011)) %>%
-  ggplot(aes(y = RTL,x = Cohort,fill = Cohort))+
-  xlab('Birth year') +
-  geom_boxplot(notch=T,aes(outlier.colour = Cohort)) +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12,angle = 90), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'),
-        legend.position = 'none')+
-  scale_fill_manual(values = c15)+
-  annotate('text',x = 1,y = 1.7,label = 'A')
-
-
-Fig2B <- transform(dd3,Cohort = factor(LayYear)) %>%
-  subset(Cohort %in% c(2002:2011)) %>%
-  ggplot(aes(y = RTL,x = Agemonths, col = Cohort))+
-  xlab('Age (years)') +
-  geom_smooth(method = 'lm', formula = y~log(x),se = F) +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12), 
-        axis.text.y = element_text(size = 12), 
-        axis.title.y = element_text(size = 14,vjust=0.8),
-        axis.title.x = element_text(size = 14),
-        axis.line.x = element_line(colour = 'black'),
-        axis.line.y = element_line(colour = 'black'),
-        legend.position = 'none') +
-    scale_color_manual(values = c15)+
-  annotate('text',x = 0,y = 1.15,label = 'B')
-
-pdf('Figures/Figure 2.pdf',
-    width = 4,
-    height = 8,
-    paper = 'a4')
-multiplot(Fig2A,Fig2B)
-dev.off()
-
-
-```
-
-
-
-
-
-
-
-
-
-```{r Figure 3}
-
-Fig3A <- ggplot(dd3,
+Fig2A <- ggplot(dd3,
        aes(x = RTL,
            y = RTL1)) +
   ylab(expression('RTL ('*italic(t)*' + 1)')) + 
@@ -398,7 +244,7 @@ Fig3A <- ggplot(dd3,
 
 
 
-Fig3B <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
+Fig2B <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
     geom_density(alpha = 0.2)+
   theme_classic()+
   ylab ('Scaled density')+
@@ -416,11 +262,11 @@ Fig3B <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
   geom_vline(xintercept = 0,lty = 2) +
   annotate('text',x = -1,y = 1,label = 'B')
 
-pdf('Figures/Figure 3.pdf',
+pdf('Figures/Figure 2.pdf',
     width = 4,
     height = 8,
     paper = 'a4')
-multiplot(Fig3A,Fig3B)
+multiplot(Fig2A,Fig2B)
 dev.off()
 
   
@@ -428,9 +274,38 @@ dev.off()
 
 
 
-```{r Figure 4}
+```{r Figure 3}
 
-Fig4A <- ggplot(dd,
+
+CIs <- CIwald(RTL_Full2)
+t1a <- data.frame(myx = row.names(CIs)[7:nrow(CIs)],
+                  Estimate = fixef(RTL_Full2),
+                  X2.5. = CIs[7:nrow(CIs),1],
+                  X97.5. = CIs[7:nrow(CIs),2],
+                  row.names = NULL,
+                  stringsAsFactors = F)
+
+nams <- t1a$myx
+nams[nams == 'z.LogAge'] <- 'Age'
+nams[nams == 'z.Tarsus'] <- 'Tarsus length'
+nams[nams == 'c.Helper'] <- 'Number helpers'
+nams[nams == 'z.GroupSize'] <- 'Group size'
+nams[nams == 'c.Sex'] <- 'Sex (males)'
+nams[nams == 'z.BodyMass'] <- 'Body mass'
+nams[nams == 'z.Insect'] <- 'Insect abundance'
+nams[nams == 'z.TQ'] <- 'Territory quality'
+nams[nams == 'z.Density'] <- 'Density'
+
+t1a$myx <- nams
+
+t1a$myx <- factor(t1a$myx,levels = t1a$myx[order(t1a$Estimate,decreasing = T)])
+t1a <- subset(t1a,myx != "(Intercept)")
+
+Fig3A <- forestplot(t1a,RI = F)+
+  annotate('text',y = 0.1,x = 0.6,label = 'A')
+
+
+Fig3B <- ggplot(dd,
        aes(x = Tarsus,
            y = RTL,
            col = Sex)) +
@@ -447,9 +322,9 @@ Fig4A <- ggplot(dd,
         legend.position = 'none') +
   stat_smooth(method = 'lm') +
   scale_color_manual(values = c('gold2','red'))+
-  annotate('text',x = 17,y = 1.7,label = 'A')
+  annotate('text',x = 17,y = 1.7,label = 'B')
 
-Fig4B <- ggplot(dd,
+Fig3C <- ggplot(dd,
        aes(y = RTL,
            x=Insect)) +
     ylab('RTL') + 
@@ -464,13 +339,13 @@ Fig4B <- ggplot(dd,
         legend.position = 'none') +
   geom_boxplot(aes(group = Insect),outlier.shape = NA)+
    stat_smooth(method = 'lm',col = 'darkgrey') +
-  annotate('text',x = 2.5,y = 1.6,label = 'B')
+  annotate('text',x = 2.5,y = 1.6,label = 'C')
 
-pdf('Figures/Figure 4.pdf',
-    width = 4,
+pdf('Figures/Figure 3.pdf',
+    width = 8,
     height = 8,
     paper = 'a4')
-multiplot(Fig4A,Fig4B)
+multiplot(Fig3A,Fig3B,Fig3C,layout = matrix(c(1,1,2,3),byrow = T,nrow = 2))
 dev.off()
 
 ```

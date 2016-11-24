@@ -276,10 +276,10 @@ propmales <- function(x)
 
 #Forestplot
 
-forestplot <- function(mytable)
+forestplot <- function(mytable,RI = T)
 {
   
-  ggplot(mytable,
+  x <- ggplot(mytable,
          aes(x = myx,
              y=Estimate)) +
     geom_point() + 
@@ -290,9 +290,19 @@ forestplot <- function(mytable)
     theme(axis.text.x = element_text(angle=90,size = 14,hjust=1,vjust=0.5), 
           axis.text.y = element_text(size = 14), 
           axis.title.y = element_text(size = 16,vjust=0.8),
-          axis.title.x = element_text(size = 16)) +
-    geom_abline(slope=0,intercept=0,lty=2) +
-    annotate('text',x=mytable$myx,y=min(mytable$X2.5)*1.2,label=paste('(',mytable$RI,')',sep=''),size = 4)
+          axis.title.x = element_text(size = 16),
+          axis.line.x = element_line(colour = 'black'),
+          axis.line.y = element_line(colour = 'black')) +
+    geom_abline(slope=0,intercept=0,lty=2)
+  
+  if(RI == T)
+  {
+    x + annotate('text',x=mytable$myx,y=min(mytable$X2.5)*1.2,label=paste('(',mytable$RI,')',sep=''),size = 4)
+  } else
+  {
+    x
+  }
+
     
 }
 
@@ -456,6 +466,11 @@ give.n <- function(x)
   {
   return(c(y = median(x)*0.96, label = length(x)))
   }
+
+
+
+
+# CIWald - get Wald confidence intervals ----------------------------------
 
 CIwald <- function(model)
 {
