@@ -3,10 +3,7 @@
 ## CLEAN THE DATA
 #################################################################################
 
-#Only use Ellie's samples
-# dd0 <- subset(dd0,Whodunnit == 'EAF')
-
-
+#Subset bad samples
 dd0 <- subset(dd0,CqTelomere < 25) %>%
   subset(CqGAPDH < 26) %>%
   subset(CqGAPDH > 21) %>%

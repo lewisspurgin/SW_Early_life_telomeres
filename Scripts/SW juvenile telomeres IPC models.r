@@ -18,7 +18,7 @@ RTL_DeltaAge <- lmer(RTL ~ Cohort*(DeltaAge + DeltaLogAge + DeltaAge2) + (1|Bird
 RTL_DeltaLogAge <- lmer(RTL ~ DeltaLogAge + (1|BirdID) + (1|CatchYear) + (1|PlateID),
                    data=dd3,
                    REML = FALSE)
-RTL_RTL1 <- lmer(RTL1 ~ RTL + (1|BirdID),
+RTL_RTL1 <- lmer(RTL1 ~ RTL + LogAge + (1|BirdID) + (1|LayYear),
                         data=dd3,
                         REML = FALSE)
 
