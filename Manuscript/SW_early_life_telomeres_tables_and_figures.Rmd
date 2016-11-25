@@ -70,7 +70,7 @@ colnames(table1A) <- c('Model','df','AICc', 'Delta AICc','Weight')
 rownames(table1A) <- NULL
 table1A$Model[table1A$Model == ''] <- 'Null model'
 table1A[,3:5] <- lapply(table1A[,3:5],as.numeric)
-
+table1A[,3:5] <- round(table1A[,3:5],3)
 
 
 RTL_DeltaAge_Dredge <- dredge(RTL_DeltaAge,
@@ -97,13 +97,10 @@ colnames(table1B) <- c('Model','df','AICc', 'Delta AICc','Weight')
 rownames(table1B) <- NULL
 table1B$Model[table1B$Model == ''] <- 'Null model'
 table1B[,3:5] <- lapply(table1B[,3:5],as.numeric)
+table1B[,3:5] <- round(table1B[,3:5],3)
 
 #Sort out rounding and exlcude NAs from blank spaces. Clunky but works
-table1 <- rbind(c('A',rep(' ',4)),table1A,c('--',rep(' ',4)),c('B',rep(' ',4)),table1B)
-table1[,3:5] <- lapply(table1[,3:5],as.numeric)
-table1[,3:5] <- round(table1[,3:5],3)
-table1[,3:5] <- lapply(table1[,3:5],as.character)
-table1[is.na(table1)] <- " "
+table1 <- rbind(c('A',rep('-',4)),table1A,c('B',rep('-',4)),table1B)
 
 kable(table1,digits = 3)
 ```
@@ -117,6 +114,7 @@ kable(table1,digits = 3)
 **Figure 2** Longitudinal telomere dynamics in the Seychelles warbler. **A** Variation in RTL within individuals sampled at different time points. The dotted line represents parity, and thus points above and below the line represent increases and decreases in RTL, respectively. **B** Scaled density plots of repeated RTL measurements among individual samples, and among different samples taken from the same individual.
 
 **Figure 3** Telomere length in relation to the social and ecological environment in the Seychelles warbler. **A** Estimates and 95% confidence intervals for all explanatory variables fitted in a linear mixed model (see methods for details). **B** RTL in relation to tarsus length and sex. **C** RTL in relation to variation in annual food availability. Lines and shaded areas represent the fitted values and 95% confidence limits from linear regressions.
+
 
 ```{r Figure 1}
 
@@ -276,6 +274,7 @@ dev.off()
 
 ```{r Figure 3}
 
+RTL_Full2 <- standardize(RTL_Full)
 
 CIs <- CIwald(RTL_Full2)
 t1a <- data.frame(myx = row.names(CIs)[7:nrow(CIs)],

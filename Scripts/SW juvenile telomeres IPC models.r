@@ -39,5 +39,3 @@ RTL_Full_SexTarsus <- lmer(RTL ~  LogAge + Helper + GroupSize + Sex + BodyMass +
 DeltaRTL_Full <- lmer(DeltaRTL ~  LogAge + Tarsus + Helper + GroupSize + Sex + BodyMass + Insect + Density + TQ + (1|BirdID),
                       data = dd3NA,
                              REML = FALSE)
-
-
