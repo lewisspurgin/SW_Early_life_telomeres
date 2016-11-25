@@ -35,7 +35,7 @@ source('Scripts/SW juvenile telomeres IPC models.r')
 
 
 
-
+ 
 
 
 **Table 1** Telomere dynamics and age in Seychelles warbler cohorts. Linear mixed models were created with RTL as the response variable, and different measures of age, cohort ID, and cohort x age interactions as explanatory variables (see methods for details). Models are ranked by AICc, with best models at the top of the table.
