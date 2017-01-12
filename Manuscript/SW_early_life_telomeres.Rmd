@@ -50,7 +50,7 @@ Lewis G. Spurgin^1^, Kat Bebbington^1^, Eleanor A. Fairfield^1^, Martijn Hammers
 **Running head:** Early-life telomeres
 
 ###Abstract
-1. Understanding the costs that individuals and populations face throughout their lifetimes is fundamental to understanding life-history evolution and population dynamics. Telomeres, the protective caps at the ends of chromosomes, shorten in response to oxidative stress, and telomere shortening is correlated with reduced survival. Thus, telomere dynamics may help us quantify individual variation in costs, and enhance our understanding of individual variation in natural populations.
+1. Understanding the costs that individuals face throughout their lifetimes is fundamental to understanding life-history evolution and population dynamics. Telomeres, the protective caps at the ends of chromosomes, shorten in response to oxidative stress, and telomere shortening is correlated with reduced survival. Investigating telomere dynamics may help us quantify individual variation in the costs of the social and ecological environment, and enhance our understanding of the dynamics of natural populations.
 
 2. Here we study spatio-temporal variation in lifelong telomere dynamics in the Seychelles warbler (*Acrocephalus sechellensis*). We combine long-term ecological data with one the largest longitudinal telomere datasets to date, consisting of `r nrow(dd)` samples from `r length(table(dd$Cohort))` cohorts born between `r min(dd$LayYear)` and `r max(dd$LayYear)`. We provide a detailed analysis of how telomere dynamics vary over individual lifespans, and with spatio-temporal variation in the social and ecological environment.
 
