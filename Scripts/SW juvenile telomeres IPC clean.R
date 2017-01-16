@@ -95,8 +95,8 @@ for(i in 1:nrow(dd))
                 dd$Tarsus[i] <- NA,
                 dd$Tarsus[i] <- dd$LeftTarsus[i]),
          dd$Tarsus[i] <- dd$RightTarsus[i])
-  
-  dd$DeltaAge[i] <- dd$Agemonths[i] - mean(subset(dd,BirdID == dd$BirdID[i])$Agemonths)
+  dd$MeanAge[i] <- mean(subset(dd,BirdID == dd$BirdID[i])$Agemonths)
+  dd$DeltaAge[i] <- dd$Agemonths[i] - dd$MeanAge[i]
   dd$DeltaLogAge[i] <- dd$LogAge[i] - mean(subset(dd,BirdID == dd$BirdID[i])$LogAge)
   dd$DeltaAge2[i] <- dd$Age2[i] - mean(subset(dd,BirdID == dd$BirdID[i])$Age2)
 }

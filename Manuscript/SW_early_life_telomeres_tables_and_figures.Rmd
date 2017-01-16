@@ -55,6 +55,7 @@ t1 <- as.matrix(RTL_Age_Dredge)
 nams <- colnames(t1)
 
 nams[nams == 'Agemonths'] <- 'Age (linear)'
+nams[nams == 'MeanAge'] <- 'Age (mean)'
 nams[nams == 'LogAge'] <- 'Age (log)'
 nams[nams == 'FAge'] <- 'Age (factor)'
 nams[nams == 'Cohort:FAge'] <- 'Age (factor)*cohort'
