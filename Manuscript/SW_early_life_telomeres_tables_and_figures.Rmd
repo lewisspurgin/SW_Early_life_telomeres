@@ -45,9 +45,9 @@ RTL_Age_Dredge <- dredge(RTL_Age,
                          subset = !(LogAge & FAge) & 
                            !(LogAge & Agemonths) &
                            !(LogAge & Age2) &
-                           !(Agemonths & FAge) & 
-                           !(Agemonths & Age2) &
-                           !(FAge & Age2))
+                           !(Agemonths & FAge) &
+                           !(FAge & Age2) &
+                           !(Age2 & !(Agemonths)))
  
 t1 <- as.matrix(RTL_Age_Dredge)
 
@@ -59,7 +59,7 @@ nams[nams == 'MeanAge'] <- 'Age (mean)'
 nams[nams == 'LogAge'] <- 'Age (log)'
 nams[nams == 'FAge'] <- 'Age (factor)'
 nams[nams == 'Cohort:FAge'] <- 'Age (factor)*cohort'
-nams[nams == 'Agemonths:Cohort'] <- 'Age (continuous)*cohort'
+nams[nams == 'Agemonths:Cohort'] <- 'Age (linear)*cohort'
 nams[nams == 'Cohort:LogAge'] <- 'Age (log)*cohort'
 nams[nams == 'Age2:Cohort'] <- 'Age (quadratic)*cohort'
 nams[nams == 'Age2'] <- 'Age (quadratic)'
@@ -75,9 +75,10 @@ table1A[,3:5] <- round(table1A[,3:5],3)
 
 
 RTL_DeltaAge_Dredge <- dredge(RTL_DeltaAge,
-                         subset = !(DeltaLogAge & DeltaAge) &
+                         subset = MeanAge &
+                           !(DeltaLogAge & DeltaAge) &
                            !(DeltaLogAge & DeltaAge2) &
-                           !(DeltaAge & DeltaAge2))
+                           !(!(DeltaAge) & DeltaAge2))
  
 t1 <- as.matrix(RTL_DeltaAge_Dredge)
 
@@ -110,9 +111,9 @@ kable(table1,digits = 3)
 
 **Figure Legends**
 
-**Figure 1** Telomere dynamics in relation to age in Seychelles warbler cohorts. **A** RTL and age across all individuals. Points and  thin grey lines represent individual samples and birds, respectively. The thick line and shaded area represent the fitted values and 95% confidence limits of a linear regression of RTL and log-transformed age.**B** Boxplot of variation in RTL among cohorts. For visualisation purposes a selection of cohorts with large sample sizes across a wide age range was chosen, but all cohorts were included in models. **C** RTL and age among cohorts. Lines represent fitted values from a linear regression and log-transformed age, and colours correspond to **B**. **D** RTL in relation to and $\Delta$Log age (i.e. within indiviual variation in log age).
+**Figure 1** Telomere dynamics in relation to age in Seychelles warbler cohorts. **A** RTL and age across all individuals. Points and  thin grey lines represent individual samples and birds, respectively. The thick line and shaded area represent the fitted values and 95% confidence limits of a linear regression of RTL and log-transformed age.**B** Boxplot of variation in RTL among cohorts. **C** RTL and age among cohorts. Lines represent fitted values from a linear regression and log-transformed age, and colours correspond to **B**. **D** RTL in relation to and $\Delta$Log age (i.e. within indiviual variation in log age).
 
-**Figure 2** Longitudinal telomere dynamics in the Seychelles warbler. **A** Variation in RTL within individuals sampled at different time points. The dotted line represents parity, and thus points above and below the line represent increases and decreases in RTL, respectively. **B** Scaled density plots of repeated RTL measurements among individual samples, and among different samples taken from the same individual.
+**Figure 2** Longitudinal telomere dynamics in the Seychelles warbler. **A** Variation in RTL within individuals sampled at different time points. The dotted line represents parity, and thus points above and below the line represent increases and decreases in RTL, respectively. **B** Scaled density plots of repeated RTL measurements among individual samples (grey), and among different samples taken from the same individual (yellow). Areas of the density plot to the left of the dotted line represent decreases in RTL, while areas to the right represent increases.
 
 **Figure 3** Telomere length in relation to the social and ecological environment in the Seychelles warbler. **A** Estimates and 95% confidence intervals for all explanatory variables fitted in a linear mixed model (see methods for details). **B** RTL in relation to tarsus length and sex. **C** RTL in relation to variation in annual food availability. Lines and shaded areas represent the fitted values and 95% confidence limits from linear regressions.
 
