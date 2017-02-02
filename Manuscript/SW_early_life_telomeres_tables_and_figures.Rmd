@@ -66,7 +66,7 @@ nams[nams == 'Age2'] <- 'Age (quadratic)'
 
 colnames(t1) <- nams
 
-table1A <- data.frame(Model = apply(t1,1,getterms,c(2:10)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+table1A <- data.frame(Model = apply(t1,1,getterms,c(2:6)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
 colnames(table1A) <- c('Model','df','AICc', 'Delta AICc','Weight')
 rownames(table1A) <- NULL
 table1A$Model[table1A$Model == ''] <- 'Null model'
@@ -94,7 +94,7 @@ nams[nams == 'DeltaAge2'] <- 'Delta age (quadratic)'
 
 colnames(t1) <- nams
 
-table1B <- data.frame(Model = apply(t1,1,getterms,c(2:8)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+table1B <- data.frame(Model = apply(t1,1,getterms,c(2:6)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
 colnames(table1B) <- c('Model','df','AICc', 'Delta AICc','Weight')
 rownames(table1B) <- NULL
 table1B$Model[table1B$Model == ''] <- 'Null model'
@@ -262,14 +262,40 @@ Fig2B <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
   geom_vline(xintercept = 0,lty = 2) +
   annotate('text',x = -1,y = 1,label = 'B')
 
+
+dd3$Gainer <- ifelse(dd3$DeltaRTL>0,1,0)
+
+Fig2C <- ddply(dd3,
+           .(Agemonths),
+           summarise,
+           PropGainers = mean(Gainer),
+           n = length(Gainer)) %>%
+  subset(n > 20) %>%
+  ggplot(aes(x = Agemonths,
+           y = PropGainers)) +
+  ylab("Proportion gainers") + 
+  xlab("Age") +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        legend.position = c('none'),
+        legend.title = element_text(size = 12),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black')) +
+    geom_point(col = 'grey')+
+  geom_line(col = 'grey')+
+  annotate('text',x = 0,y = 0.6,label = 'A')
+
 pdf('Figures/Figure 2.pdf',
-    width = 4,
-    height = 8,
+    width = 7,
+    height = 7,
     paper = 'a4')
-multiplot(Fig2A,Fig2B)
+multiplot(Fig2A,Fig2B,Fig2C,layout = matrix(c(1,2,3,3),nrow = 2,byrow = T))
 dev.off()
 
-  
+
 ```
 
 
@@ -279,15 +305,15 @@ dev.off()
 RTL_Full2 <- standardize(RTL_Full)
 
 CIs <- CIwald(RTL_Full2)
-t1a <- data.frame(myx = row.names(CIs)[7:nrow(CIs)],
+t1a <- data.frame(myx = row.names(CIs)[6:nrow(CIs)],
                   Estimate = fixef(RTL_Full2),
-                  X2.5. = CIs[7:nrow(CIs),1],
-                  X97.5. = CIs[7:nrow(CIs),2],
+                  X2.5. = CIs[6:nrow(CIs),1],
+                  X97.5. = CIs[6:nrow(CIs),2],
                   row.names = NULL,
                   stringsAsFactors = F)
 
 nams <- t1a$myx
-nams[nams == 'z.LogAge'] <- 'Age'
+nams[nams == 'z.LogAge'] <- 'Log age'
 nams[nams == 'z.Tarsus'] <- 'Tarsus length'
 nams[nams == 'c.Helper'] <- 'Number helpers'
 nams[nams == 'z.GroupSize'] <- 'Group size'

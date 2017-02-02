@@ -75,7 +75,7 @@ dd$Fledged <- factor(dd$Fledged,levels = c('Nestlings','Fledglings','Adults'))
 dd$Agemonths <- ifelse(dd$Ageclass == 'CH',1,
                        ifelse(dd$Ageclass == 'FL',6,
                               ifelse(dd$Ageclass == 'SA',10,dd$Age*12+6)))/12
-
+dd <- subset(dd,Agemonths != 0)
 
 dd$LogAge <- log10(dd$Agemonths)
 dd <- subset(dd,!is.na(LogAge))
