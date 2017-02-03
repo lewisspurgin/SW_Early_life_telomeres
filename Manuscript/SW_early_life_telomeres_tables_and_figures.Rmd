@@ -263,16 +263,13 @@ Fig2B <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
   annotate('text',x = -1,y = 1,label = 'B')
 
 
-dd3$Gainer <- ifelse(dd3$DeltaRTL>0,1,0)
+temp <- subset(dd3,TimeDiff < 4)
+temp$MidAge <- (temp$Agemonths+temp$Agemonths1)/2
+temp$Gainer <- ifelse(temp$DeltaRTL>0,1,0)
 
-Fig2C <- ddply(dd3,
-           .(Agemonths),
-           summarise,
-           PropGainers = mean(Gainer),
-           n = length(Gainer)) %>%
-  subset(n > 20) %>%
-  ggplot(aes(x = Agemonths,
-           y = PropGainers)) +
+
+Fig2C <- ggplot(temp, aes(x = Agemonths,
+           y = Gainer)) +
   ylab("Proportion gainers") + 
   xlab("Age") +
   theme_classic() +
@@ -284,9 +281,10 @@ Fig2C <- ddply(dd3,
         legend.title = element_text(size = 12),
         axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black')) +
-    geom_point(col = 'grey')+
-  geom_line(col = 'grey')+
-  annotate('text',x = 0,y = 0.6,label = 'A')
+  geom_point(col = 'grey')+
+  geom_count(alpha = 0.2)+
+  geom_smooth()+
+  annotate('text',x = -0.2,y = 1,label = 'C')
 
 pdf('Figures/Figure 2.pdf',
     width = 7,
@@ -299,6 +297,9 @@ dev.off()
 ```
 
 
+ggplot(temp,aes(x = TimeDiff,y = DeltaRTL))+
+geom_point()+
+geom_smooth()
 
 ```{r Figure 3}
 
