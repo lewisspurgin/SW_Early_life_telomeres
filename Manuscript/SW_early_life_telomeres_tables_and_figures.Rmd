@@ -224,9 +224,14 @@ dev.off()
 
 ```{r Figure 2}
 
-Fig2A <- ggplot(dd3,
+temp <- dd3
+temp$Gainer <- ifelse(temp$DeltaRTL>0,"1","0")
+
+
+Fig2A <- ggplot(temp,
        aes(x = RTL,
-           y = RTL1)) +
+           y = RTL1,
+           col = Gainer)) +
   ylab(expression('RTL ('*italic(t)*' + 1)')) + 
   xlab(expression('RTL ('*italic(t)*')')) +
   theme_classic() +
@@ -238,8 +243,9 @@ Fig2A <- ggplot(dd3,
         legend.title = element_text(size = 12),
         axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black')) +
-    geom_point(col = 'grey')+
+    geom_point()+
   geom_abline(slope = 1,intercept = 0,lty = 2) +
+  scale_colour_manual(values = c("navy","red"))+
   annotate('text',x = 0.3,y = 1.7,label = 'A')
 
 
@@ -263,13 +269,10 @@ Fig2B <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
   annotate('text',x = -1,y = 1,label = 'B')
 
 
-temp <- subset(dd3,TimeDiff < 4)
-temp$MidAge <- (temp$Agemonths+temp$Agemonths1)/2
-temp$Gainer <- ifelse(temp$DeltaRTL>0,1,0)
 
 
 Fig2C <- ggplot(temp, aes(x = Agemonths,
-           y = Gainer)) +
+           y = DeltaRTL,col = Gainer)) +
   ylab("Proportion gainers") + 
   xlab("Age") +
   theme_classic() +
@@ -281,16 +284,38 @@ Fig2C <- ggplot(temp, aes(x = Agemonths,
         legend.title = element_text(size = 12),
         axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black')) +
-  geom_point(col = 'grey')+
-  geom_count(alpha = 0.2)+
-  geom_smooth()+
+  geom_point()+
+  geom_smooth(col = "darkgrey",method = "lm",formula = y~log(x))+
+  geom_abline(slope = 0,intercept = 0,lty = 2)+
+  scale_colour_manual(values = c("navy","red"))+
+  annotate('text',x = -0.2,y = 1,label = 'C')
+
+
+Fig2D <- ddply()
+ggplot(temp, aes(x = Agemonths,
+           y = DeltaRTL,col = Gainer)) +
+  ylab("Proportion gainers") + 
+  xlab("Age") +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        legend.position = c('none'),
+        legend.title = element_text(size = 12),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black')) +
+  geom_point()+
+  geom_smooth(col = "darkgrey",method = "lm",formula = y~log(x))+
+  geom_abline(slope = 0,intercept = 0,lty = 2)+
+  scale_colour_manual(values = c("navy","red"))+
   annotate('text',x = -0.2,y = 1,label = 'C')
 
 pdf('Figures/Figure 2.pdf',
     width = 7,
     height = 7,
     paper = 'a4')
-multiplot(Fig2A,Fig2B,Fig2C,layout = matrix(c(1,2,3,3),nrow = 2,byrow = T))
+multiplot(Fig2A,Fig2B,Fig2C,Fig2D,layout = matrix(c(1,2,3,4),nrow = 2,byrow = T))
 dev.off()
 
 
