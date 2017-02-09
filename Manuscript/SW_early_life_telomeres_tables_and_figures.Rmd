@@ -111,9 +111,9 @@ kable(table1,digits = 3)
 
 **Figure Legends**
 
-**Figure 1** Telomere dynamics in relation to age in Seychelles warbler cohorts. **A** RTL and age across all individuals. Points and  thin grey lines represent individual samples and birds, respectively. The thick line and shaded area represent the fitted values and 95% confidence limits of a linear regression of RTL and log-transformed age.**B** Boxplot of variation in RTL among cohorts. **C** RTL and age among cohorts. Lines represent fitted values from a linear regression and log-transformed age, and colours correspond to **B**. **D** RTL in relation to and $\Delta$Log age (i.e. within indiviual variation in log age).
+**Figure 1** Telomere dynamics in relation to age in Seychelles warbler cohorts. **A** RTL and age across all individuals. Points and  connecting thin grey lines represent individual samples and birds, respectively. The thick line and shaded area represent the fitted values and 95% confidence limits of a linear regression of RTL and log-transformed age. **B** Boxplot of variation in RTL among cohorts. **C** RTL and age among cohorts. Lines represent fitted values from a linear regression of RTL and log-transformed age, and colours correspond to **B**. **D** RTL in relation to and $\Delta$Log age (i.e. within indiviual variation in log age).
 
-**Figure 2** Longitudinal telomere dynamics in the Seychelles warbler. **A** Variation in RTL within individuals sampled at different time points. The dotted line represents parity, and thus points above and below the line represent increases and decreases in RTL, respectively. **B** Scaled density plots of repeated RTL measurements among individual samples (grey), and among different samples taken from the same individual (yellow). Areas of the density plot to the left of the dotted line represent decreases in RTL, while areas to the right represent increases.
+**Figure 2** Longitudinal telomere dynamics in the Seychelles warbler. **A** Variation in RTL within individuals sampled at different time points. The dotted line represents parity, and thus points above and below the line represent increases and decreases in RTL, respectively. **B** Scaled density plots of repeated RTL measurements among individual samples, and among different samples taken from the same individual. Areas of the density plot to the left of the dotted line represent decreases in RTL, while areas to the right represent increases. **C** $\Delta$RTL in relation to age in pairs of samples taken within two years. Black line and shaded area represent fitted values and 05% confidence limits from a linear regression of RTL and log-transformed age. **D** Telomere lengthening and shortening in relation to age. Points at zero and one represent pairs of samples where RTL has decreased and increased, respectively, with point size scaled by the number of overlapping values. The grey line represents the proportion of samples in which i ncreases in RTL where observed at each age.
 
 **Figure 3** Telomere length in relation to the social and ecological environment in the Seychelles warbler. **A** Estimates and 95% confidence intervals for all explanatory variables fitted in a linear mixed model (see methods for details). **B** RTL in relation to tarsus length and sex. **C** RTL in relation to variation in annual food availability. Lines and shaded areas represent the fitted values and 95% confidence limits from linear regressions.
 
@@ -256,7 +256,7 @@ Fig2B <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
         axis.text.y = element_text(size = 12), 
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
-        legend.position = 'none',
+        legend.position = "top",
         legend.title = element_blank(),
         axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black')) +
@@ -277,8 +277,6 @@ Fig2C <- ggplot(temp, aes(x = Agemonths,
         axis.text.y = element_text(size = 12), 
         axis.title.y = element_text(size = 14,vjust=0.8),
         axis.title.x = element_text(size = 14),
-        legend.position = c('none'),
-        legend.title = element_text(size = 12),
         axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black')) +
   geom_point(col = "grey")+
@@ -370,7 +368,8 @@ Fig3B <- ggplot(dd,
         axis.title.x = element_text(size = 14),
                 axis.line.x = element_line(colour = 'black'),
         axis.line.y = element_line(colour = 'black'),
-        legend.position = 'none') +
+        legend.position = 'top',
+        legend.title = element_blank()) +
   stat_smooth(method = 'lm') +
   scale_color_manual(values = c('gold2','red'))+
   annotate('text',x = 17,y = 1.7,label = 'B')
