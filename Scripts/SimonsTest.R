@@ -105,4 +105,4 @@ pvalue<-pf(vratio,length(TLincreases)-1,dim(data)[1]-1,lower.tail=T)
 print(pvalue)
 
 
-
+pf(0.5,length(TLincreases)-1,dim(data)[1]-1,lower.tail=F)
