@@ -52,3 +52,57 @@ print(indexTLincreases[outsideconfindex]) #initial row of individual in the data
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ss <- table(subset(dd,Ageclass!="CH")$BirdID)
+tokeep <- names(ss[ss>2])
+data <- subset(dd,BirdID %in% tokeep)
+
+#Estimating error using individual regressions, Equation 4 in main manuscript
+
+
+birds <- unique(data$BirdID)
+output <- rep(NA,length(birds))
+deltaTL <- rep(NA,length(birds))
+  
+  #loop the individual regressions for the amount of individuals in the dataset
+
+for(i in 1:length(birds))
+{
+  cd <- subset(data,BirdID == birds[i])
+  fit<-lm(RTL~order(cd$Agemonths),data=cd)  #individual linear regression
+  output[i]<-sum((residuals(fit))^2)/(nrow(cd)-2) #residual sum of squares
+  deltaTL[i] <- cd[order(cd$Agemonths),"RTL"][length(cd[order(cd$Agemonths),"RTL"])] - cd[order(cd$Agemonths),"RTL"][1]
+  }
+sigma1<-mean(c(output)) #average residual sum of squares across the individuals
+
+
+#Estimating error under the assumption that TL cannot increase over time, Equation 5 in main manuscript
+
+#Next we determine which individuals increase in TL between the first and last timepoint
+indexTLincreases=which(deltaTL>0)
+
+#We create a new variable including only the data of individual increases
+TLincreases=deltaTL[indexTLincreases]
+#sigma2
+sigma2=0.5*sum(TLincreases^2)/(length(TLincreases))
+
+
+#compare both estimates of error variance (sigma1 and sigma2), Equation 6 in main manuscript
+vratio=sigma2/sigma1
+pvalue<-pf(vratio,length(TLincreases)-1,dim(data)[1]-1,lower.tail=T)
+print(pvalue)
+
+
+
