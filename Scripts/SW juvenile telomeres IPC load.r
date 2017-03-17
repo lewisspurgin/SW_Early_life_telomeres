@@ -8,7 +8,7 @@
 rm(list=ls())
 
 
-# Load relevant libraries -------------------------------------------------
+
 library(MuMIn)
 library(plyr)
 library(ggplot2)
