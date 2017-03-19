@@ -1,29 +1,46 @@
 ---
-output: pdf_document
+output: 
+  pdf_document:
+header-includes: \usepackage{graphicx}
 ---
 
 
 
-Dr Lewis G. Spurgin
-School of Biological Sciences
-University of East Anglia
-Norwich
-Norfolk NR4 7TJ
-United Kingdom
+\begin{flushright}
 
-Email: L.Spurgin@uea.ac.uk
-Web: lewisspurgin.wordpress.com
+\includegraphics{UEAlogo}
+
+School of Biological Sciences\\*
+University of East Anglia\\*
+Norwich\\*
+Norfolk NR4 7TJ\\* 
+United Kingdom  
+
+L.Spurgin@uea.ac.uk\\*
+lewisspurgin.wordpress.com
+
+\end{flushright}
+
+\bigskip
+
+**19th March 2017**
+
+\bigskip
 
 To the Editor,
 
 Please find enclosed our manuscript *Spatio-temporal variation in lifelong telomere dynamics in a long-term ecological study*, for consideration as an article to be published in *Journal of Animal Ecology*. We use telomeres as biomarkers to understand how individuals vary in their response to changes in the environment, over different life history stages. Specifically, utilising the many benefits of the long-term Seychelles warbler study system, we study telomere dynamics in relation to age and the ecological environment in 22 cohorts from a single wild population. 
 
-Two of our main faindings are particularly striking and will, we hope, be of interest to your readers. Firstly, we find that cohort effects are the most important drivers of variation in telomere length in the Seychelles warbler population. This has important ramifications for how studies of natural populations interpret variaiton in teloemre length, as these are often based on a single timepoint. Our data suggest that telomere dynamics at a single point in time may in fact be a snapshot of a temporally dynamic process.
+Two of our main findings are particularly striking and will, we hope, be of interest to your readers. Firstly, we find that cohort effects are the most important drivers of variation in telomere length in the Seychelles warbler population. This has important ramifications for how studies of natural populations interpret variation in telomere length, as these are often based on a single time point. Our data suggest that telomere dynamics at a single point in time may in fact be a snapshot of a temporally dynamic process.
 
 Secondly, using a large number of repeated telomere measurements we show that within-individual increases in telomere length cannot be solely explained by measurement error. This is in accordance with recent theoretical work, and data from humans, suggesting that telomere elongation may be an ecologically important process. We hope that our data will spur further research into when, where any why telomere elongation occurs.
 
 In addition to these two main findings, we provide a broad and comprehensive analysis of telomere dynamics in the long-term Seychelles warbler study. I hope you are in agreement that our thorough analysis, and main findings, are of of broad ecological interest, and suited to the readership of *Journal of Animal Ecology*. I look forward to hearing from you.
 
+\bigskip
+
 Yours faithfully,
+
+\bigskip
 
 Lewis Spurgin (on behalf of the authors)
