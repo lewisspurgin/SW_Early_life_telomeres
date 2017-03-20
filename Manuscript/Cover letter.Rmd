@@ -10,10 +10,14 @@ header-includes: \usepackage{graphicx}
 
 \includegraphics{UEAlogo}
 
+\bigskip
+
+Dr Lewis G. Spurgin\\*
+BBSRC Research Fellow\\*
 School of Biological Sciences\\*
 University of East Anglia\\*
 Norwich\\*
-Norfolk NR4 7TJ\\* 
+Norfolk, NR4 7TJ\\* 
 United Kingdom  
 
 L.Spurgin@uea.ac.uk\\*
@@ -21,6 +25,7 @@ lewisspurgin.wordpress.com
 
 \end{flushright}
 
+\bigskip
 \bigskip
 
 **19th March 2017**
@@ -38,9 +43,12 @@ Secondly, using a large number of repeated telomere measurements we show that wi
 In addition to these two main findings, we provide a broad and comprehensive analysis of telomere dynamics in the long-term Seychelles warbler study. I hope you are in agreement that our thorough analysis, and main findings, are of of broad ecological interest, and suited to the readership of *Journal of Animal Ecology*. I look forward to hearing from you.
 
 \bigskip
+\bigskip
 
 Yours faithfully,
 
 \bigskip
+\bigskip
 
 Lewis Spurgin (on behalf of the authors)
+

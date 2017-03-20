@@ -1,10 +1,13 @@
 ---
 output:
-  word_document:
-    reference_docx: myref.docx
+  pdf_document:
 bibliography: MyBib.bib
-csl: Evolution.csl
-
+csl: JAE.csl
+header-includes: \usepackage{graphicx}
+    \usepackage{setspace}
+    \doublespacing
+    \usepackage{lineno}
+    \linenumbers
 ---
 ```{r setup, include = F}
 
@@ -18,7 +21,9 @@ options(na.action='na.fail')
 opts_knit$set(root.dir = '..')
 opts_chunk$set(echo=FALSE,
                warning=FALSE,
-               message=FALSE)
+               message=FALSE,
+               fig.width=8,
+               fig.height=8)
 
 ```
 
@@ -35,7 +40,7 @@ source('Scripts/SW juvenile telomeres IPC models.r')
 
 
 
-**Spatio-temporal variation in lifelong telomere dynamics in a long-term ecological study**
+#Spatio-temporal variation in lifelong telomere dynamics in a long-term ecological study
 
 Lewis G. Spurgin^1^, Kat Bebbington^1^, Eleanor A. Fairfield^1^, Martijn Hammers^2^, Jan Komdeur^2^, Terry Burke^3^, Hannah L. Dugdale^2,4^ and David S. Richardson^1,5,^.
 
@@ -49,10 +54,10 @@ Lewis G. Spurgin^1^, Kat Bebbington^1^, Eleanor A. Fairfield^1^, Martijn Hammers
 
 **Running head:** Lifelong telomere dynamics in warblers
 
-###Abstract
+\pagebreak
+
+##Abstract
 1. Understanding individual-level variation in response to the environment is fundamental to understanding life-history evolution and population dynamics. Telomeres, the protective caps at the ends of chromosomes, shorten in response to oxidative stress, and telomere shortening is correlated with reduced survival and lifespan. Investigating telomere dynamics may help us quantify individual variation in the costs experienced from social and ecological environmental factors, and enhance our understanding of the dynamics of natural populations.
-
-
 
 2. Here we study spatio-temporal variation in lifelong telomere dynamics in the Seychelles warbler, *Acrocephalus sechellensis*. We combine long-term life-history and ecological data with a large longitudinal dataset of mean telomere lengths, consisting of `r nrow(dd)` samples from `r length(table(dd$Cohort))` cohorts born between `r min(dd$LayYear)` and `r max(dd$LayYear)`. We provide a detailed analysis of how telomere dynamics vary over individual lifespans and cohorts, and with spatio-temporal variation in the social and ecological environment.
 
@@ -65,10 +70,9 @@ Lewis G. Spurgin^1^, Kat Bebbington^1^, Eleanor A. Fairfield^1^, Martijn Hammers
 
 **Keywords:** Biomarkers; Intra- and inter-individual variation; Life history; Telomere; Seychelles warbler; Senescence
 
-**Data archival location:** This manuscript was written in R Markdown (http://rmarkdown.rstudio.com/). All data and scripts required to reproduce the manuscript, figures and analyses will be made available on GitHub.
+\pagebreak
 
-
-###Introduction
+##Introduction
 A major aim of ecologists and evolutionary biologists is to understand why individuals vary in their response to different environmental factors. Identifying this variation in environmental costs is central to understanding variation in fitness [@Lindstrom1999], and thus for understanding population and community dynamics [@Bolnick2011]. Furthermore, knowledge of the relative impact that different environmental factors exert on individuals, and why individuals may differ in mitigating these costs, is important to understanding evolutionary trade-offs and life-history strategies [@Stearns1992]. However, fully quantifying individual-level variation in costs is impossible in wild systems, and thus effective biomarkers that reflect the physiological consequences of individual-level experiences are required.
 
 Telomeres have been proposed to be a potential biomarker of such costs [@Monaghan2014]. Telomeres are repetitive DNA sequences at the ends of linear chromosomes that protect against DNA damage. Telomeres generally shorten with age [@Monaghan2006], and there is evidence from a range of taxa that telomere shortening is fastest in early life [e.g. @Frenck1998; @Haussmann2003]. Telomere shortening is accelerated by oxidative stress, which can be elevated due to many environmental factors [@VonZglinicki2002]. There is evidence from humans, and from captive and wild animal populations, that telomere shortening is influenced by the conditions experienced during both early life and adulthood  [@Price2013; @Monaghan2014; @Nettle2015; @Reichert2015]. Importantly, the extent of telomere shortening is linked to senescence and survival. When telomeres become critically short, cells senesce [@Campisi2003], and the accumulation of these cells has been suggested to result in organismal senescence and death [@Wong2003]. 
@@ -84,9 +88,9 @@ Importantly, we have an established protocol for assessing telomere length in th
 In this study, we test how lifelong telomere dynamics are related to environmental variation across 22 Seychelles warbler cohorts (years). We first study how telomere length and rates of shortening are related to age and sex across all life stages, and how this relationship varies among cohorts, in order to gain an in-depth understanding of the temporal dynamics of telomere changes. We then examine, within individuals, how telomere length changes with age, and statistically test whether observed increases in telomere length across temporally longitudinal samples within individuals are larger than can be accounted for by measurement error. Finally, we test how telomere length and shortening are related to a wide range of social and environmental variables in order to gain a fuller understanding of the forces driving telomere dynamics in natural populations.
 
 
-###Methods
+##Methods
 
-#####Study species and sampling
+*Study species and sampling*
 The Seychelles warbler is a small (~15 g), insectivorous passerine bird with a mean life expectancy of 5.5 years at fledging [@Hammers2013]. The population of *ca* 320 adult birds on Cousin Island (04'20'S, 55'40'E) has been intensively studied since 1986 [@Komdeur1992; @Richardson2003b; @Spurgin2014a]. This species' main breeding season runs from June-September (though a small proportion of pairs also breed between January–March), when the breeding females on many of the *ca* 110 territories will attempt to breed, laying one or, rarely, two or three eggs [@Komdeur1991]. Breeding attempts are often unsuccessful, and as a result of this low reproductive output, and higher mortality in first-year birds [39% in first-year birds versus 16% in adults; @Brouwer2006], cohort sizes in the Seychelles warbler are typically small (< 50). The 22 birth year cohorts used in this study cover 1993 to 2014 – the time period during which our data and sampling are most complete.
 
 The majority of individuals are ringed (with an individually numbered metal ring and unique combination of colour rings) within the first year of life, and so are of known age. We aged all birds using information on eye colour at first capture [@Komdeur1991a] and previous capture history [@Richardson2003b]. As Seychelles warblers are non-migratory endemics naturally confined to the island [@Komdeur2004a], an extensive biannual census of birds on Cousin during each breeding season gives accurate measures of local density, social status (e.g. breeder, helper, non-helper) and individual survival [@VandeCrommenacker2011; @Barrett2013a]. Full details of monitoring methods can be found in Brouwer *et al.* [-@Brouwer2012].
@@ -97,13 +101,13 @@ Each time a bird is caught on Cousin a range of morphometric measurements are ta
 
 
 
-#####Molecular methods
+*Molecular methods*
 For each sample, genomic DNA was extracted from a ~2 mm^2^ flake of preserved blood using the DNeasy Blood and Tissue Kit (Qiagen), following the manufacturer's protocol, with the modification of overnight lysis at 37^o^C and a final DNA elution volume of 80 $\mu$l. Sex was determined using the PCR-based method outlined by Griffiths *et al.* [-@Griffiths1998]. Prior to telomere analysis, DNA concentration and purity were quantified using a NanoDrop 8000 Spectrophotometer (ThermoScientific). The following thresholds were applied before samples were included for further analysis: i) DNA concentration must be at least 15 ng $\mu$l^-1^ (based on a mean of three measurements), ii) the 260/280 absorbance ratio has to be between 1.8 and 2.0 for acceptable DNA purity, and iii) the 260/230 absorbance ratio must be higher than 1.8. DNA integrity was further validated by visualization with ethidium bromide after electrophoresis on a 1.2% agarose gel, and all samples with evidence of DNA degradation were re-extracted or excluded. All DNA extractions that passed the above criteria were diluted to 3.3 ng $\mu$l^-1^ before telomere measurement. We measured relative telomere length (RTL) for all samples using a quantitative PCR (qPCR) assay of telomeres and a GAPDH control gene, following Bebbington *et al.* [-@Bebbington2016]. Based on the distribution of observed cq values, we excluded outlier samples with extremely large cq values (cq values > 25 and 26 were excluded for the telomere and GAPDH reactions, respectively), which were assumed to be failed reactions.
 
 For a large subset of birds we had longitudinal data, with two or more samples taken at different ages (n = `r length(unique(c(dd3$BloodID,dd3$BloodID1)))` measurements from `r length(unique(dd3$BirdID))` birds). For these individuals we calculated the within-individual change in RTL by subtracting RTL at time point *t* from RTL at time point *t* + 1 (hereafter $\Delta$RTL, n = `r nrow(dd3)` measurements). Negative values of RTL reflect decreases in telomere length with age, while positive values reflect increases.
 
 
-#####Statistical analyses
+*Statistical analyses*
 We performed all statistical analyses using R version 3.2.2 [@RDevelopmentCoreTeam2011]. RTL was square root transformed to improve linear model fits, and we assessed repeatability of RTL using the rptR package.
 
 We explored the cross-sectional relationship between RTL and age among cohorts using linear mixed models (LMMs) carried out in the lme4 package [@Bates2014]. Following a similar approach to Fairlie *et al.* [-@Fairlie2016], we compared a selection of models fitting different relationships between RTL and age. We created models where the relationship between RTL and age was linear, quadratic, log-linear, and where age was fitted as a factor. For each age term, we fitted additional models including birth year (cohort) as a factor. All fitted models are included in Table 1. Note that we do not carry out full model selection or model averaging here, as our aim was to compare a set of specifically defined models. For random effects we included individual ID, and catch year. Models were compared using AIC with correction for finite sample size [AICc; @Hurvich1989].
@@ -120,10 +124,10 @@ We used LMMs to explore how variation in environmental and social conditions inf
 
 For individuals with longitudinal data we repeated the above analyses of telomere dynamics, replacing telomere length with $\Delta$RTL~*individual*~ as the response variable, and including the environmental/social explanatory variables from the first of the two sampling points. We excluded the cohort ID random effect from this analysis, as longitudinal telomere dynamics did not differ among cohorts; see results.
 
-###Results
+##Results
 We measured telomere lengths using a total of `r length(unique(dd$BloodID))` unique samples from juvenile and adult Seychelles warblers from `r length(table(dd$Cohort))` cohorts born between `r min(dd$LayYear)` and `r max(dd$LayYear)`. Efficiencies (mean $\pm$ s.d.) for our telomere and GAPDH reactions were `r round2(mean(dd$EffTelomere))` $\pm$ `r round2(sd(dd$EffTelomere))` and `r round2(mean(dd$EffGAPDH))` $\pm$ `r round2(sd(dd$EffGAPDH))` respectively. Inter-plate repeatability of RTL, based on `r nrow(subset(ddL,Group == 'Within samples'))` samples measured at least twice at different time points, was `r round2(rptall$R)` (CI = `r round2(rptall$CI_emp[1])`, `r round2(rptall$CI_emp[2])`).
 
-#####Telomere dynamics and age among cohorts
+*Telomere dynamics and age among cohorts*
 We first tested how RTL was related to age among cohorts using a model selection approach. The top model contained a log-linear relationship between RTL and age (Table 1A). All other models fitted the data much less well ($\Delta$AICc > 15; Table 1). The log-linear relationship between RTL and age could be seen clearly in the raw data; RTL decreased with age (estimate = `r round3(fixef(RTL_LogAge)['LogAge'],lessthan = F)`, CIs = `r paste(round3(CIwald(RTL_LogAge)['LogAge',],lessthan = F),collapse = ', ')`), with the greatest decrease occurring in the first year of life (Fig. 1A). There was substantial variation in RTL among cohorts, with no obvious trend over time (Fig. 1B). There was a negative relationship between RTL and log age in 21 of the `r length(table(dd$Cohort))` cohorts, but the slope the relationship varied substantially among cohorts (Fig. 1C). To test whether this variation was significant we fitted a model including the log age x cohort interaction term, and found that this was a marginally better fit than a model including only main effects ($\Delta$AICc = `r round2(AICc(RTL_LogAge) - AICc(RTL_LogAgeXcohort))`). In the one year in which RTL increased with age (2013), 17 of the 18 birds sampled were fledglings or subadults, suggesting that the observed pattern was an artefact of the sampling in this season (i.e. a lack of variation in age among sampled birds), rather than a real relationship.
 
 A within-individual analysis of RTL and age revealed that the top model explaining RTL contained $\Delta$log age, which reflects within-individual changes in log-transformed age (Table 1B). Models including cohort ID were substantially poorer fits than a model only containing age (Table 1B). RTL decreased with $\Delta$log age (estimate = `r round3(fixef(RTL_DeltaLogAge)['DeltaLogAge'],lessthan = F)`, CIs = `r paste(round3(CIwald(RTL_DeltaLogAge)['DeltaLogAge',],lessthan = F),collapse = ', ')`), confirming that within-individual telomere shortening occurs across the Seychelles warbler dataset.
@@ -136,10 +140,10 @@ To better understand how longitudinal telomere dynamics vary with age, we examin
 
 Using the approach outlined by Simons *et al.* we tested whether overall increases in RTL over lifespans could be detected statistically in our dataset. We found no evidence that this was the case: overall increases in RTL within individuals did not exceed residual variance; in fact, residual variance in RTL was significantly greater than observed RTL increases over lifespans (P = 0.02). This suggests that increases in RTL within individuals are sporadic, and not consistent over individual lifespans.
 
-#####Telomere dynamics and the environment
+*Telomere dynamics and the environment*
 In addition to age, RTL was associated with tarsus length, sex and insect abundance (Fig. 3A). RTL was negatively related to tarsus length and males had longer telomeres than females (Fig. 3B), while insect abundance was positively related to RTL (Fig. 3C). The full model was weak in terms of explanatory power of fixed effects (marginal R^2^ = `r round2(r.squaredGLMM(RTL_Full)['R2m'])`), although including the random effect terms increased this substantially (conditional R^2^ = `r round2(r.squaredGLMM(RTL_Full)['R2c'])`). The model averaging approach yielded qualitatively identical results to the full LMM, with the same explanatory variables 'significant' in terms of being retained in top models, and having model-averaged confidence intervals not overlapping zero (Table S1; Fig. S1). One interesting finding from the model selection was that sex only appeared in top models where tarsus length was also present (Table S1). In accordance with this, when tarsus length was removed from the full model sex was no longer significant (estimate = `r round3(fixef(RTL_Full_NoTarsus)['SexMales'],lessthan = F)`, CIs = `r paste(round3(CIwald(RTL_Full_NoTarsus)['SexMales',],lessthan = F),collapse = ', ')`), and a sex x tarsus interaction was significant when included (estimate = `r round3(fixef(RTL_Full_SexTarsus)['SexMales:Tarsus'],lessthan = F)`, CIs = `r paste(round3(CIwald(RTL_Full_SexTarsus)['SexMales:Tarsus',],lessthan = F),collapse = ', ')`); RTL decreased with tarsus length in both sexes, but this decrease was stronger in females (Fig. 3B). No social or ecological environmental variables were significant predictors of $\Delta$RTL using the full model approach (Table S2). Using model selection, we found that the top model explaining $\Delta$RTL contained age and population density (Table S3). $\Delta$RTL was positively related to age, consistent with telomere shortening being highest in early life, and negatively related to population density; however, in both instances model averaged confidence intervals overlapped zero (Fig. S2).
 
-###Discussion
+##Discussion
 Here we use a long-term, multi-cohort dataset to assess lifelong telomere dynamics and the relationship between these and spatio-temporal variation in the ecological environment in a contained population of Seychelles warblers. We found that telomere length decreases with age, and that this decrease is greatest very early in life. Telomere length decreased with age in almost all of the `r length(table(dd$Cohort))` cohorts studied, but the rate of decrease of telomere length with age, and consequently the telomere length of adults, varied substantially among cohorts. Despite an overall pattern of telomere shortening with age in the Seychelles warbler, we found that our measure of telomere length increased within some individuals at particular life stages, and that the extent of these increases could not be explained solely by qPCR measurement error. Finally, we found that telomeres are related to tarsus length in a sex-specific manner, and that telomere length is positively associated with temporal fluctuations in food availability.
 
 Our study adds to the substantial body of literature from humans and wild animals showing that telomere length decreases with age, and that this decrease is most rapid in early life [e.g. @Frenck1998; @Haussmann2003; @Heidinger2012]. However, we also found that, despite an overall trend for shortening, telomere length both increased and decreased, especially after the juvenile period. Importantly, these increases were observed in longitudinal as well as cross-sectional data, indicating that selective disappearance of individuals with shorter telomeres is not sufficient to explain this pattern. Longitudinal increases in measured telomere length have been observed in humans and wild animals  [@Steenstrup2013;@Kotrschal2007; @Fairlie2016; @Hoelzl2016; @Hoelzl2016a]. The most commonly invoked explanation for increases in telomere length is measurement error, which can be a particular problem in qPCR-based telomere studies [@Nussey2014; @Steenstrup2013; @Verhulst2015]. However, recent modelling work suggests that longitudinal telomere dynamics in humans are indeed consistent with instances of lengthening, and that dismissing apparent telomere lengthening as solely measurement error is "too strong" without additional data [@Bateson2016a]. Here, we explicitly compare intra-individual variation among samples to variation among sample replicates, on a large scale. Our results suggest that qPCR measurement error alone cannot explain observed increases in RTL observed within individuals.
@@ -157,9 +161,378 @@ We also found evidence for sex-specific telomere dynamics: males had longer telo
 Although we found clear associations between the environment and telomere dynamics, we should bear in mind that the social and ecological variables we tested here explained only a small proportion of the variance in RTL. A poor social and ecological environment is known to be detrimental to Seychelles warblers, both in terms of oxidative stress and survival [@VandeCrommenacker2011a; @Brouwer2012], and it is therefore perhaps surprising that these variables do not explain more variance in RTL. While telomere measurement error will account for some of this lack of explanatory power, it is also likely that early-life RTL in the Seychelles warbler is explained by a set of environmental and genetic variables not considered here [e.g. @Bebbington2016]. A key question to be addressed is the extent to which RTL, especially in early life, reflects inheritance and parental effects [e.g. @Becker2015; @Asghar2014; @Heidinger2016]. For example, parental age and quality may key variables that impact the telomere dynamics of offspring in the Seychelles warbler, and will be addressed in future studies.  Long-term ecological study systems are uniquely suited to addressing such questions in natural systems [@Clutton-Brock2010]. To gain a full understanding of telomere dynamics in natural systems, long-term studies combining ecological and genetic data will be required from a range of species.
 
 
-###Acknowledgements
+##Acknowledgements
 We thank Nature Seychelles for facilitating the long-term Seychelles warbler project. The Seychelles Bureau of Standards and Department of Environment gave permission for sampling and fieldwork. Emma Barrett laid the foundations for this study, generating the original telomere qPCR protocol. We thank everyone who has helped in the field, with lab work and with database management, and the Seychelles warbler research group for discussions. This work was funded by two Natural Environment Research Council (NERC) grants to DSR (NE/F02083X/1 and NE/K005502/1). LGS was also funded by a fellowship from the BBSRC (BB/N011759/1), HLD by a NERC fellowship (NE/I021748/1), MH was funded by a VENI fellowship from the Netherlands Organisation for Scientific Research (863.15.020), and TB by a Leverhulme fellowship.
 
+##Data accessibility
+This manuscript was written in R Markdown (http://rmarkdown.rstudio.com/). All data and scripts required to reproduce the manuscript, figures and analyses will be made available on GitHub.
 
-###References
+##Author contributions
+DSR, HLD, JK and TB manage the long-term Seychelles warbler project. DSR conceived and obtained funding for the telomere research. EAF and KB performed the molecular work. LGS processed the telomere data, with input from EAF, KB, MH, HLD and DSR. LGS analysed the data and wrote the manuscript, with input from DSR and all authors.
 
+##References
+
+<div id="refs"></div>
+
+\pagebreak
+
+**Table 1** Telomere dynamics and age in Seychelles warbler cohorts. Linear mixed models were created with RTL as the response variable, and different measures of age, along with cohort ID, were included as explanatory variables (see methods for details). Models are ranked by AICc, with best models at the top of the table.
+
+```{r Table 1,include = T,echo = F,warning = F}
+RTL_Age_Dredge <- dredge(RTL_Age,
+                         subset = !(LogAge & FAge) & 
+                           !(LogAge & Agemonths) &
+                           !(LogAge & Age2) &
+                           !(Agemonths & FAge) &
+                           !(FAge & Age2) &
+                           !(Age2 & !(Agemonths)))
+ 
+t1 <- as.matrix(RTL_Age_Dredge)
+
+#Sort out row/col names
+nams <- colnames(t1)
+
+nams[nams == 'Agemonths'] <- 'Age (linear)'
+nams[nams == 'MeanAge'] <- 'Age (mean)'
+nams[nams == 'LogAge'] <- 'Age (log)'
+nams[nams == 'FAge'] <- 'Age (factor)'
+nams[nams == 'Cohort:FAge'] <- 'Age (factor)*cohort'
+nams[nams == 'Agemonths:Cohort'] <- 'Age (linear)*cohort'
+nams[nams == 'Cohort:LogAge'] <- 'Age (log)*cohort'
+nams[nams == 'Age2:Cohort'] <- 'Age (quadratic)*cohort'
+nams[nams == 'Age2'] <- 'Age (quadratic)'
+
+colnames(t1) <- nams
+
+table1A <- data.frame(Model = apply(t1,1,getterms,c(2:6)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+colnames(table1A) <- c('Model','df','AICc', 'Delta AICc','Weight')
+rownames(table1A) <- NULL
+table1A$Model[table1A$Model == ''] <- 'Null model'
+table1A[,3:5] <- lapply(table1A[,3:5],as.numeric)
+table1A[,3:5] <- round(table1A[,3:5],3)
+
+
+RTL_DeltaAge_Dredge <- dredge(RTL_DeltaAge,
+                         subset = MeanAge &
+                           !(DeltaLogAge & DeltaAge) &
+                           !(DeltaLogAge & DeltaAge2) &
+                           !(!(DeltaAge) & DeltaAge2))
+ 
+t1 <- as.matrix(RTL_DeltaAge_Dredge)
+
+#Sort out row/col names
+nams <- colnames(t1)
+
+nams[nams == 'DeltaAge'] <- 'Delta age (linear)'
+nams[nams == 'DeltaLogAge'] <- 'Delta age (log)'
+nams[nams == 'Cohort:DeltaAge'] <- 'Delta age (continuous)*cohort'
+nams[nams == 'Cohort:DeltaLogAge'] <- 'Delta age (log)*cohort'
+nams[nams == 'Cohort:DeltaAge2'] <- 'Delta age (quadratic)*cohort'
+nams[nams == 'DeltaAge2'] <- 'Delta age (quadratic)'
+
+colnames(t1) <- nams
+
+table1B <- data.frame(Model = apply(t1,1,getterms,c(2:6)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+colnames(table1B) <- c('Model','df','AICc', 'Delta AICc','Weight')
+rownames(table1B) <- NULL
+table1B$Model[table1B$Model == ''] <- 'Null model'
+table1B[,3:5] <- lapply(table1B[,3:5],as.numeric)
+table1B[,3:5] <- round(table1B[,3:5],3)
+
+#Sort out rounding and exlcude NAs from blank spaces. Clunky but works
+table1 <- rbind(c('A',rep('-',4)),table1A,c('B',rep('-',4)),table1B)
+
+kable(table1,digits = 3)
+```
+
+\pagebreak
+
+##Figure Legends
+
+**Figure 1** Telomere dynamics in relation to age in Seychelles warbler cohorts. **A** RTL and age across all individuals. Points and  connecting thin grey lines represent individual samples and birds, respectively. The thick line and shaded area represent the fitted values and 95% confidence limits of a linear regression of RTL and log-transformed age. **B** Boxplot of variation in RTL among cohorts. **C** RTL and age among cohorts. Lines represent fitted values from a linear regression of RTL and log-transformed age, and colours correspond to **B**. **D** RTL in relation to and $\Delta$Log age (i.e. within individual variation in log age).
+
+**Figure 2** Longitudinal telomere dynamics in the Seychelles warbler. **A** Variation in RTL within individuals sampled at different time points. The dotted line represents parity, and thus points above and below the line represent increases and decreases in RTL, respectively. **B** Scaled density plots of repeated RTL measurements among individual samples, and among different samples taken from the same individual. Areas of the density plot to the left of the dotted line represent decreases in RTL, while areas to the right represent increases. **C** $\Delta$RTL in relation to age in pairs of samples taken within two years. Black line and shaded area represent fitted values and 95% confidence limits from a linear regression of RTL and log-transformed age. **D** Probability of telomere lengthening occurring in relation to age. Points at zero and one represent pairs of samples where RTL has decreased and increased, respectively, with point size scaled by the number of overlapping values. The black line represents the proportion of samples in which increases in RTL where observed at each age category.
+
+**Figure 3** Telomere length in relation to the social and ecological environment in the Seychelles warbler. **A** Estimates and 95% confidence intervals for all explanatory variables fitted in a linear mixed model (see methods for details). **B** RTL in relation to tarsus length and sex. **C** RTL in relation to variation in annual food availability. Lines and shaded areas represent the fitted values and 95% confidence limits from linear regressions.
+
+\pagebreak
+
+
+
+
+
+
+**Figure 1**
+
+```{r Figure 1}
+
+Fig1A <- ddply(dd,
+               .(BirdID),
+        mutate,
+        nreps = length(RTL)) %>%
+  subset(nreps>0) %>%
+  subset(!duplicated(paste0(BirdID,Agemonths))) %>%
+  ggplot(aes(x = Agemonths,y = RTL,group = BirdID,col=factor(BirdID)))+
+  geom_point(alpha = 1,col='grey')+
+geom_line(col = 'darkgrey',alpha = 0.2)+
+  xlab('Age (years)') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'none')+
+  geom_smooth(col = 'black',fill = 'black',lwd = 0.5,aes(group = NULL),method = 'lm',formula = y~log(x))+
+  annotate('text',x = 0,y = 1.7,label = 'A')
+
+
+
+c15 <- c("dodgerblue2","#E31A1C", # red
+                "green4",
+                "#FF7F00", # orange
+                "gold1",
+                "skyblue2", # lt pink
+                "palegreen2",
+                "#FDBF6F", # lt orange
+                "gray70", "khaki2","blue1","steelblue4",
+                "darkturquoise",
+                "darkorange4","brown","navy",
+         'yellow','green','khaki3','blue','pink','orange')
+
+Fig1B <- transform(dd,Cohort = factor(LayYear)) %>%
+  ggplot(aes(y = RTL,x = Cohort, fill = Cohort))+
+  xlab('Birth year') +
+  geom_boxplot(outlier.shape = NA) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12,angle = 90), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'none') +
+        scale_fill_manual(values = c15)+
+  annotate('text',x = 1,y = 1.6,label = 'B')
+
+
+Fig1C <- transform(dd,Cohort = factor(LayYear)) %>%
+  ggplot(aes(y = RTL,x = Agemonths, col = Cohort,fill = Cohort))+
+  xlab('Age (years)') +
+  geom_smooth(method = 'lm', formula = y~log(x),se = F) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'none') +
+    scale_color_manual(values = c15)+
+        scale_fill_manual(values = c15)+
+  annotate('text',x = 0,y = 1.3,label = 'C')
+
+
+
+  Fig1D <- ggplot(dd3, aes(x = DeltaLogAge,y = RTL))+
+  geom_point(alpha = 1,col='grey')+
+  xlab(expression(Delta*'Log age (years)')) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'none')+
+  geom_smooth(col = 'black',method = 'lm')+
+  annotate('text',x = -1.5,y = 1.7,label = 'D')
+
+
+
+multiplot(Fig1A,Fig1B,Fig1C,Fig1D,layout = matrix(1:4,2,2,byrow = T))
+
+
+```
+
+\pagebreak
+
+
+
+
+
+**Figure 2**
+
+```{r Figure 2}
+
+temp <- subset(dd3,TimeDiff < 3.5)
+
+
+Fig2A <- ggplot(dd3,
+       aes(x = RTL,
+           y = RTL1)) +
+  ylab(expression('RTL ('*italic(t)*' + 1)')) + 
+  xlab(expression('RTL ('*italic(t)*')')) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        legend.position = c('none'),
+        legend.title = element_text(size = 12),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black')) +
+    geom_point(col = "grey")+
+  geom_abline(slope = 1,intercept = 0,lty = 2) +
+  annotate('text',x = 0.3,y = 1.7,label = 'A')
+
+
+
+Fig2B <- ggplot(ddL,aes(col=Group,fill = Group,y = ..scaled..,x = DeltaRTL))+
+    geom_density(alpha = 0.2)+
+  theme_classic()+
+  ylab ('Scaled density')+
+  xlab(expression(Delta*'RTL'))+
+    theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        legend.position = "top",
+        legend.title = element_blank(),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black')) +
+  scale_colour_manual(values = c('darkgrey','gold'))+
+  scale_fill_manual(values = c('darkgrey','gold'))+
+  geom_vline(xintercept = 0,lty = 2) +
+  annotate('text',x = -1,y = 1,label = 'B')
+
+
+
+
+Fig2C <- ggplot(temp, aes(x = Agemonths,
+           y = DeltaRTL)) +
+  ylab(expression(Delta*'RTL'))+
+  xlab("Age (years)") +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black')) +
+  geom_point(col = "grey")+
+  geom_smooth(col = 'black',fill = 'black',method = "lm",formula = y~log(x))+
+  geom_abline(slope = 0,intercept = 0,lty = 2)+
+  annotate('text',x = -0.2,y = 1,label = 'C')
+
+
+Fig2D <- ddply(temp,
+               .(Agemonths),
+               summarise,
+               PropGainer = mean(DeltaRTLF),
+               n = length(DeltaRTLF)) %>%
+ggplot(aes(x = Agemonths,
+           y = PropGainer)) +
+  ylab("Proportion gainers") + 
+  xlab("Age (years)") +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+        legend.position = c('none'),
+        legend.title = element_text(size = 12),
+        axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black')) +
+  geom_line(col="black")+
+  geom_count(data = temp,aes(y = DeltaRTLF,x = Agemonths),col = "grey")+
+  annotate('text',x = 0,y = 1.1,label = 'D')
+
+
+multiplot(Fig2A,Fig2B,Fig2C,Fig2D,layout = matrix(c(1,2,3,4),nrow = 2,byrow = T))
+
+
+```
+
+\pagebreak
+
+
+
+
+
+**Figure 3**
+
+```{r Figure 3}
+
+RTL_Full2 <- standardize(RTL_Full)
+
+CIs <- CIwald(RTL_Full2)
+t1a <- data.frame(myx = row.names(CIs)[6:nrow(CIs)],
+                  Estimate = fixef(RTL_Full2),
+                  X2.5. = CIs[6:nrow(CIs),1],
+                  X97.5. = CIs[6:nrow(CIs),2],
+                  row.names = NULL,
+                  stringsAsFactors = F)
+
+nams <- t1a$myx
+nams[nams == 'z.LogAge'] <- 'Log age'
+nams[nams == 'z.Tarsus'] <- 'Tarsus length'
+nams[nams == 'c.Helper'] <- 'Number helpers'
+nams[nams == 'z.GroupSize'] <- 'Group size'
+nams[nams == 'c.Sex'] <- 'Sex (males)'
+nams[nams == 'z.BodyMass'] <- 'Body mass'
+nams[nams == 'z.Insect'] <- 'Insect abundance'
+nams[nams == 'z.TQ'] <- 'Territory quality'
+nams[nams == 'z.Density'] <- 'Density'
+
+t1a$myx <- nams
+
+t1a$myx <- factor(t1a$myx,levels = t1a$myx[order(t1a$Estimate,decreasing = T)])
+t1a <- subset(t1a,myx != "(Intercept)")
+
+Fig3A <- forestplot(t1a,RI = F)+
+  annotate('text',y = 0.1,x = 0.6,label = 'A')
+
+
+Fig3B <- ggplot(dd,
+       aes(x = Tarsus,
+           y = RTL,
+           col = Sex)) +
+  geom_point()+
+  ylab('RTL') + 
+  xlab('Tarsus length (mm)') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+                axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'top',
+        legend.title = element_blank()) +
+  stat_smooth(method = 'lm') +
+  scale_color_manual(values = c('gold2','red'))+
+  annotate('text',x = 17,y = 1.7,label = 'B')
+
+Fig3C <- ggplot(dd,
+       aes(y = RTL,
+           x=Insect)) +
+    ylab('RTL') + 
+  xlab('Insect abundance') +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12), 
+        axis.title.y = element_text(size = 14,vjust=0.8),
+        axis.title.x = element_text(size = 14),
+                axis.line.x = element_line(colour = 'black'),
+        axis.line.y = element_line(colour = 'black'),
+        legend.position = 'none') +
+  geom_boxplot(aes(group = Insect),outlier.shape = NA)+
+   stat_smooth(method = 'lm',col = 'darkgrey') +
+  annotate('text',x = 2.5,y = 1.6,label = 'C')
+
+
+multiplot(Fig3A,Fig3B,Fig3C,layout = matrix(c(1,1,2,3),byrow = T,nrow = 2))
+
+```

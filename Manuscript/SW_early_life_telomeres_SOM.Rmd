@@ -1,10 +1,9 @@
 ---
-output:
-  word_document:
-    reference_docx: myref.docx
+output: pdf_document
+classoption: landscape
 ---
 
-###Supplementary information for Spurgin *et al.* "Spatiotemporal variation in lifelong telomere dynamics in a long-term ecological study"
+#Supplementary information for Spurgin *et al.* "Spatiotemporal variation in lifelong telomere dynamics in a long-term ecological study"
 
 
 
@@ -25,9 +24,7 @@ opts_chunk$set(echo=FALSE,
                message=FALSE,
                fig.path='../Figures/',
                fig.width= 5,
-               fig.height= 5,
-               fig.show='asis',
-               dev=c('png'))
+               fig.height= 5)
 
 ```
 
@@ -41,6 +38,7 @@ source('Scripts/SW juvenile telomeres IPC models.r')
 source('Scripts/SW juvenile telomeres IPC model averaging.r')
 
 ```
+
 
 **Table S1** Model selection table for analysis of factors affecting early life telomere length in juvenile Seychelles warblers. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here.
 
@@ -76,7 +74,10 @@ kable(tableS1,digits=2)
 ```
 
 
+\pagebreak
+
 **Table S2** Full model of factors affecting $\Delta$RTL in Seychelles warblers, using longitudinal data.
+
 ```{r Table S2}
 
 #Run the model
@@ -105,8 +106,10 @@ kable(t1b,digits = 3)
 
 ```
 
+\pagebreak
 
 **Table S3** Model selection table for analysis of factors affecting $\Delta$RTL in Seychelles warblers, using longitudinal data. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. TQ = territory quality.
+
 
 ```{r Table S3}
 
@@ -138,8 +141,8 @@ kable(tableS3,digits=2)
 
 ```
 
+\pagebreak
 
-**Figure S1** Model averaged estimates and 95% cofidence intervals for social and ecological environmental variables in relation to RTL in Seychelles warblers. 
 
 ```{r Figure S1}
 
@@ -182,10 +185,12 @@ FigS1
 
 ```
 
+**Figure S1** Model averaged estimates and 95% cofidence intervals for social and ecological environmental variables in relation to RTL in Seychelles warblers. 
 
 
+\pagebreak
 
-**Figure S2** Model averaged estimates and 95% cofidence intervals for social and ecological environmental variables in relation to $\Delta$RTL in Seychelles warblers, using longitudinal data. 
+
 
 ```{r Figure S2}
 
@@ -225,3 +230,5 @@ FigS2 <- forestplot(table2)+
 FigS2
 
 ```
+
+**Figure S2** Model averaged estimates and 95% cofidence intervals for social and ecological environmental variables in relation to $\Delta$RTL in Seychelles warblers, using longitudinal data. 
