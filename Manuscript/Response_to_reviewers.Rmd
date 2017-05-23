@@ -89,14 +89,24 @@ RESPONSE: The reviewer is correct that the estimate of repeatability is the intr
 
 RESPONSE: We are confident that plate effects are not a source of systematic bias in our data. Firstly, we assigned samples completely randomly (i.e. using a random number generator) to plates prior to running the telomere assays, minimising the chance that plate effects would introduce systematic differences among ages, sexes or cohorts. Secondly, our method of estimating RTL normalises samples across plates, as each RTL value is obtained by subtracting sample Cq values from Cq values obtained from a "calibrator" sample, which is run on every plate (information contained within Bebbington et al. 2016, cited). Thirdly, in response to a request by reviewer 3 we have now also included plate ID as a random effect in the models (see below), and our results are virtually identical.
 
-With regards to the observed telomere lenghtening, it is very possible that inter-plate variability accounts some of the observed lengthening in our dataset, but it cannot account for the amount and extent of lengthening we find. Indeed, this is exactly what Figure 2B shows. The lengthening observed "within" samples can be attributed to error across plates, but the additional lengthening observed "among" samples cannot be explained by measurement error.
+With regards to the observed telomere lengthening, it is very possible that inter-plate variability accounts some of the observed lengthening in our dataset, but it cannot account for the amount and extent of lengthening we find. Indeed, this is exactly what Figure 2B shows. The lengthening observed "within" samples can be attributed to error across plates, but the additional lengthening observed "among" samples cannot be explained by measurement error.
 
-We now include a brief discussion of the error rate on lines XX:
+We now explain our randomisation approach in the methods, line XX:
 
 \begin{adjustwidth}{2cm}{2cm}
 
 \textit{
-"Put in the quoted text here..."
+"Prior to qPCR, we used a random number generator to assign samples to qPCR plates, to ensure that no systematic bias could occur with regards to age, sex, cohort or ecological environment."
+}
+
+\end{adjustwidth}
+
+We also include a discussion on error rate on lines XX:
+
+\begin{adjustwidth}{2cm}{2cm}
+
+\textit{
+"Measurement error is one  factor that is an issue in our study, and other studies that use qPCR to measure telomere length (Nussey et al. 2014). Measurement error is unlikely to be a cause of type I error in our study, because we were careful to randomise all samples across qPCR plates, and normalise RTL estimates across plates. However, the noise associated with within and among plate measure may have resulted in a decrease in explanatory power, and possibly in a degree of type II error. Techniques for measuring telomere length with a greater degree of precision may probe helpful in future ecological studies of teloere dynamics, but at present there is still atrade-off between obtaining precise telomere measurements, and utilising the large sample sizes necessary for ecological study."
 }
 
 \end{adjustwidth}
@@ -109,6 +119,7 @@ We now include a brief discussion of the error rate on lines XX:
 
 **1.78 (78%) would not be considered appropriate by many researchers for qPCR methodology (the commonly accepted limit is more or less + or minus 10%, so here between 90% (1.90) and 110% (2.10)). Your efficiency is more than 20% below the expected 100%, which raises some questions about the validity of your methodology. How can you be confident that this low efficiency is not affecting the quality of your data?**
 
+RESPONSE: Again, the level of efficiency is lower than we would have liked, although again suts fairly squarely within that found the published literature (see Fairlie et al. 2015, for a recent example), and often it is not even reported. We also note that this problem is not explected to be too drastic, because variaiton in efficiency is taken into account when calculating RTL from the Cq values. And again, we suggest that because of our study design, random error of this kind makes the majority of our analyses conservative, and is accounted for in the analysis of telomere lengthening.
 
 \bigskip
 
@@ -118,20 +129,64 @@ We now include a brief discussion of the error rate on lines XX:
 
 **Important information is missing in the methods section regarding the age and life stage at which birds have been sampled. Telomeres might shorten in a few days during the nestling period (e.g. Stier et al. 2015b, 2016), and might be affected by breeding effort (e.g. Reichert et al. 2014, Sudyka et al. 2014), so it is important in my opinion to know more about the age and status of the birds used in this study.**
 
-				
+RESPONSE: We now provide more clarification about how we determined and analyse age, lines XX:
+
+\begin{adjustwidth}{2cm}{2cm}
+
+\textit{
+"The majority of individuals are ringed (with an individually numbered metal ring and unique combination of colour rings) within the first year of life, and so are of known age. We aged all birds using information on eye colour at first capture (Kondeur et al. 1991) and previous capture history (Richardson et al. 2003). Within the first year of life, birds are classified as nestlings less than one month old (rounded to one month for analyses), fledglings less than six month olds (rounded to six months) or subadults up to one year old (rounded to 10 months). Ages for adult birds were rounded to the nearest year."
+}
+
+\end{adjustwidth}
+
+We do not have more detailed data on age for the majority of our individuals, but given that we are studying broad, lifelong patterns of telomere length and dynamics, we feel that the resolution we have is sufficient.
+
+\bigskip
+
+
+---
+
+\bigskip
+
+**Lines 145-147: Storage and extraction methods are known to potentially affect qPCR results (e.g. Reichert et al. 2017 in press Oecologia). Storing samples in 100% ethanol at RT is not very common among people measuring telomeres as far as I know. Do you have any papers supporting the relevance of such storage method? Can you provide some DNA integrity gel images as supplementary material? Were older samples more likely to be degraded? Such information would be helpful for the reader to assess the quality of your DNA and to have an idea of the appearance of normal vs. degraded DNA samples.**
+
+RESPONSE: 
+
 \bigskip
 
 ---
 
+\bigskip
 
-		
-Lines 145-147: Storage and extraction methods are known to potentially affect qPCR results (e.g. Reichert et al. 2017 in press Oecologia). Storing samples in 100% ethanol at RT is not very common among people measuring telomeres as far as I know. Do you have any papers supporting the relevance of such storage method? Can you provide some DNA integrity gel images as supplementary material? Were older samples more likely to be degraded? Such information would be helpful for the reader to assess the quality of your DNA and to have an idea of the appearance of normal vs. degraded DNA samples.
+**How can you exclude that the cohort effects observed in your study are not linked to differences in storage conditions / DNA quality-integrity rather than true biological variation? Can you try for instance to disentangle/quantify the proportion of variation linked to the year of sampling (I would not expect a strong biological year effect on adults) vs. the proportion of variation linked to the year of birth (cohort effect)?**
 
-How can you exclude that the cohort effects observed in your study are not linked to differences in storage conditions / DNA quality-integrity rather than true biological variation? Can you try for instance to disentangle/quantify the proportion of variation linked to the year of sampling (I would not expect a strong biological year effect on adults) vs. the proportion of variation linked to the year of birth (cohort effect)?
-					
-Would it be more relevant to present Figure 1B only with telomere data from fledglings individuals of the cohort in question. I am assuming from data presentation than it is an average of TL of all the individuals from these cohorts throughout their life, but I might be wrong. Presenting average TL data over the life of individuals might be somewhat misleading here in my opinion since some cohorts might experience poorer survival than other, etc... In addition, the main cohort effect seems to be on telomere length per se, rather than on telomere dynamics with age (see comment 6 below).
-					
-Cohort effects (year of birth in analyses of nestling TL) have been reported without being clearly discussed (e.g. Stier et al. 2014, Becker et al. 2015). It might be worth mentioning it in the discussion, and pointing out the difficulties in distinguishing between real cohort effects and potential methodological artefacts linked to sampling, storage, extraction and/or qPCR methods. Were the different cohorts well randomized between qPCR plates?
+RESPONSE:
+
+\bigskip
+
+---
+
+\bigskip
+
+**Would it be more relevant to present Figure 1B only with telomere data from fledglings individuals of the cohort in question. I am assuming from data presentation than it is an average of TL of all the individuals from these cohorts throughout their life, but I might be wrong. Presenting average TL data over the life of individuals might be somewhat misleading here in my opinion since some cohorts might experience poorer survival than other, etc... In addition, the main cohort effect seems to be on telomere length per se, rather than on telomere dynamics with age (see comment 6 below).**
+
+RESPONSE:
+
+\bigskip
+
+---
+
+\bigskip
+
+**Cohort effects (year of birth in analyses of nestling TL) have been reported without being clearly discussed (e.g. Stier et al. 2014, Becker et al. 2015). It might be worth mentioning it in the discussion, and pointing out the difficulties in distinguishing between real cohort effects and potential methodological artefacts linked to sampling, storage, extraction and/or qPCR methods. Were the different cohorts well randomized between qPCR plates?**
+
+RESPONSE:
+
+\bigskip
+
+---
+				
+
 					
 You mention in several places that telomere dynamics with age is different between cohorts (e.g. lines 241-244; 299-300; 350-54), but in my opinion this is not supported by your data; so such conclusion should be avoided. Indeed, in the first analysis of RTL, including the log age * cohort interaction only marginally improved the fit of the model (delta AIC of 1.40, lines 242-244), which is not sufficient to support your conclusion. In addition, you mention that including cohort ID in the within-individual analyse of TL was even decreasing the fit of the model to your data, again suggesting that telomere dynamics is not significantly impacted by the cohort.
 					
