@@ -6,28 +6,28 @@
 
 # Telomere length, age and cohort -----------------------------------------
 
-RTL_Age <- lmer(RTL ~ Cohort + Agemonths + LogAge + FAge + Age2 + (1|BirdID) + (1|CatchYear),
+RTL_Age <- lmer(RTL ~ Cohort + Agemonths + LogAge + FAge + Age2 + (1|BirdID) + (1|CatchYear) + (1|PlateID),
                 data=dd,
                 REML = FALSE)
-RTL_LogAge <- lmer(RTL ~ LogAge + Cohort + (1|BirdID) + (1|CatchYear),
+RTL_LogAge <- lmer(RTL ~ LogAge + Cohort + (1|BirdID) + (1|CatchYear) + (1|PlateID),
                 data=dd,
                 REML = FALSE)
-RTL_LogAgeXcohort <- lmer(RTL ~ LogAge*Cohort + (1|BirdID) + (1|CatchYear),
+RTL_LogAgeXcohort <- lmer(RTL ~ LogAge*Cohort + (1|BirdID) + (1|CatchYear) + (1|PlateID),
                    data=dd,
                    REML = FALSE)
-RTL_DeltaAge <- lmer(RTL ~ MeanAge + Cohort + DeltaAge + DeltaLogAge + DeltaAge2 + (1|BirdID) + (1|CatchYear),
+RTL_DeltaAge <- lmer(RTL ~ MeanAge + Cohort + DeltaAge + DeltaLogAge + DeltaAge2 + (1|BirdID) + (1|CatchYear) + (1|PlateID),
                 data=dd3,
                 REML = FALSE)
-RTL_DeltaLogAge <- lmer(RTL ~ DeltaLogAge + (1|BirdID) + (1|CatchYear),
+RTL_DeltaLogAge <- lmer(RTL ~ DeltaLogAge + (1|BirdID) + (1|CatchYear) + (1|PlateID),
                    data=dd3,
                    REML = FALSE)
-DeltaRTL_LogAge <- lmer(DeltaRTL ~ LogAge + (1|BirdID) + (1|CatchYear),
+DeltaRTL_LogAge <- lmer(DeltaRTL ~ LogAge + (1|BirdID) + (1|CatchYear) + (1|PlateID),
                         data=subset(dd3,TimeDiff < 3.5),
                         REML = FALSE)
-DeltaRTLF_LogAge <- glmer(DeltaRTLF ~ LogAge + (1|BirdID) + (1|CatchYear),
+DeltaRTLF_LogAge <- glmer(DeltaRTLF ~ LogAge + (1|BirdID) + (1|CatchYear) + (1|PlateID),
                         data=subset(dd3,TimeDiff < 3.5),
                         family = "binomial")
-RTL_RTL1 <- lmer(RTL1 ~ RTL + LogAge + (1|BirdID) + (1|LayYear),
+RTL_RTL1 <- lmer(RTL1 ~ RTL + LogAge + (1|BirdID) + (1|LayYear) + (1|PlateID),
                         data=dd3,
                         REML = FALSE)
 

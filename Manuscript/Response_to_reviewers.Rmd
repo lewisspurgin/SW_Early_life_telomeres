@@ -1,0 +1,271 @@
+---
+output: 
+  pdf_document:
+header-includes:
+  \usepackage{graphicx}
+  \usepackage{changepage}
+  \usepackage{color}
+---
+
+
+
+\begin{flushright}
+
+\includegraphics{UEAlogo}
+
+\bigskip
+
+Dr Lewis G. Spurgin\\*
+BBSRC Research Fellow\\*
+School of Biological Sciences\\*
+University of East Anglia\\*
+Norwich\\*
+Norfolk, NR4 7TJ\\* 
+United Kingdom  
+
+L.Spurgin@uea.ac.uk\\*
+lewisspurgin.wordpress.com
+
+\end{flushright}
+
+\bigskip
+\bigskip
+
+**June 2017**
+
+\bigskip
+
+Dear Ben,
+
+Thank you for taking the time to consider our manuscript for publication in *Journal of Animal Ecology*. We were very pleased that the editors and reviewers were all so enthusiastic about the quality of our paper, and were impressed by the detailed and constructive nature of the reviews. We have now been through the Associate Editor and reviewer comments in detail, and made substantial changes to our manuscript in response. Below we outline, point-by-point, how we have responded to each of the reviewer comments. We also reproduce the sections of our manuscript we have changed in response to the reviewer comments. Reviewer comments are in bold, and reproduced manuscript sections are indented and italicised.
+
+Please do not hesitate to let me know if you require any further information or clarifications. I look forward to hearing from you.
+
+\bigskip
+\bigskip
+
+Kind Regards,
+
+\bigskip
+\bigskip
+
+
+Lewis Spurgin (on behalf of all authors)
+
+\newpage		
+
+
+
+
+
+
+#Reviewer 1
+
+---
+
+\bigskip
+
+**This paper reports interesting findings on lifelong telomere dynamics and its environmental correlates in a wild bird species. This is a very interesting study, but a moderate/major revision would be needed before considering this paper for publication in my opinion. With such revision, I am convinced that this paper will be an important contribution in the field of telomeres in ecology and evolution. I have some comments/criticism about the methodology presented by the authors, especially about the poor repeatability found between qPCR runs (see major comment 1) and the low efficiency for the telomere amplification. In addition, one main conclusion reached by the authors (i.e. that lifelong telomere dynamics is different between cohort, see comment 6) is not supported by the data in my opinion, or at least by the stats presented in the paper. Despite such limitations, the research question is novel and merits to be addressed and published in high-quality journal such as Journal of Animal Ecology. I really hope that my comments will be useful to the authors in revising their manuscript.**
+
+RESPONSE: We thank Dr Stier for his constructive comments, and are pleased that he believes our work to be novel and worthy of publication. We agree that the main issues he raises were not properly addressed/explained, and respond to these points in detail below.
+
+\bigskip
+
+---
+
+\bigskip
+
+**I am not sure to understand how you calculated the inter-plate repeatability of 0.68 mentioned line 234. Assuming that it is more or less equivalent to the intraclass coefficient of correlation r, it would mean that approximately 50% of the variation in your measurement is linked to the error of measurement. If my understanding is correct, it would mean that your qPCR methodology is quite poorly repeatable. Can you please clarify this point?**
+
+RESPONSE: The reviewer is correct that the estimate of repeatability is the intraclass correlation coefficient (this is made clear in the rptR documentation, which we cite). We agree with the reviewer in the sense that repeatability is not as high as we would have hoped, although we note that in the context of the telomere literature, a repeatability estimate of 0.68 is not especially low. However, because of how the samples were run, we are confident that any issues of repeatability have not led to any kind of bias in our results, and in fact make our analyses conservative. We respond to this point in detail, and outline how we clarified our discussion, in our response to the next comment.
+
+\bigskip
+
+---
+
+\bigskip
+
+**You should mention in the methods how the samples were assigned to the different plates (i.e. totally random, balanced between years/age, or all samples of 1 individual on the same plate?). If you allocated more or less randomly your samples to the different plates, can you check (and present as supplementary) that you do not have a “plate effect” on the average TL measurement. If you do observe such plate effect (something not that unusual with qPCR...), it might contribute to explain your low repeatability, and maybe part of the telomere lengthening that you describe.**
+
+RESPONSE: We are confident that plate effects are not a source of systematic bias in our data. Firstly, we assigned samples completely randomly (i.e. using a random number generator) to plates prior to running the telomere assays, minimising the chance that plate effects would introduce systematic differences among ages, sexes or cohorts. Secondly, our method of estimating RTL normalises samples across plates, as each RTL value is obtained by subtracting sample Cq values from Cq values obtained from a "calibrator" sample, which is run on every plate (information contained within Bebbington et al. 2016, cited). Thirdly, in response to a request by reviewer 3 we have now also included plate ID as a random effect in the models (see below), and our results are virtually identical.
+
+With regards to the observed telomere lenghtening, it is very possible that inter-plate variability accounts some of the observed lengthening in our dataset, but it cannot account for the amount and extent of lengthening we find. Indeed, this is exactly what Figure 2B shows. The lengthening observed "within" samples can be attributed to error across plates, but the additional lengthening observed "among" samples cannot be explained by measurement error.
+
+We now include a brief discussion of the error rate on lines XX:
+
+\begin{adjustwidth}{2cm}{2cm}
+
+\textit{
+"Put in the quoted text here..."
+}
+
+\end{adjustwidth}
+
+\bigskip
+
+---
+
+\bigskip
+
+**1.78 (78%) would not be considered appropriate by many researchers for qPCR methodology (the commonly accepted limit is more or less + or minus 10%, so here between 90% (1.90) and 110% (2.10)). Your efficiency is more than 20% below the expected 100%, which raises some questions about the validity of your methodology. How can you be confident that this low efficiency is not affecting the quality of your data?**
+
+
+\bigskip
+
+---
+
+\bigskip
+
+**Important information is missing in the methods section regarding the age and life stage at which birds have been sampled. Telomeres might shorten in a few days during the nestling period (e.g. Stier et al. 2015b, 2016), and might be affected by breeding effort (e.g. Reichert et al. 2014, Sudyka et al. 2014), so it is important in my opinion to know more about the age and status of the birds used in this study.**
+
+				
+\bigskip
+
+---
+
+
+		
+Lines 145-147: Storage and extraction methods are known to potentially affect qPCR results (e.g. Reichert et al. 2017 in press Oecologia). Storing samples in 100% ethanol at RT is not very common among people measuring telomeres as far as I know. Do you have any papers supporting the relevance of such storage method? Can you provide some DNA integrity gel images as supplementary material? Were older samples more likely to be degraded? Such information would be helpful for the reader to assess the quality of your DNA and to have an idea of the appearance of normal vs. degraded DNA samples.
+
+How can you exclude that the cohort effects observed in your study are not linked to differences in storage conditions / DNA quality-integrity rather than true biological variation? Can you try for instance to disentangle/quantify the proportion of variation linked to the year of sampling (I would not expect a strong biological year effect on adults) vs. the proportion of variation linked to the year of birth (cohort effect)?
+					
+Would it be more relevant to present Figure 1B only with telomere data from fledglings individuals of the cohort in question. I am assuming from data presentation than it is an average of TL of all the individuals from these cohorts throughout their life, but I might be wrong. Presenting average TL data over the life of individuals might be somewhat misleading here in my opinion since some cohorts might experience poorer survival than other, etc... In addition, the main cohort effect seems to be on telomere length per se, rather than on telomere dynamics with age (see comment 6 below).
+					
+Cohort effects (year of birth in analyses of nestling TL) have been reported without being clearly discussed (e.g. Stier et al. 2014, Becker et al. 2015). It might be worth mentioning it in the discussion, and pointing out the difficulties in distinguishing between real cohort effects and potential methodological artefacts linked to sampling, storage, extraction and/or qPCR methods. Were the different cohorts well randomized between qPCR plates?
+					
+You mention in several places that telomere dynamics with age is different between cohorts (e.g. lines 241-244; 299-300; 350-54), but in my opinion this is not supported by your data; so such conclusion should be avoided. Indeed, in the first analysis of RTL, including the log age * cohort interaction only marginally improved the fit of the model (delta AIC of 1.40, lines 242-244), which is not sufficient to support your conclusion. In addition, you mention that including cohort ID in the within-individual analyse of TL was even decreasing the fit of the model to your data, again suggesting that telomere dynamics is not significantly impacted by the cohort.
+					
+Please remove any reference to such effect or try to provide convincing analysis justifying your conclusion.
+					
+While I agree that your results are very interesting and biologically meaningful (age effect, sex effet, link with body size and food abundance), and that they are very similar to those on Soay sheep from Dan Nussey’s team, an intra-individual repeatability of 8% is a bit worrying in my opinion. This is especially worrying for using telomere length/dynamics as a “biomarker” as you suggest it in several places in the manuscript. A true biomarker should be at least to some extent consistent within an individual to be useful. You should raise such limitation in your discussion.
+					
+You mention that in other bird studies such within-individual consistency was much higher because they were done in the lab/nest-boxes. Another major difference with these studies is the shorter time-frame on which they were conducted, in addition to the more controlled conditions to store the samples. Therefore you would expect less noise in theses studies linked to methodological artefact due to sample storage/integrity, which might contribute to explain your low within-individual consistency.
+					
+Body mass is known to be less affected than tarsus length by bias linked to different experimenters in long-term studies like yours. Do you have any body mass data, and if yes why not including it in this paper?
+					
+Line 16: Telomeres shorten in response to oxidative stress and cellular division. It is important to mention that here since you find higher telomere shortening very early in life that might be linked to cellular division rather than oxidative stress.
+					
+Line 30: “Telomere length and the slope of its relationship with age” is not a straightforward formulation in my opinion. You could use “Telomere length and the rate of telomere change with age”, it has more biological meaning in my opinion.
+					
+Line 44: “environmental costs” is not clearly defined, so please rephrase or define clearly what you mean by environmental costs here.
+					
+Lines 55-56: While I acknowledged that Von Zglinicki 2002 is the common citation used by people to support the role of oxidative stress in telomere shortening, this is in vitro work with cultured cells using supra-physiological doses of ROS. I would suggest to mention that this relationship is observed “in vitro” or provide a reference supporting such assumption in vivo (if you find one, because I am still looking for solid evidence of this relationship..).
+
+Lines 64-65: I am not sure that Horn 2010 and Simons 2015 are appropriate here, however you could cite Stier et al. 2015 Exp. Gerontol. reviewing relationships between age and TL as well as TL and survival in non-mammalian vertebrates species.
+					
+Line 82: To help a bit the naïve reader, I would give here some recent examples of “environmental conditions” that are known to affect telomere length; for instance anthropogenic noise (Meillère et al. 2016), altitude (Stier et al. 2016), heat stress (Simide et al. 2016) or infection (Asghar et al. 2016).
+					
+Lines 231-234: information on sample size, efficiencies and repeatability would be better placed in the methods section in my opinion, since it is not results per se.
+					
+Lines 267-271: You mention that “longitudinal telomere length increased with log age...”, and cite fig 2C, 2D to support your statement. As far as I understand fig 2C, it seems that telomere length decrease with age before more or less 2 years of age, and then is not changing overall with age later in life. Yet, such figure does not fit with the estimate you give in the text, so the presentation of your results is quite confusing here.. I do not see how your results are supporting this particular statement. In my opinion, you should probably state that the probability of detecting a within-individual telomere shortening is decreasing with age // the probability of detecting telomere elongation is increasing with age.
+
+Line 302: the sentence is too vague, especially “particular life stage”.
+
+Line 321: same comment as above “specific periods”
+
+Lines 337-338: Such change in blood cell types would be quite convincing for mammals since “mammalian people” are measuring telomeres from different kind of WBCs and also immature nucleated RBCs.. However, in birds more than 99% of the cells in the blood are RBCs, therefore a change in blood cell types is quite unlikely. However, cellular turnover of RBCs might change with age/life stage, and you can expect that RBCs that have been in the blood stream for a longer time have shorter telomeres due to oxidative stress, though this remain to be tested properly.. Therefore you should probably mention the “cellular composition of the blood (e.g. age of RBCs, proportion of WBCs)” instead of “composition of cell types”.
+
+Lines 348-349: you might cite Becker 2015 and Stier 2014 here too. Lines 350-54: Please reformulate according to major comment 6 above. Line 356: Atema 2015 is not in the wild
+
+Lines 367-369: In my opinion, Heidinger et al. 2012 does not fit here (they do not look at differences in early-life conditions), but you might cite Reichert 2015, Stier 2014, 2015a, 2015b, Meillère 2016.
+
+Lines 378-379: It is unclear here that you speak about a comparative study of the sex effect on TL. 
+				
+---
+
+\newpage
+
+
+
+
+
+
+
+
+
+
+#Reviewer 2
+
+---
+
+\bigskip
+
+**I congratulate the authors on this fantastic paper. It's very rare for me to read a manuscript and not be able to come up with a single meaningful criticism, but I really can't fault this effort. The authors tackle important emerging questions about telomere dynamics and the importance of telomere length as a biomarker in ecology using a fantastic long term data set. Importantly, and unlike many recent studies of telomere length in wild animals, this study is based on a high quality longitudinal data set spanning a long time series. I particularly like the great care the authors have taken to address the question of within-individual lengthening of telomere length, applying a variety of published methods to test whether observed lengthening is greater than that expected due to measurement error. These results, combined with the thorough analyses of ageing patterns and cohort effects, represent an important addition to our current understanding of the complexity of telomere dynamics in the wild. They also show interesting associations between telomere length, environmental quality, sex and size which offer important insights into the ecological and physiological factors responsible for telomere dynamics. All in all, I really enjoyed reading this paper and have no meaningful suggestions for improvements. I expect this excellent manuscript will make a very strong and widely cited addition to the emerging literature on telomere dynamics in wild populations.**
+
+RESPONSE: We thank Dr Nussey for his extremely kind words. It is not often that one receives such a positive review!
+
+\bigskip
+
+---
+
+\newpage
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Reviewer 3
+
+---
+
+\bigskip
+
+Dear authors,
+You have an impressive dataset of longitudinal data and your work on telomere dynamics can be an important contribution to the current knowledge. However, I have some major concerns regarding your manuscript. 
+
+Your introduction could be improved, first of all, by citing correctly. Also, there is some more recent literature on the topic, which you could cite. See more in comments on the introduction below. Further, I have some methodological questions. I would like to see more information on how samples were distributed over qPCR plates. Were samples of the same individual on the same plate? If not, how did you take plate ID into account in your statistical analyses? How exactly did you relate territory quality to RTL and delta RTL change? Only for birth year? Reading your abstract and aims in the introduction, I expected more. In the discussion, you speculate on effects of environmental conditions on telomere dynamics. Is there a relationship with telomere lengthening between years and insect abundance/territory quality in the year of lengthening? I guess you could test this with the data you have? This could add to your discussion on potential telomere lengthening, which remained rather methodological. In my opinion, the ecological context in the discussion could be improved. More comments see below.
+I apologise for a delayed submission of my review, but hope that you find my comments helpful!
+
+L 53: In Monaghan & Haussmann 2006, data for 4 species are presented whereof two show telomere shortening. I therefore don’t consider this the best citation for your statement. Also, given that by now there are plenty of others that show this relationship - including other Haussmann or Monaghan papers.
+
+L 54: The statement is correct but reference Haussmann, Vleck & Nisbet 2003 is wrong! In this paper the result of a cross-sectional analysis is presented and discussed that one can classify birds into age classes according to their telomere length. Please cite appropriate papers.
+
+L 56: If you use the reference von Zglinicki 2002, please state that this is based on cell culture research. Or site a convincing reference where it has been shown in vivo. As far as I know the relation between oxidative stress and telomere shortening in vivo is less clear.
+
+L 65: Please either cite a meta-analysis or some more like Barrett et al. There are quite some studies with original data showing a relationship between telomere length and survival. Given all the literature available, I do not consider to cite Simons 2015 a good choice here. 
+
+L 65-66: Here you state there is little evidence of a direct relationship. Only a few lines above, in sentence line 59-61, you write about a potential causal relationship. Please consider to rewrite this, so that it is in one paragraph.
+
+L 80: Njajour 2007: Where is this reference?
+
+Methods:
+
+L136: You describe how you assess territory quality etc. But how do you relate it to RTL or delta RTL in your statistical analyses? Do you only use territory quality in the hatching year? You could relate territory quality between RTL measurements to telomere dynamics. Is the variation of territory quality within-individually over time smaller than among-individually? Is the difference between years much larger than between territories?
+
+L 165: “time point t + 1” Is the time span between repeated samples always the same? If not, please add a sentence to make it clear. Are samples taken in the same month every year?
+Some more information on the sampled individuals your study is based on would be helpful and could be added to the supplement. E.g. cohort sizes.
+
+L 168: How do you explain a non-normal distribution of telomere lengths? Data selection or methodological effect? How large is the variation of samples among cohorts?
+
+L 180: Van de Pol & Wright 2009 
+
+L 205: first and least?
+
+L 234: Please provide intra-plate repeatabilities as well. Do you have repeats that are not directly next to each other on the plate?   
+
+Given an inter-plate repeatability of 0.68, how do you take plate ID into account in your statistical analyses? Random effect plate ID? 
+
+For the samples analysed repeatedly, which measurement did you use? Or average?
+
+L 238-239: If you would add a translation into base pairs lost per year, it would become easier to interpret your results. As the relationship is not linear give examples for a few ages.
+
+L 247: Please compare cross-sectional and longitudinal telomere shortening and discuss it.
+	
+L 252: It is always the same time span between sampling, right? Could the low repeatability/correlation be partly due to inter-plate differences? Did you run all samples of the same individuals on the same plates or partly on different plates?
+
+L 307: Again the citation Haussmann et al. is not correct here.
+
+L 340: Does telomere lengthening or shortening relate to environmental conditions in your study?
+
+Generally, the discussion of this part of potential causes of telomere dynamics remains very methodological. The ecological context could be improved by adding own results as mentioned above or more citations.
+
+L 389: Sentence incomplete
+
