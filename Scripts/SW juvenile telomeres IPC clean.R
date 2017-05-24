@@ -82,6 +82,7 @@ dd <- subset(dd,!is.na(LogAge))
 dd$Cohort <- factor(dd$LayYear)
 dd$FAge <- factor(dd$Age)
 dd$Age2 <- poly(dd$Agemonths,2)[,2]
+dd$StorageTime <- 2017-dd$CatchYear
 
 # Tarsus and delta age ------------------------------------------------------------------
 

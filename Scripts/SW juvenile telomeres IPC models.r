@@ -3,6 +3,10 @@
 ## LOAD MODELS
 #################################################################################*
 
+# RTL and storage time
+RTL_ST <- lmer(RTL ~ StorageTime + (1|BirdID) + (1|PlateID),
+                data=subset(subset(dd,Agemonths > 1.5),Whodunnit == "EAF"),
+                REML = FALSE)
 
 # Telomere length, age and cohort -----------------------------------------
 

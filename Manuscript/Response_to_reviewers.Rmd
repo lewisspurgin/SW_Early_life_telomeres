@@ -71,6 +71,14 @@ RESPONSE: We thank Dr Stier for his constructive comments, and are pleased that 
 
 \bigskip
 
+
+
+
+
+
+
+
+
 ---
 
 \bigskip
@@ -80,6 +88,11 @@ RESPONSE: We thank Dr Stier for his constructive comments, and are pleased that 
 RESPONSE: The reviewer is correct that the estimate of repeatability is the intraclass correlation coefficient (this is made clear in the rptR documentation, which we cite). We agree with the reviewer in the sense that repeatability is not as high as we would have hoped, although we note that in the context of the telomere literature, a repeatability estimate of 0.68 is not especially low. However, because of how the samples were run, we are confident that any issues of repeatability have not led to any kind of bias in our results, and in fact make our analyses conservative. We respond to this point in detail, and outline how we clarified our discussion, in our response to the next comment.
 
 \bigskip
+
+
+
+
+
 
 ---
 
@@ -113,6 +126,10 @@ We also include a discussion on error rate on lines XX:
 
 \bigskip
 
+
+
+
+
 ---
 
 \bigskip
@@ -122,6 +139,11 @@ We also include a discussion on error rate on lines XX:
 RESPONSE: Again, the level of efficiency is lower than we would have liked, although again suts fairly squarely within that found the published literature (see Fairlie et al. 2015, for a recent example), and often it is not even reported. We also note that this problem is not explected to be too drastic, because variaiton in efficiency is taken into account when calculating RTL from the Cq values. And again, we suggest that because of our study design, random error of this kind makes the majority of our analyses conservative, and is accounted for in the analysis of telomere lengthening.
 
 \bigskip
+
+
+
+
+
 
 ---
 
@@ -144,25 +166,46 @@ We do not have more detailed data on age for the majority of our individuals, bu
 \bigskip
 
 
+
+
+
+
 ---
 
 \bigskip
 
 **Lines 145-147: Storage and extraction methods are known to potentially affect qPCR results (e.g. Reichert et al. 2017 in press Oecologia). Storing samples in 100% ethanol at RT is not very common among people measuring telomeres as far as I know. Do you have any papers supporting the relevance of such storage method? Can you provide some DNA integrity gel images as supplementary material? Were older samples more likely to be degraded? Such information would be helpful for the reader to assess the quality of your DNA and to have an idea of the appearance of normal vs. degraded DNA samples.**
 
-RESPONSE: 
-
-\bigskip
-
----
-
-\bigskip
-
 **How can you exclude that the cohort effects observed in your study are not linked to differences in storage conditions / DNA quality-integrity rather than true biological variation? Can you try for instance to disentangle/quantify the proportion of variation linked to the year of sampling (I would not expect a strong biological year effect on adults) vs. the proportion of variation linked to the year of birth (cohort effect)?**
 
-RESPONSE:
+
+RESPONSE: Storage in ethanol is standardd procedure for avian blood samples, and allows DNA to be maintained at high quality for many years. We checked DNA integrity for a very large number of samples, and found no evidence of DNA degration in older samples. We now include two gel images to illustrate this in the supplementary material (Fig. S1). We refer to this in the main text, lines XX. 
+
+\begin{adjustwidth}{2cm}{2cm}
+
+\textit{
+We found no evidence of DNA degradation in older samples (Fig. S1). 
+}
+
+\end{adjustwidth}
+
+
+We also performed an analysis of RTL and sample storage time, using adult birds, and found no evidence of a relationship - lines XX.
+
+\begin{adjustwidth}{2cm}{2cm}
+
+\textit{
+Using adult samples greater than one year old, we checked whether RTL was related to sample storage time, and found no evidence of such a relationship (estimate = -0.002, CIs = -0.007, 0.002).
+}
+
+\end{adjustwidth}
 
 \bigskip
+
+
+
+
+
 
 ---
 
@@ -170,9 +213,14 @@ RESPONSE:
 
 **Would it be more relevant to present Figure 1B only with telomere data from fledglings individuals of the cohort in question. I am assuming from data presentation than it is an average of TL of all the individuals from these cohorts throughout their life, but I might be wrong. Presenting average TL data over the life of individuals might be somewhat misleading here in my opinion since some cohorts might experience poorer survival than other, etc... In addition, the main cohort effect seems to be on telomere length per se, rather than on telomere dynamics with age (see comment 6 below).**
 
-RESPONSE:
+RESPONSE: Figure 1B did not show averages for individuals, but rather all measures for all individuals from each cohort (i.e. including repeats from individuals). The aim here was to show the full distribution of telomere lengths for each cohort. However, on balance we agree that restricting this plot to juveniles is probably less biased. We have now altered the figure accordingly.
 
 \bigskip
+
+
+
+
+
 
 ---
 
@@ -184,49 +232,295 @@ RESPONSE:
 
 \bigskip
 
+
+
+
+
+
+
 ---
 				
+\bigskip
 
-					
-You mention in several places that telomere dynamics with age is different between cohorts (e.g. lines 241-244; 299-300; 350-54), but in my opinion this is not supported by your data; so such conclusion should be avoided. Indeed, in the first analysis of RTL, including the log age * cohort interaction only marginally improved the fit of the model (delta AIC of 1.40, lines 242-244), which is not sufficient to support your conclusion. In addition, you mention that including cohort ID in the within-individual analyse of TL was even decreasing the fit of the model to your data, again suggesting that telomere dynamics is not significantly impacted by the cohort.
-					
-Please remove any reference to such effect or try to provide convincing analysis justifying your conclusion.
-					
-While I agree that your results are very interesting and biologically meaningful (age effect, sex effet, link with body size and food abundance), and that they are very similar to those on Soay sheep from Dan Nussey’s team, an intra-individual repeatability of 8% is a bit worrying in my opinion. This is especially worrying for using telomere length/dynamics as a “biomarker” as you suggest it in several places in the manuscript. A true biomarker should be at least to some extent consistent within an individual to be useful. You should raise such limitation in your discussion.
-					
-You mention that in other bird studies such within-individual consistency was much higher because they were done in the lab/nest-boxes. Another major difference with these studies is the shorter time-frame on which they were conducted, in addition to the more controlled conditions to store the samples. Therefore you would expect less noise in theses studies linked to methodological artefact due to sample storage/integrity, which might contribute to explain your low within-individual consistency.
-					
-Body mass is known to be less affected than tarsus length by bias linked to different experimenters in long-term studies like yours. Do you have any body mass data, and if yes why not including it in this paper?
-					
-Line 16: Telomeres shorten in response to oxidative stress and cellular division. It is important to mention that here since you find higher telomere shortening very early in life that might be linked to cellular division rather than oxidative stress.
-					
-Line 30: “Telomere length and the slope of its relationship with age” is not a straightforward formulation in my opinion. You could use “Telomere length and the rate of telomere change with age”, it has more biological meaning in my opinion.
-					
-Line 44: “environmental costs” is not clearly defined, so please rephrase or define clearly what you mean by environmental costs here.
-					
-Lines 55-56: While I acknowledged that Von Zglinicki 2002 is the common citation used by people to support the role of oxidative stress in telomere shortening, this is in vitro work with cultured cells using supra-physiological doses of ROS. I would suggest to mention that this relationship is observed “in vitro” or provide a reference supporting such assumption in vivo (if you find one, because I am still looking for solid evidence of this relationship..).
+**You mention in several places that telomere dynamics with age is different between cohorts (e.g. lines 241-244; 299-300; 350-54), but in my opinion this is not supported by your data; so such conclusion should be avoided. Indeed, in the first analysis of RTL, including the log age * cohort interaction only marginally improved the fit of the model (delta AIC of 1.40, lines 242-244), which is not sufficient to support your conclusion. In addition, you mention that including cohort ID in the within-individual analyse of TL was even decreasing the fit of the model to your data, again suggesting that telomere dynamics is not significantly impacted by the cohort. Please remove any reference to such effect or try to provide convincing analysis justifying your conclusion.**
 
-Lines 64-65: I am not sure that Horn 2010 and Simons 2015 are appropriate here, however you could cite Stier et al. 2015 Exp. Gerontol. reviewing relationships between age and TL as well as TL and survival in non-mammalian vertebrates species.
-					
-Line 82: To help a bit the naïve reader, I would give here some recent examples of “environmental conditions” that are known to affect telomere length; for instance anthropogenic noise (Meillère et al. 2016), altitude (Stier et al. 2016), heat stress (Simide et al. 2016) or infection (Asghar et al. 2016).
-					
-Lines 231-234: information on sample size, efficiencies and repeatability would be better placed in the methods section in my opinion, since it is not results per se.
-					
-Lines 267-271: You mention that “longitudinal telomere length increased with log age...”, and cite fig 2C, 2D to support your statement. As far as I understand fig 2C, it seems that telomere length decrease with age before more or less 2 years of age, and then is not changing overall with age later in life. Yet, such figure does not fit with the estimate you give in the text, so the presentation of your results is quite confusing here.. I do not see how your results are supporting this particular statement. In my opinion, you should probably state that the probability of detecting a within-individual telomere shortening is decreasing with age // the probability of detecting telomere elongation is increasing with age.
+RESPONSE:
 
-Line 302: the sentence is too vague, especially “particular life stage”.
+\bigskip
 
-Line 321: same comment as above “specific periods”
 
-Lines 337-338: Such change in blood cell types would be quite convincing for mammals since “mammalian people” are measuring telomeres from different kind of WBCs and also immature nucleated RBCs.. However, in birds more than 99% of the cells in the blood are RBCs, therefore a change in blood cell types is quite unlikely. However, cellular turnover of RBCs might change with age/life stage, and you can expect that RBCs that have been in the blood stream for a longer time have shorter telomeres due to oxidative stress, though this remain to be tested properly.. Therefore you should probably mention the “cellular composition of the blood (e.g. age of RBCs, proportion of WBCs)” instead of “composition of cell types”.
 
-Lines 348-349: you might cite Becker 2015 and Stier 2014 here too. Lines 350-54: Please reformulate according to major comment 6 above. Line 356: Atema 2015 is not in the wild
 
-Lines 367-369: In my opinion, Heidinger et al. 2012 does not fit here (they do not look at differences in early-life conditions), but you might cite Reichert 2015, Stier 2014, 2015a, 2015b, Meillère 2016.
 
-Lines 378-379: It is unclear here that you speak about a comparative study of the sex effect on TL. 
-				
+
+
 ---
+	
+\bigskip
+
+**While I agree that your results are very interesting and biologically meaningful (age effect, sex effet, link with body size and food abundance), and that they are very similar to those on Soay sheep from Dan Nussey’s team, an intra-individual repeatability of 8% is a bit worrying in my opinion. This is especially worrying for using telomere length/dynamics as a “biomarker” as you suggest it in several places in the manuscript. A true biomarker should be at least to some extent consistent within an individual to be useful. You should raise such limitation in your discussion.**
+
+RESPONSE:
+
+\bigskip
+
+---					
+				
+\bigskip
+
+**You mention that in other bird studies such within-individual consistency was much higher because they were done in the lab/nest-boxes. Another major difference with these studies is the shorter time-frame on which they were conducted, in addition to the more controlled conditions to store the samples. Therefore you would expect less noise in theses studies linked to methodological artefact due to sample storage/integrity, which might contribute to explain your low within-individual consistency.**
+
+RESPONSE:
+
+\bigskip
+
+
+
+
+
+
+---					
+				
+\bigskip
+
+**Body mass is known to be less affected than tarsus length by bias linked to different experimenters in long-term studies like yours. Do you have any body mass data, and if yes why not including it in this paper?**
+
+RESPONSE:
+
+\bigskip
+
+
+
+
+
+
+---					
+				
+\bigskip
+
+**Line 16: Telomeres shorten in response to oxidative stress and cellular division. It is important to mention that here since you find higher telomere shortening very early in life that might be linked to cellular division rather than oxidative stress.**
+
+RESPONSE:
+
+\bigskip
+
+
+
+
+
+
+---
+
+\bigskip
+
+**Line 30: “Telomere length and the slope of its relationship with age” is not a straightforward formulation in my opinion. You could use “Telomere length and the rate of telomere change with age”, it has more biological meaning in my opinion.**
+
+RESPONSE:
+
+\bigskip
+
+
+
+
+
+---
+
+\bigskip
+
+**Line 44: “environmental costs” is not clearly defined, so please rephrase or define clearly what you mean by environmental costs here.**
+
+RESPONSE:
+
+\bigskip
+
+
+
+
+
+---
+
+\bigskip
+
+**Lines 55-56: While I acknowledged that Von Zglinicki 2002 is the common citation used by people to support the role of oxidative stress in telomere shortening, this is in vitro work with cultured cells using supra-physiological doses of ROS. I would suggest to mention that this relationship is observed “in vitro” or provide a reference supporting such assumption in vivo (if you find one, because I am still looking for solid evidence of this relationship..).**
+
+RESPONSE:
+
+\bigskip
+			
+				
+
+
+
+
+---
+
+\bigskip
+
+**Lines 64-65: I am not sure that Horn 2010 and Simons 2015 are appropriate here, however you could cite Stier et al. 2015 Exp. Gerontol. reviewing relationships between age and TL as well as TL and survival in non-mammalian vertebrates species.**
+
+RESPONSE:
+
+\bigskip
+
+
+
+
+
+
+---
+
+\bigskip
+
+**Line 82: To help a bit the naïve reader, I would give here some recent examples of “environmental conditions” that are known to affect telomere length; for instance anthropogenic noise (Meillère et al. 2016), altitude (Stier et al. 2016), heat stress (Simide et al. 2016) or infection (Asghar et al. 2016).**
+
+RESPONSE:
+
+\bigskip
+
+
+
+
+
+---
+
+\bigskip
+
+**Lines 231-234: information on sample size, efficiencies and repeatability would be better placed in the methods section in my opinion, since it is not results per se.**
+
+RESPONSE:
+
+\bigskip
+			
+				
+
+
+
+---
+
+\bigskip
+
+**Lines 267-271: You mention that “longitudinal telomere length increased with log age...”, and cite fig 2C, 2D to support your statement. As far as I understand fig 2C, it seems that telomere length decrease with age before more or less 2 years of age, and then is not changing overall with age later in life. Yet, such figure does not fit with the estimate you give in the text, so the presentation of your results is quite confusing here.. I do not see how your results are supporting this particular statement. In my opinion, you should probably state that the probability of detecting a within-individual telomere shortening is decreasing with age // the probability of detecting telomere elongation is increasing with age.**
+
+RESPONSE:
+
+\bigskip
+
+
+
+
+				
+
+---
+
+\bigskip
+
+**Line 302: the sentence is too vague, especially “particular life stage”.**
+
+RESPONSE:
+
+\bigskip
+
+
+
+---
+
+\bigskip
+
+**Line 321: same comment as above “specific periods”.**
+
+RESPONSE:
+
+\bigskip
+
+
+
+
+
+
+---
+
+\bigskip
+
+**Lines 337-338: Such change in blood cell types would be quite convincing for mammals since “mammalian people” are measuring telomeres from different kind of WBCs and also immature nucleated RBCs.. However, in birds more than 99% of the cells in the blood are RBCs, therefore a change in blood cell types is quite unlikely. However, cellular turnover of RBCs might change with age/life stage, and you can expect that RBCs that have been in the blood stream for a longer time have shorter telomeres due to oxidative stress, though this remain to be tested properly.. Therefore you should probably mention the “cellular composition of the blood (e.g. age of RBCs, proportion of WBCs)” instead of “composition of cell types”.**
+
+RESPONSE:
+
+\bigskip
+
+
+
+
+
+---
+
+\bigskip
+
+**Lines 348-349: you might cite Becker 2015 and Stier 2014 here too.** 
+
+
+RESPONSE:
+
+\bigskip
+
+
+
+
+---
+
+\bigskip
+
+**Lines 350-54: Please reformulate according to major comment 6 above.**
+
+
+RESPONSE:
+
+\bigskip
+
+
+
+
+
+---
+
+\bigskip
+
+**Line 356: Atema 2015 is not in the wild**
+
+RESPONSE:
+
+\bigskip
+
+
+
+
+
+---
+
+\bigskip
+
+**Lines 367-369: In my opinion, Heidinger et al. 2012 does not fit here (they do not look at differences in early-life conditions), but you might cite Reichert 2015, Stier 2014, 2015a, 2015b, Meillère 2016.**
+
+RESPONSE:
+
+\bigskip
+
+
+
+
+---
+
+\bigskip
+
+**Lines 378-379: It is unclear here that you speak about a comparative study of the sex effect on TL.**
+
+RESPONSE:
+
+\bigskip
+
+			
+---
+
+
 
 \newpage
 

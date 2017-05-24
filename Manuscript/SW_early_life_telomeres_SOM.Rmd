@@ -143,6 +143,10 @@ kable(tableS3,digits=2)
 
 \pagebreak
 
+**Figure S1** Examples of DNA extractions from older and more recent Seychelles warbler samples. We found no evidence for differences in DNA integrity with sample age.
+
+\pagebreak
+
 
 ```{r Figure S1}
 
@@ -185,7 +189,7 @@ FigS1
 
 ```
 
-**Figure S1** Model averaged estimates and 95% cofidence intervals for social and ecological environmental variables in relation to RTL in Seychelles warblers. 
+**Figure S2** Model averaged estimates and 95% cofidence intervals for social and ecological environmental variables in relation to RTL in Seychelles warblers. 
 
 
 \pagebreak
@@ -231,4 +235,4 @@ FigS2
 
 ```
 
-**Figure S2** Model averaged estimates and 95% cofidence intervals for social and ecological environmental variables in relation to $\Delta$RTL in Seychelles warblers, using longitudinal data. 
+**Figure S3** Model averaged estimates and 95% cofidence intervals for social and ecological environmental variables in relation to $\Delta$RTL in Seychelles warblers, using longitudinal data. 
