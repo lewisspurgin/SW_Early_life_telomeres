@@ -228,7 +228,14 @@ RESPONSE: Figure 1B did not show averages for individuals, but rather all measur
 
 **Cohort effects (year of birth in analyses of nestling TL) have been reported without being clearly discussed (e.g. Stier et al. 2014, Becker et al. 2015). It might be worth mentioning it in the discussion, and pointing out the difficulties in distinguishing between real cohort effects and potential methodological artefacts linked to sampling, storage, extraction and/or qPCR methods. Were the different cohorts well randomized between qPCR plates?**
 
-RESPONSE:
+RESPONSE: See response above re. randomisation. While not an issue for our study, we agree that it is a point worth raising. We have added a brief point in the discussion to highlight the issue, lines XX:
+
+\begin{adjustwidth}{2cm}{2cm}
+
+\textit{"Although a few studies have shown that temporal variation in telomere dynamicsoccurs in natural populations, these have been limited in the number of seasons they cover (Mizutani et al. 2013; Watson, Bolton and Monaghan 2015; Fairlie et al. 2016). Other studies have found chort effects but not discussed them in an ecological context (Stier et al. 2014; Becker et al.2015). One problem with studying cohort effects is that it can be difficult to tease apart true cohort effects from effects that arise due to sample degradation with aim, and/or batch effects in telomere assays, although neither of these factors were a problem in our study. Indeed, the long-term Seychelles warbler dataset has allowed us to show that temporal variation in telomere dynamics can occur over substantial time periods."}
+
+\end{adjustwidth}
+
 
 \bigskip
 
@@ -570,8 +577,11 @@ RESPONSE: We thank Dr Nussey for his extremely kind words. It is not often that 
 Dear authors,
 You have an impressive dataset of longitudinal data and your work on telomere dynamics can be an important contribution to the current knowledge. However, I have some major concerns regarding your manuscript. 
 
-Your introduction could be improved, first of all, by citing correctly. Also, there is some more recent literature on the topic, which you could cite. See more in comments on the introduction below. Further, I have some methodological questions. I would like to see more information on how samples were distributed over qPCR plates. Were samples of the same individual on the same plate? If not, how did you take plate ID into account in your statistical analyses? How exactly did you relate territory quality to RTL and delta RTL change? Only for birth year? Reading your abstract and aims in the introduction, I expected more. In the discussion, you speculate on effects of environmental conditions on telomere dynamics. Is there a relationship with telomere lengthening between years and insect abundance/territory quality in the year of lengthening? I guess you could test this with the data you have? This could add to your discussion on potential telomere lengthening, which remained rather methodological. In my opinion, the ecological context in the discussion could be improved. More comments see below.
-I apologise for a delayed submission of my review, but hope that you find my comments helpful!
+Your introduction could be improved, first of all, by citing correctly. Also, there is some more recent literature on the topic, which you could cite. See more in comments on the introduction below. 
+
+Further, I have some methodological questions. I would like to see more information on how samples were distributed over qPCR plates. Were samples of the same individual on the same plate? If not, how did you take plate ID into account in your statistical analyses? How exactly did you relate territory quality to RTL and delta RTL change? Only for birth year? Reading your abstract and aims in the introduction, I expected more. 
+
+In the discussion, you speculate on effects of environmental conditions on telomere dynamics. Is there a relationship with telomere lengthening between years and insect abundance/territory quality in the year of lengthening? I guess you could test this with the data you have? This could add to your discussion on potential telomere lengthening, which remained rather methodological. In my opinion, the ecological context in the discussion could be improved.
 
 L 53: In Monaghan & Haussmann 2006, data for 4 species are presented whereof two show telomere shortening. I therefore don’t consider this the best citation for your statement. Also, given that by now there are plenty of others that show this relationship - including other Haussmann or Monaghan papers.
 
@@ -584,8 +594,6 @@ L 65: Please either cite a meta-analysis or some more like Barrett et al. There 
 L 65-66: Here you state there is little evidence of a direct relationship. Only a few lines above, in sentence line 59-61, you write about a potential causal relationship. Please consider to rewrite this, so that it is in one paragraph.
 
 L 80: Njajour 2007: Where is this reference?
-
-Methods:
 
 L136: You describe how you assess territory quality etc. But how do you relate it to RTL or delta RTL in your statistical analyses? Do you only use territory quality in the hatching year? You could relate territory quality between RTL measurements to telomere dynamics. Is the variation of territory quality within-individually over time smaller than among-individually? Is the difference between years much larger than between territories?
 
