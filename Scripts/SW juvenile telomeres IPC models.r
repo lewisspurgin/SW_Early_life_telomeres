@@ -19,19 +19,19 @@ RTL_LogAge <- lmer(RTL ~ LogAge + Cohort + (1|BirdID) + (1|CatchYear) + (1|Plate
 RTL_LogAgeXcohort <- lmer(RTL ~ LogAge*Cohort + (1|BirdID) + (1|CatchYear) + (1|PlateID),
                    data=dd,
                    REML = FALSE)
-RTL_DeltaAge <- lmer(RTL ~ MeanAge + Cohort + DeltaAge + DeltaLogAge + DeltaAge2 + (1|BirdID) + (1|CatchYear) + (1|PlateID),
+RTL_DeltaAge <- lmer(RTL ~ MeanAge + Cohort + DeltaAge + DeltaLogAge + DeltaAge2 + (1|BirdID) + (1|CatchYear),
                 data=dd3,
                 REML = FALSE)
-RTL_DeltaLogAge <- lmer(RTL ~ DeltaLogAge + (1|BirdID) + (1|CatchYear) + (1|PlateID),
+RTL_DeltaLogAge <- lmer(RTL ~ DeltaLogAge + (1|BirdID) + (1|CatchYear),
                    data=dd3,
                    REML = FALSE)
-DeltaRTL_LogAge <- lmer(DeltaRTL ~ LogAge + (1|BirdID) + (1|CatchYear) + (1|PlateID),
+DeltaRTL_LogAge <- lmer(DeltaRTL ~ LogAge + (1|BirdID) + (1|CatchYear),
                         data=subset(dd3,TimeDiff < 3.5),
                         REML = FALSE)
-DeltaRTLF_LogAge <- glmer(DeltaRTLF ~ LogAge + (1|BirdID) + (1|CatchYear) + (1|PlateID),
+DeltaRTLF_LogAge <- glmer(DeltaRTLF ~ LogAge + (1|BirdID) + (1|CatchYear),
                         data=subset(dd3,TimeDiff < 3.5),
                         family = "binomial")
-RTL_RTL1 <- lmer(RTL1 ~ RTL + LogAge + (1|BirdID) + (1|LayYear) + (1|PlateID),
+RTL_RTL1 <- lmer(RTL1 ~ RTL + LogAge + (1|BirdID) + (1|LayYear),
                         data=dd3,
                         REML = FALSE)
 
