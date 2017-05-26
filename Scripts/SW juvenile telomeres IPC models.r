@@ -13,10 +13,10 @@ RTL_ST <- lmer(RTL ~ StorageTime + (1|BirdID) + (1|PlateID),
 RTL_Age <- lmer(RTL ~ Cohort + Agemonths + LogAge + FAge + Age2 + (1|BirdID) + (1|CatchYear) + (1|PlateID),
                 data=dd,
                 REML = FALSE)
-RTL_LogAge <- lmer(RTL ~ LogAge + Cohort + (1|BirdID) + (1|CatchYear) + (1|PlateID),
+RTL_LogAge <- lmer(RTL ~ LogAge + Cohort + (1|BirdID) + (1|CatchYear),
                 data=dd,
                 REML = FALSE)
-RTL_LogAgeXcohort <- lmer(RTL ~ LogAge*Cohort + (1|BirdID) + (1|CatchYear) + (1|PlateID),
+RTL_LogAgeXcohort <- lmer(RTL ~ LogAge*Cohort + (1|BirdID) + (1|CatchYear),
                    data=dd,
                    REML = FALSE)
 RTL_DeltaAge <- lmer(RTL ~ MeanAge + Cohort + DeltaAge + DeltaLogAge + DeltaAge2 + (1|BirdID) + (1|CatchYear),
