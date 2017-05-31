@@ -779,6 +779,11 @@ RESPONSE: We now clarify (lines XX) that the territory quality estimates that we
 
 RESPONSE: Samples are taken as and when we can catch the birds, which is not always in the same month. We now clarify this on lines XX:
 
+\begin{adjustwidth}{2cm}{2cm}
+
+\textit{"Note that the follow-up time between samples varied among individuals, and that individuals are not always caught at exactly the same time of year."}
+
+\end{adjustwidth}
 
 
 \bigskip
@@ -794,7 +799,7 @@ RESPONSE: Samples are taken as and when we can catch the birds, which is not alw
 
 **Some more information on the sampled individuals your study is based on would be helpful and could be added to the supplement. E.g. cohort sizes.**
 
-RESPONSE:
+RESPONSE: We have now added a table of cohort sizes to the supplement.
 
 \bigskip
 
