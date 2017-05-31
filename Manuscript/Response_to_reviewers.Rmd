@@ -310,7 +310,7 @@ However, as we argue above, we do not think it is likely that the pattern is a r
 
 **Body mass is known to be less affected than tarsus length by bias linked to different experimenters in long-term studies like yours. Do you have any body mass data, and if yes why not including it in this paper?**
 
-RESPONSE: We do have body mass data, but decided to exclude it for a number of reasons. Firstly, with tarsus length we wanted to control for variation in structural size - even with measurer effects, tarsus length is a better indicator of structural size than body mass. Body mass is more of a measure of (short-term) condition, and varies according to the time of day, season, etc. In some respects body mass is likely to respond in a similar way to the environment as telomere length (especially if telomeres can get longer). There is thus a circularity issue with including bodymass as a predictor of telomere length. Finally, from apractical perspective, including body mass introduces collinearity issues, particularly with tarsus length, but also with other ecological variables.
+RESPONSE: As stated in the methods, we do include body mass data in our analyses. It is not related to RTL - see figure 3.
 
 \bigskip
 
@@ -641,11 +641,14 @@ RESPONSE: We thank Dr Nussey for his extremely kind words. It is not often that 
 **Dear authors,**
 **You have an impressive dataset of longitudinal data and your work on telomere dynamics can be an important contribution to the current knowledge. However, I have some major concerns regarding your manuscript.**
 
-**Your introduction could be improved, first of all, by citing correctly. Also, there is some more recent literature on the topic, which you could cite. See more in comments on the introduction below.**
+**Your introduction could be improved, first of all, by citing correctly. Also, there is some more recent literature on the topic, which you could cite. See more in comments on the introduction below. Further, I have some methodological questions. I would like to see more information on how samples were distributed over qPCR plates. Were samples of the same individual on the same plate? If not, how did you take plate ID into account in your statistical analyses? How exactly did you relate territory quality to RTL and delta RTL change? Only for birth year? Reading your abstract and aims in the introduction, I expected more. Your introduction could be improved, first of all, by citing correctly. Also, there is some more recent literature on the topic, which you could cite. See more in comments on the introduction below. Further, I have some methodological questions. I would like to see more information on how samples were distributed over qPCR plates. Were samples of the same individual on the same plate? If not, how did you take plate ID into account in your statistical analyses? How exactly did you relate territory quality to RTL and delta RTL change? Only for birth year? Reading your abstract and aims in the introduction, I expected more. In the discussion, you speculate on effects of environmental conditions on telomere dynamics. Is there a relationship with telomere lengthening between years and insect abundance/territory quality in the year of lengthening? I guess you could test this with the data you have? This could add to your discussion on potential telomere lengthening, which remained rather methodological. In my opinion, the ecological context in the discussion could be improved. More comments see below.
+I apologise for a delayed submission of my review, but hope that you find my comments helpful!**
+**
 
-RESPONSE: We are pleased that the reviewer is positive about are manuscript. We think it a little harsh to imply that we have not "cited correctly", but are grateful for the suggested changes.
+RESPONSE: We are pleased that the reviewer is generally positive about are manuscript. We think it a little harsh to imply that we have not "cited correctly", but are grateful for the suggested changes. We respond to each of these questions/comments below.
 
 \bigskip
+
 
 
 
@@ -656,39 +659,9 @@ RESPONSE: We are pleased that the reviewer is positive about are manuscript. We 
 
 \bigskip
 
-**Further, I have some methodological questions. I would like to see more information on how samples were distributed over qPCR plates. Were samples of the same individual on the same plate? If not, how did you take plate ID into account in your statistical analyses? How exactly did you relate territory quality to RTL and delta RTL change? Only for birth year? Reading your abstract and aims in the introduction, I expected more.**
+**L 53: In Monaghan & Haussmann 2006, data for 4 species are presented whereof two show telomere shortening. I therefore don't consider this the best citation for your statement. Also, given that by now there are plenty of others that show this relationship - including other Haussmann or Monaghan papers.**
 
-RESPONSE:
-
-\bigskip
-
-
-
-
-
-
----
-
-\bigskip
-
-**In the discussion, you speculate on effects of environmental conditions on telomere dynamics. Is there a relationship with telomere lengthening between years and insect abundance/territory quality in the year of lengthening? I guess you could test this with the data you have? This could add to your discussion on potential telomere lengthening, which remained rather methodological. In my opinion, the ecological context in the discussion could be improved.**
-
-RESPONSE:
-
-\bigskip
-
-
-
-
-
-
----
-
-\bigskip
-
-**L 53: In Monaghan & Haussmann 2006, data for 4 species are presented whereof two show telomere shortening. I therefore don’t consider this the best citation for your statement. Also, given that by now there are plenty of others that show this relationship - including other Haussmann or Monaghan papers.**
-
-RESPONSE:
+RESPONSE: We have changed the citations here.
 
 \bigskip
 
@@ -703,7 +676,7 @@ RESPONSE:
 
 **L 54: The statement is correct but reference Haussmann, Vleck & Nisbet 2003 is wrong! In this paper the result of a cross-sectional analysis is presented and discussed that one can classify birds into age classes according to their telomere length. Please cite appropriate papers.**
 
-RESPONSE:
+RESPONSE: We have replaced the Haussmann reference with Heidinger 2012, PNAS.
 
 \bigskip
 
@@ -718,7 +691,7 @@ RESPONSE:
 
 **L 56: If you use the reference von Zglinicki 2002, please state that this is based on cell culture research. Or site a convincing reference where it has been shown in vivo. As far as I know the relation between oxidative stress and telomere shortening in vivo is less clear.**
 
-RESPONSE:
+RESPONSE: Done - see response to reviewer 1, who made the same point.
 
 \bigskip
 
@@ -733,7 +706,7 @@ RESPONSE:
 
 **L 65: Please either cite a meta-analysis or some more like Barrett et al. There are quite some studies with original data showing a relationship between telomere length and survival. Given all the literature available, I do not consider to cite Simons 2015 a good choice here.**
 
-RESPONSE:
+RESPONSE: We disagree here - Simons 2015 *is* a meta-analysis that shows that there is little evidence that the relationship between telomeres and survival is causal.
 
 \bigskip
 
@@ -748,7 +721,18 @@ RESPONSE:
 
 **L 65-66: Here you state there is little evidence of a direct relationship. Only a few lines above, in sentence line 59-61, you write about a potential causal relationship. Please consider to rewrite this, so that it is in one paragraph.**
 
-RESPONSE:
+RESPONSE: We have re-written the text so that the contrast is clearer here. Lines XX:
+
+\begin{adjustwidth}{2cm}{2cm}
+
+\textit{"When telomeres become critically short, cells senesce (Campisi 2003), and the accumulation of these cells has been suggested to result in organismal senescence and death (Wong et al. 2003). The association between senescence and telomere length has inspired a great deal of recent research into telomere evolutionary ecology, and relationships between telomere dynamics and survival or lifespan have been documented in wild population of several species (Haussmann and Marchetto 2010; Barrett et al. 2013; Stier et al. 2015). As yet, however, there is little direct evidence that the relationship between telomere dynamics and survival is causal (Simons 2015).} 
+
+\textit{"Although the causal role of telomeres in senescence and survival is not yet clear, there is mounting evidence that telomeres can act as biomarkers of individual condition and ageing in wild populations, providing a measure of the ecological stress that an individual has experienced, a signature that can otherwise be difficult to detect (e.g. Schultner et al. 2014; Asghar et al. 2015; Bebbington et al. 2016)."}
+
+\end{adjustwidth}
+
+
+
 
 \bigskip
 
@@ -763,7 +747,7 @@ RESPONSE:
 
 **L 80: Njajour 2007: Where is this reference?**
 
-RESPONSE:
+RESPONSE: Apologies - this is now in the bibliography (there was also a typo - the reference is actually Njajou et al. 2007).
 
 \bigskip
 
@@ -778,7 +762,7 @@ RESPONSE:
 
 **L136: You describe how you assess territory quality etc. But how do you relate it to RTL or delta RTL in your statistical analyses? Do you only use territory quality in the hatching year? You could relate territory quality between RTL measurements to telomere dynamics. Is the variation of territory quality within-individually over time smaller than among-individually? Is the difference between years much larger than between territories?**
 
-RESPONSE:
+RESPONSE: We now clarify (lines XX) that the territory quality estimates that we use in our statistical models are taken from the field period in which the telomere sample was taken. The same applies to insect abundance, group size etc. We feel that an in-depth explanation of how and why territory quality varies over space and time is outside the scope of this manuscript, especially given i) the word limit, and ii) the fact that territory quality is not related to RTL.
 
 \bigskip
 
@@ -793,7 +777,9 @@ RESPONSE:
 
 **L 165: “time point t + 1” Is the time span between repeated samples always the same? If not, please add a sentence to make it clear. Are samples taken in the same month every year?**
 
-RESPONSE:
+RESPONSE: Samples are taken as and when we can catch the birds, which is not always in the same month. We now clarify this on lines XX:
+
+
 
 \bigskip
 
