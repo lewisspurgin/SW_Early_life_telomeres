@@ -100,7 +100,7 @@ RESPONSE: The reviewer is correct that the estimate of repeatability is the intr
 
 **You should mention in the methods how the samples were assigned to the different plates (i.e. totally random, balanced between years/age, or all samples of 1 individual on the same plate?). If you allocated more or less randomly your samples to the different plates, can you check (and present as supplementary) that you do not have a “plate effect” on the average TL measurement. If you do observe such plate effect (something not that unusual with qPCR...), it might contribute to explain your low repeatability, and maybe part of the telomere lengthening that you describe.**
 
-RESPONSE: We are confident that plate effects are not a source of systematic bias in our data. Firstly, we assigned samples completely randomly (i.e. using a random number generator) to plates prior to running the telomere assays, minimising the chance that plate effects would introduce systematic differences among ages, sexes or cohorts. Secondly, our method of estimating RTL normalises samples across plates, as each RTL value is obtained by subtracting sample Cq values from Cq values obtained from a "calibrator" sample, which is run on every plate (information contained within Bebbington et al. 2016, cited). Thirdly, in response to a request by reviewer 3 we have now also included plate ID as a random effect in the models (see below), and our results are virtually identical.
+RESPONSE: We are confident that plate effects are not a source of systematic bias in our data. Firstly, we assigned samples completely randomly (i.e. using a random number generator) to plates prior to running the telomere assays, minimising the chance that plate effects would introduce systematic differences among ages, sexes or cohorts. Secondly, our method of estimating RTL normalises samples across plates, as each RTL value is obtained by subtracting sample Cq values from Cq values obtained from a "calibrator" sample, which is run on every plate (information contained within Bebbington et al. 2016, cited).
 
 With regards to the observed telomere lengthening, it is very possible that inter-plate variability accounts some of the observed lengthening in our dataset, but it cannot account for the amount and extent of lengthening we find. Indeed, this is exactly what Figure 2B shows. The lengthening observed "within" samples can be attributed to error across plates, but the additional lengthening observed "among" samples cannot be explained by measurement error.
 
@@ -799,7 +799,7 @@ RESPONSE: Samples are taken as and when we can catch the birds, which is not alw
 
 **Some more information on the sampled individuals your study is based on would be helpful and could be added to the supplement. E.g. cohort sizes.**
 
-RESPONSE: We have now added a table of cohort sizes to the supplement.
+RESPONSE: We have now added a table of cohort sizes to the supplement (Table S1), and refer to this in the main text on Line XX.
 
 \bigskip
 
@@ -814,7 +814,7 @@ RESPONSE: We have now added a table of cohort sizes to the supplement.
 
 **L 168: How do you explain a non-normal distribution of telomere lengths? Data selection or methodological effect? How large is the variation of samples among cohorts?**
 
-RESPONSE:
+RESPONSE: Positive skew in telomere length distribution is a widespread and uncontroversial phenomenon, and the causes are likely biological (see for example Golubev et al. 2003 J. Theor. Biol.; Hirt et al. 2014; J. Math. Biol.; ). Investigating the causes of this are outside the scope of our study, and we feel that a discussion of this would be an unnecessary distraction.
 
 \bigskip
 

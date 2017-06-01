@@ -11,7 +11,7 @@ dd0 <- subset(dd0,CqTelomere < 25) %>%
   subset(DiffTelomere < 0.5) %>%
   subset(RTL < 3) %>%
   subset(BloodID>6)
-
+dd0$RTL0 <- dd0$RTL
 dd0$RTL <- sqrt(dd0$RTL)
 
 

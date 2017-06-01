@@ -40,9 +40,21 @@ source('Scripts/SW juvenile telomeres IPC model averaging.r')
 ```
 
 
-**Table S1** Model selection table for analysis of factors affecting early life telomere length in juvenile Seychelles warblers. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here.
-
+**Table S1** Cohort sizes for each birth year of the Seychelles warbler dataset used in this study.
 ```{r Table S1}
+x <- subset(dd,!duplicated(BirdID)) %>%
+  ddply(.(LayYear),
+        summarise,
+        N = length(RTL)) %>%
+  `colnames<-`(c("Cohort", "N"))
+kable(x)
+```
+
+\pagebreak
+
+**Table S2** Model selection table for analysis of factors affecting early life telomere length in juvenile Seychelles warblers. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here.
+
+```{r Table S2}
 
 
 t1 <- as.matrix(RTL_Full_Dredge)
@@ -64,21 +76,21 @@ nams[nams == 'z.TQ'] <- 'Territory quality'
 
 colnames(t1) <- nams
 
-tableS1 <- data.frame(Model = apply(t1,1,getterms,c(2:10)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
-colnames(tableS1) <- c('Model','df','AICc', 'Delta AICc','Weight')
-rownames(tableS1) <- NULL
-tableS1$Model[tableS1$Model == ''] <- 'Null model'
-tableS1[,3:5] <- lapply(tableS1[,3:5],as.numeric)
-kable(tableS1,digits=2)
+tableS2 <- data.frame(Model = apply(t1,1,getterms,c(2:10)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+colnames(tableS2) <- c('Model','df','AICc', 'Delta AICc','Weight')
+rownames(tableS2) <- NULL
+tableS2$Model[tableS2$Model == ''] <- 'Null model'
+tableS2[,3:5] <- lapply(tableS2[,3:5],as.numeric)
+kable(tableS2,digits=2)
 
 ```
 
 
 \pagebreak
 
-**Table S2** Full model of factors affecting $\Delta$RTL in Seychelles warblers, using longitudinal data.
+**Table S3** Full model of factors affecting $\Delta$RTL in Seychelles warblers, using longitudinal data.
 
-```{r Table S2}
+```{r Table S3}
 
 #Run the model
 CIs <- CIwald(DeltaRTL_Full)
@@ -108,10 +120,10 @@ kable(t1b,digits = 3)
 
 \pagebreak
 
-**Table S3** Model selection table for analysis of factors affecting $\Delta$RTL in Seychelles warblers, using longitudinal data. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. TQ = territory quality.
+**Table S4** Model selection table for analysis of factors affecting $\Delta$RTL in Seychelles warblers, using longitudinal data. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. TQ = territory quality.
 
 
-```{r Table S3}
+```{r Table S4}
 
 #Model averaging
 t1 <- as.matrix(DeltaRTL_Full_Dredge)
@@ -132,12 +144,12 @@ nams[nams == 'z.TQ'] <- 'Territory quality'
 
 colnames(t1) <- nams
 
-tableS3 <- data.frame(Model = apply(t1,1,getterms,c(2:10)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
-colnames(tableS3) <- c('Model','df','AICc', 'Delta AICc','Weight')
-rownames(tableS3) <- NULL
-tableS3$Model[tableS3$Model == ''] <- 'Null model'
-tableS3[,3:5] <- lapply(tableS3[,3:5],as.numeric)
-kable(tableS3,digits=2)
+tableS4 <- data.frame(Model = apply(t1,1,getterms,c(2:10)),t1[,c('df','AICc','delta','weight')],stringsAsFactors = FALSE)
+colnames(tableS4) <- c('Model','df','AICc', 'Delta AICc','Weight')
+rownames(tableS4) <- NULL
+tableS4$Model[tableS4$Model == ''] <- 'Null model'
+tableS4[,3:5] <- lapply(tableS4[,3:5],as.numeric)
+kable(tableS4,digits=2)
 
 ```
 
