@@ -814,7 +814,7 @@ RESPONSE: We have now added a table of cohort sizes to the supplement (Table S1)
 
 **L 168: How do you explain a non-normal distribution of telomere lengths? Data selection or methodological effect? How large is the variation of samples among cohorts?**
 
-RESPONSE: Positive skew in telomere length distribution is a widespread and uncontroversial phenomenon, and the causes are likely biological (see for example Golubev et al. 2003 J. Theor. Biol.; Hirt et al. 2014; J. Math. Biol.; ). Investigating the causes of this are outside the scope of our study, and we feel that a discussion of this would be an unnecessary distraction.
+RESPONSE: Positive skew in telomere length distribution is a widespread and uncontroversial phenomenon (see for example Heidinger et al. 2012 PNAS; Barrett et al. 2013 Mol Ecol., plus many others), and we suspect that the causes are biological. Investigating the causes of this are outside the scope of our study, and we feel that a discussion of this would be an unnecessary distraction.
 
 \bigskip
 
@@ -829,7 +829,7 @@ RESPONSE: Positive skew in telomere length distribution is a widespread and unco
 
 **L 180: Van de Pol & Wright 2009**
 
-RESPONSE:
+RESPONSE: Yes, thanks - this was a reference manager error that we missed.
 
 \bigskip
 
@@ -844,7 +844,7 @@ RESPONSE:
 
 **L 205: first and least?**
 
-RESPONSE:
+RESPONSE: This was a typo - we meant to type "first and last". Now fixed.
 
 \bigskip
 
@@ -859,7 +859,7 @@ RESPONSE:
 
 **L 234: Please provide intra-plate repeatabilities as well. Do you have repeats that are not directly next to each other on the plate?**
 
-RESPONSE:
+RESPONSE: NEED TO GO BACK TO RAW DATA TO DO
 
 \bigskip
 
@@ -874,7 +874,7 @@ RESPONSE:
 
 **Given an inter-plate repeatability of 0.68, how do you take plate ID into account in your statistical analyses? Random effect plate ID?**
 
-RESPONSE:
+RESPONSE: As samples are normalised within plates, including a plate ID random effect would not make sense. The error across plates is random. See also response to reviewer 1. 
 
 \bigskip
 
@@ -889,7 +889,7 @@ RESPONSE:
 
 **For the samples analysed repeatedly, which measurement did you use? Or average?**
 
-RESPONSE:
+RESPONSE: We used a mean. We have now clarified this on line XX.
 
 \bigskip
 
@@ -904,7 +904,7 @@ RESPONSE:
 
 **L 238-239: If you would add a translation into base pairs lost per year, it would become easier to interpret your results. As the relationship is not linear give examples for a few ages.**
 
-RESPONSE:
+RESPONSE: We are not convinced that this would be accurate enough to be useful, and very few ecological studies do this. See Bebbington et al. 2016 Mol Ecol for a discussion of why were using relative telomere length.
 
 \bigskip
 
@@ -919,7 +919,7 @@ RESPONSE:
 
 **L 247: Please compare cross-sectional and longitudinal telomere shortening and discuss it.**
 	
-RESPONSE:
+RESPONSE: We are not sure exactly what the reviewer wants us to do here. We do compare cross-sectional and longitudinal telomere shortening, in the sense that we demonstrate how both measures shorten with log age. We are happy to add more if there is space, and if we are given a clarification.
 
 \bigskip
 
@@ -934,7 +934,7 @@ RESPONSE:
 
 **L 252: It is always the same time span between sampling, right? Could the low repeatability/correlation be partly due to inter-plate differences? Did you run all samples of the same individuals on the same plates or partly on different plates?**
 
-RESPONSE:
+RESPONSE: No, it is not always the same time between sampling. And yes, part of the low repeatability could be explained by inter-plate error, as individual samples were fully randomised across plates. However, the within-individual repeatability is still far lower than the within-sample (across-plate) repeatability. We now add a caveat to the discussion to highlight this - lines XX:
 
 \bigskip
 
@@ -949,7 +949,7 @@ RESPONSE:
 
 **L 307: Again the citation Haussmann et al. is not correct here.**
 
-RESPONSE:
+RESPONSE: Now removed.
 
 \bigskip
 
@@ -964,7 +964,7 @@ RESPONSE:
 
 **L 340: Does telomere lengthening or shortening relate to environmental conditions in your study?**
 
-RESPONSE:
+RESPONSE: As stated in the discussion, we feel that this is an important area for future research, and we hope that it will be a whole manuscript on its own. We are already pushing the page limit for Journal of Animal Ecology, so adding in an entire new set of analyses is just not possible. But watch this space!
 
 \bigskip
 
@@ -979,7 +979,7 @@ RESPONSE:
 
 **Generally, the discussion of this part of potential causes of telomere dynamics remains very methodological. The ecological context could be improved by adding own results as mentioned above or more citations.**
 
-RESPONSE:
+RESPONSE: See response above regarding the analysis of lengthening. Although this section is somewhat methodological, we feel that i) it is a very important point to be able to separate telomere elongation from sampling error, as few studies have done so in ecological systems, and ii) we make it clear (lines XX) that our findings are likely to be of ecological importance.
 
 \bigskip
 
@@ -994,7 +994,7 @@ RESPONSE:
 
 **L 389: Sentence incomplete**
 
-RESPONSE:
+RESPONSE: Now fixed.
 
 \bigskip
 
