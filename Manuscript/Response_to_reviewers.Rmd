@@ -104,7 +104,7 @@ RESPONSE: We are confident that plate effects are not a source of systematic bia
 
 With regards to the observed telomere lengthening, it is very possible that inter-plate variability accounts some of the observed lengthening in our dataset, but it cannot account for the amount and extent of lengthening we find. Indeed, this is exactly what Figure 2B shows. The lengthening observed "within" samples can be attributed to error across plates, but the additional lengthening observed "among" samples cannot be explained by measurement error.
 
-We now explain our randomisation approach in the methods, line XX:
+We now explain our randomisation approach in the methods, lines XX:
 
 \begin{adjustwidth}{2cm}{2cm}
 
@@ -119,7 +119,7 @@ We also include a discussion on error rate on lines XX:
 \begin{adjustwidth}{2cm}{2cm}
 
 \textit{
-"Measurement error is one  factor that is an issue in our study, and other studies that use qPCR to measure telomere length (Nussey et al. 2014). Measurement error is unlikely to be a cause of type I error in our study, because we were careful to randomise all samples across qPCR plates, and normalise RTL estimates across plates. However, the noise associated with within and among plate measure may have resulted in a decrease in explanatory power, and possibly in a degree of type II error. Techniques for measuring telomere length with a greater degree of precision may probe helpful in future ecological studies of teloere dynamics, but at present there is still atrade-off between obtaining precise telomere measurements, and utilising the large sample sizes necessary for ecological study."
+"Measurement error is one  factor that is an issue in our study, and other studies that use qPCR to measure telomere length (Nussey et al. 2014). Measurement error is unlikely to be a cause of type I error in our study, because we were careful to randomise all samples across qPCR plates, and normalise RTL estimates across plates. However, the noise associated with within and among plate measure may have resulted in a decrease in explanatory power, and possibly in a degree of type II error. Techniques for measuring telomere length with a greater degree of precision may probe helpful in future ecological studies of teloere dynamics, but at present there is still a trade-off between obtaining precise telomere measurements, and utilising the large sample sizes necessary for ecological study."
 }
 
 \end{adjustwidth}
@@ -136,7 +136,7 @@ We also include a discussion on error rate on lines XX:
 
 **1.78 (78%) would not be considered appropriate by many researchers for qPCR methodology (the commonly accepted limit is more or less + or minus 10%, so here between 90% (1.90) and 110% (2.10)). Your efficiency is more than 20% below the expected 100%, which raises some questions about the validity of your methodology. How can you be confident that this low efficiency is not affecting the quality of your data?**
 
-RESPONSE: Again, the level of efficiency is lower than we would have liked, although again suts fairly squarely within that found the published literature (see Fairlie et al. 2015, for a recent example), and often it is not even reported. We also note that this problem is not explected to be too drastic, because variaiton in efficiency is taken into account when calculating RTL from the Cq values. And again, we suggest that because of our study design, random error of this kind makes the majority of our analyses conservative, and is accounted for in the analysis of telomere lengthening.
+RESPONSE: Again, the level of efficiency is lower than we would have liked, although again this value sits fairly squarely within that found in the published telomere literature (see Fairlie et al. 2015, for a recent example), and often it is not even reported. We also note that this problem is not explected to be too drastic, because variation in efficiency is taken into account when calculating RTL from the Cq values. And again, we suggest that because of our study design, random error of this kind makes the majority of our analyses conservative, and is accounted for in the analysis of telomere lengthening.
 
 \bigskip
 
@@ -195,7 +195,7 @@ We also performed an analysis of RTL and sample storage time, using adult birds,
 \begin{adjustwidth}{2cm}{2cm}
 
 \textit{
-Using adult samples greater than one year old, we checked whether RTL was related to sample storage time, and found no evidence of such a relationship (estimate = -0.002, CIs = -0.007, 0.002).
+Using samples taken from adults greater than one year old, we checked whether RTL was related to sample storage time, and found no evidence of such a relationship (estimate = -0.002, CIs = -0.007, 0.002).
 }
 
 \end{adjustwidth}
@@ -213,7 +213,7 @@ Using adult samples greater than one year old, we checked whether RTL was relate
 
 **Would it be more relevant to present Figure 1B only with telomere data from fledglings individuals of the cohort in question. I am assuming from data presentation than it is an average of TL of all the individuals from these cohorts throughout their life, but I might be wrong. Presenting average TL data over the life of individuals might be somewhat misleading here in my opinion since some cohorts might experience poorer survival than other, etc... In addition, the main cohort effect seems to be on telomere length per se, rather than on telomere dynamics with age (see comment 6 below).**
 
-RESPONSE: Figure 1B did not show averages for individuals, but rather all measures for all individuals from each cohort (i.e. including repeats from individuals). The aim here was to show the full distribution of telomere lengths for each cohort. However, on balance we agree that restricting this plot to juveniles is probably less biased. We have now altered the figure accordingly.
+RESPONSE: Figure 1B did not show averages for individuals, but rather all measures for all individuals from each cohort (i.e. including repeats from individuals). The aim here was to show the full distribution of telomere lengths for each cohort. However, on balance we agree that restricting this plot to juveniles is probably less biased. We have now altered the figure and legend accordingly.
 
 \bigskip
 
@@ -232,7 +232,7 @@ RESPONSE: See response above re. randomisation. While not an issue for our study
 
 \begin{adjustwidth}{2cm}{2cm}
 
-\textit{"Although a few studies have shown that temporal variation in telomere dynamicsoccurs in natural populations, these have been limited in the number of seasons they cover (Mizutani et al. 2013; Watson, Bolton and Monaghan 2015; Fairlie et al. 2016). Other studies have found chort effects but not discussed them in an ecological context (Stier et al. 2014; Becker et al.2015). One problem with studying cohort effects is that it can be difficult to tease apart true cohort effects from effects that arise due to sample degradation with aim, and/or batch effects in telomere assays, although neither of these factors were a problem in our study. Indeed, the long-term Seychelles warbler dataset has allowed us to show that temporal variation in telomere dynamics can occur over substantial time periods."}
+\textit{"Although a few studies have shown that temporal variation in telomere dynamicsoccurs in natural populations, these have been limited in the number of seasons they cover (Mizutani et al. 2013; Watson, Bolton and Monaghan 2015; Fairlie et al. 2016). Other studies have found chort effects but not discussed them in an ecological context (Stier et al. 2014; Becker et al.2015). One problem with studying cohort effects is that it can be difficult to tease apart true cohort effects from effects that arise due to sample degradation with storage time, and/or batch effects in telomere assays, although neither of these factors were a problem in our study. Indeed, the long-term Seychelles warbler dataset has allowed us to show that temporal variation in telomere dynamics can occur over substantial time periods."}
 
 \end{adjustwidth}
 
@@ -271,7 +271,7 @@ RESPONSE: We are not sure that "worrying" is the correct phrase to use, as we an
 
 \begin{adjustwidth}{2cm}{2cm}
 
-\textit{"Such inconsistent changes in telomere length over lifespans could occur due to changes in the composition of cell types within individual samples, or due to the actual elongation of telomeres (Blackburn et al. 1999(. Determining the mechanism of these changes is essential for how we view telomeres as biomarkers of costs. For example, if telomeres can be lengthened in response to improvements in environmental conditions, this would suggest that they reflect short- to medium-term costs, rather than the cumulative costs that an individual has faced over its lifespan (Bateson et al. 2016). New statistical and technical approaches are therefore now required to determine the mechanisms behind increases in telomere length within individuals, so that biologically informed hypotheses about the ecological causes and consequences of these increases can be generated and tested."}
+\textit{"Such inconsistent changes in telomere length over lifespans could occur due to changes in the composition of cell types within individual samples, or due to the actual elongation of telomeres (Blackburn et al. 1999). Determining the mechanism of these changes is essential for how we view telomeres as biomarkers of costs. For example, if telomeres can be lengthened in response to improvements in environmental conditions, this would suggest that they reflect short- to medium-term costs, rather than the cumulative costs that an individual has faced over its lifespan (Bateson et al. 2016). New statistical and technical approaches are therefore now required to determine the mechanisms behind increases in telomere length within individuals, so that biologically informed hypotheses about the ecological causes and consequences of these increases can be generated and tested."}
 
 \end{adjustwidth}
 
@@ -422,7 +422,7 @@ RESPONSE: We have added in the suggested references.
 
 **Lines 231-234: information on sample size, efficiencies and repeatability would be better placed in the methods section in my opinion, since it is not results per se.**
 
-RESPONSE: We disagree here - it is the outcome of the molecular methods. We tried moving it but this disrupted the flow of the manuscript se have left it as it was.
+RESPONSE: We disagree here - it is the outcome of the molecular methods. We tried moving it but this disrupted the flow of the manuscript, so have left it as it was.
 
 \bigskip
 			
@@ -519,7 +519,7 @@ RESPONSE: This is a good point and we have made the suggested edit.
 **Lines 348-349: you might cite Becker 2015 and Stier 2014 here too.** 
 
 
-RESPONSE: These bave been added in response to an earlier comment.
+RESPONSE: These have been added in response to an earlier comment.
 
 \bigskip
 
@@ -639,11 +639,12 @@ RESPONSE: We thank Dr Nussey for his extremely kind words. It is not often that 
 \bigskip
 
 **Dear authors,**
-**You have an impressive dataset of longitudinal data and your work on telomere dynamics can be an important contribution to the current knowledge. However, I have some major concerns regarding your manuscript.**
 
-**Your introduction could be improved, first of all, by citing correctly. Also, there is some more recent literature on the topic, which you could cite. See more in comments on the introduction below. Further, I have some methodological questions. I would like to see more information on how samples were distributed over qPCR plates. Were samples of the same individual on the same plate? If not, how did you take plate ID into account in your statistical analyses? How exactly did you relate territory quality to RTL and delta RTL change? Only for birth year? Reading your abstract and aims in the introduction, I expected more. Your introduction could be improved, first of all, by citing correctly. Also, there is some more recent literature on the topic, which you could cite. See more in comments on the introduction below. Further, I have some methodological questions. I would like to see more information on how samples were distributed over qPCR plates. Were samples of the same individual on the same plate? If not, how did you take plate ID into account in your statistical analyses? How exactly did you relate territory quality to RTL and delta RTL change? Only for birth year? Reading your abstract and aims in the introduction, I expected more. In the discussion, you speculate on effects of environmental conditions on telomere dynamics. Is there a relationship with telomere lengthening between years and insect abundance/territory quality in the year of lengthening? I guess you could test this with the data you have? This could add to your discussion on potential telomere lengthening, which remained rather methodological. In my opinion, the ecological context in the discussion could be improved. More comments see below.
-I apologise for a delayed submission of my review, but hope that you find my comments helpful!**
-**
+**You have an impressive dataset of longitudinal data and your work on telomere dynamics can be an important contribution to the current knowledge. However, I have some major concerns regarding your manuscript.** 
+
+**Your introduction could be improved, first of all, by citing correctly. Also, there is some more recent literature on the topic, which you could cite. See more in comments on the introduction below. Further, I have some methodological questions. I would like to see more information on how samples were distributed over qPCR plates. Were samples of the same individual on the same plate? If not, how did you take plate ID into account in your statistical analyses? How exactly did you relate territory quality to RTL and delta RTL change? Only for birth year? Reading your abstract and aims in the introduction, I expected more. In the discussion, you speculate on effects of environmental conditions on telomere dynamics. Is there a relationship with telomere lengthening between years and insect abundance/territory quality in the year of lengthening? I guess you could test this with the data you have? This could add to your discussion on potential telomere lengthening, which remained rather methodological. In my opinion, the ecological context in the discussion could be improved. More comments see below.**
+
+**I apologise for a delayed submission of my review, but hope that you find my comments helpful!**
 
 RESPONSE: We are pleased that the reviewer is generally positive about are manuscript. We think it a little harsh to imply that we have not "cited correctly", but are grateful for the suggested changes. We respond to each of these questions/comments below.
 
