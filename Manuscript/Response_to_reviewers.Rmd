@@ -860,7 +860,7 @@ RESPONSE: This was a typo - we meant to type "first and last". Now fixed.
 
 **L 234: Please provide intra-plate repeatabilities as well. Do you have repeats that are not directly next to each other on the plate?**
 
-RESPONSE: NEED TO GO BACK TO RAW DATA TO DO
+RESPONSE: We have now included intra-plate repeatability estimates on lines XX. Samples were generally placed next to one another on the plate.
 
 \bigskip
 
@@ -935,7 +935,15 @@ RESPONSE: We are not sure exactly what the reviewer wants us to do here. We do c
 
 **L 252: It is always the same time span between sampling, right? Could the low repeatability/correlation be partly due to inter-plate differences? Did you run all samples of the same individuals on the same plates or partly on different plates?**
 
-RESPONSE: No, it is not always the same time between sampling. And yes, part of the low repeatability could be explained by inter-plate error, as individual samples were fully randomised across plates. However, the within-individual repeatability is still far lower than the within-sample (across-plate) repeatability. We now add a caveat to the discussion to highlight this - lines XX:
+RESPONSE: No, it is not always the same time between sampling, as we now make clear in the manuscript (see response to previous comment). And yes, part of the low repeatability could be explained by inter-plate error, as individual samples were fully randomised across plates. However, the within-individual repeatability is still far lower than the within-sample (across-plate) repeatability. We now add a caveat to this effect, on lines XX:
+
+\begin{adjustwidth}{2cm}{2cm}
+
+\textit{"Consistent with a pattern of sporadic changes in telomere length with age, we found that within-individual telomere measurements were only weakly correlated. Although some of this low within-individual repeatability will occur die to measurement error, our within-sample repeatability was still much higher than our within-individual repeatability."}
+
+\end{adjustwidth}
+
+
 
 \bigskip
 
