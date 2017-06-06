@@ -100,7 +100,7 @@ RESPONSE: The reviewer is correct that the estimate of repeatability is the intr
 
 **You should mention in the methods how the samples were assigned to the different plates (i.e. totally random, balanced between years/age, or all samples of 1 individual on the same plate?). If you allocated more or less randomly your samples to the different plates, can you check (and present as supplementary) that you do not have a “plate effect” on the average TL measurement. If you do observe such plate effect (something not that unusual with qPCR...), it might contribute to explain your low repeatability, and maybe part of the telomere lengthening that you describe.**
 
-RESPONSE: We are confident that plate effects are not a source of systematic bias in our data. Firstly, we assigned samples completely randomly (i.e. using a random number generator) to plates prior to running the telomere assays, minimising the chance that plate effects would introduce systematic differences among ages, sexes or cohorts. Secondly, our method of estimating RTL normalises samples across plates, as each RTL value is obtained by subtracting sample Cq values from Cq values obtained from a "calibrator" sample, which is run on every plate (information contained within Bebbington et al. 2016, cited).
+RESPONSE: We are confident that plate effects are not a source of systematic bias in our data. Firstly, we assigned samples completely randomly (i.e. using a random number generator) to plates prior to running the telomere assays, minimising the chance that plate effects would introduce systematic differences among ages, sexes or cohorts. Secondly, our method of estimating RTL normalises samples across plates, as each RTL value is obtained by subtracting sample Cq values from Cq values obtained from a "calibrator" sample, which is run on every plate (information contained within Bebbington et al. 2016, cited). 
 
 With regards to the observed telomere lengthening, it is very possible that inter-plate variability accounts some of the observed lengthening in our dataset, but it cannot account for the amount and extent of lengthening we find. Indeed, this is exactly what Figure 2B shows. The lengthening observed "within" samples can be attributed to error across plates, but the additional lengthening observed "among" samples cannot be explained by measurement error.
 
@@ -119,7 +119,7 @@ We also include a discussion on error rate on lines XX:
 \begin{adjustwidth}{2cm}{2cm}
 
 \textit{
-"Measurement error is one  factor that is an issue in our study, and other studies that use qPCR to measure telomere length (Nussey et al. 2014). Measurement error is unlikely to be a cause of type I error in our study, because we were careful to randomise all samples across qPCR plates, and normalise RTL estimates across plates. However, the noise associated with within and among plate measure may have resulted in a decrease in explanatory power, and possibly in a degree of type II error. Techniques for measuring telomere length with a greater degree of precision may probe helpful in future ecological studies of teloere dynamics, but at present there is still a trade-off between obtaining precise telomere measurements, and utilising the large sample sizes necessary for ecological study."
+"Measurement error is one  factor that is an issue in our study, and other studies that use qPCR to measure telomere length (Nussey et al. 2014). Measurement error is unlikely to be a cause of type I error in our study, because we were careful to randomise all samples across qPCR plates, and normalise RTL estimates across plates. However, the noise associated with within and among plate measure may have resulted in a decrease in explanatory power, and possibly in a degree of type II error. Techniques for measuring telomere length with a greater degree of precision may probe helpful in future ecological studies of telomere dynamics, but at present there is still a trade-off between obtaining precise telomere measurements, and utilising the large sample sizes necessary for ecological study."
 }
 
 \end{adjustwidth}
@@ -136,7 +136,7 @@ We also include a discussion on error rate on lines XX:
 
 **1.78 (78%) would not be considered appropriate by many researchers for qPCR methodology (the commonly accepted limit is more or less + or minus 10%, so here between 90% (1.90) and 110% (2.10)). Your efficiency is more than 20% below the expected 100%, which raises some questions about the validity of your methodology. How can you be confident that this low efficiency is not affecting the quality of your data?**
 
-RESPONSE: Again, the level of efficiency is lower than we would have liked, although again this value sits fairly squarely within that found in the published telomere literature (see Fairlie et al. 2015, for a recent example), and often it is not even reported. We also note that this problem is not explected to be too drastic, because variation in efficiency is taken into account when calculating RTL from the Cq values. And again, we suggest that because of our study design, random error of this kind makes the majority of our analyses conservative, and is accounted for in the analysis of telomere lengthening.
+RESPONSE: Again, the level of efficiency is lower than we would have liked, although again this value sits fairly squarely within that found in the published telomere literature (see Fairlie et al. 2015, for a recent example), and often it is not even reported. We also note that this problem is not expected to be too drastic, because variation in efficiency is taken into account when calculating RTL from the Cq values. And again, we suggest that because of our study design, random error of this kind makes the majority of our analyses conservative, and is accounted for in the analysis of telomere lengthening.
 
 \bigskip
 
@@ -156,7 +156,7 @@ RESPONSE: We now provide more clarification about how we determined and analyse 
 \begin{adjustwidth}{2cm}{2cm}
 
 \textit{
-"The majority of individuals are ringed (with an individually numbered metal ring and unique combination of colour rings) within the first year of life, and so are of known age. We aged all birds using information on eye colour at first capture (Kondeur et al. 1991) and previous capture history (Richardson et al. 2003). Within the first year of life, birds are classified as nestlings less than one month old (rounded to one month for analyses), fledglings less than six month olds (rounded to six months) or subadults up to one year old (rounded to 10 months). Ages for adult birds were rounded to the nearest year."
+"The majority of individuals are ringed (with an individually numbered metal ring and unique combination of colour rings) within the first year of life, and so are of known age. We aged all birds using information on eye colour at first capture (Komdeur et al. 1991) and previous capture history (Richardson et al. 2003). Within the first year of life, birds are classified as nestlings less than one month old (rounded to one month for analyses), fledglings less than six month old (rounded to six months) or subadults up to one year old (rounded to 10 months). Ages for adult birds were rounded to the nearest year."
 }
 
 \end{adjustwidth}
@@ -179,7 +179,7 @@ We do not have more detailed data on age for the majority of our individuals, bu
 **How can you exclude that the cohort effects observed in your study are not linked to differences in storage conditions / DNA quality-integrity rather than true biological variation? Can you try for instance to disentangle/quantify the proportion of variation linked to the year of sampling (I would not expect a strong biological year effect on adults) vs. the proportion of variation linked to the year of birth (cohort effect)?**
 
 
-RESPONSE: Storage in ethanol is standardd procedure for avian blood samples, and allows DNA to be maintained at high quality for many years. We checked DNA integrity for a very large number of samples, and found no evidence of DNA degration in older samples. We now include two gel images to illustrate this in the supplementary material (Fig. S1). We refer to this in the main text, lines XX. 
+RESPONSE: Storage in ethanol is standard procedure for avian blood samples, and allows DNA to be maintained at high quality for many years. We checked DNA integrity for a very large number of samples, and found no evidence of DNA degradation in older samples. We now include two gel images to illustrate this in the supplementary material (Fig. S1). We refer to this in the main text, lines XX. 
 
 \begin{adjustwidth}{2cm}{2cm}
 
@@ -232,7 +232,7 @@ RESPONSE: See response above re. randomisation. While not an issue for our study
 
 \begin{adjustwidth}{2cm}{2cm}
 
-\textit{"Although a few studies have shown that temporal variation in telomere dynamicsoccurs in natural populations, these have been limited in the number of seasons they cover (Mizutani et al. 2013; Watson, Bolton and Monaghan 2015; Fairlie et al. 2016). Other studies have found chort effects but not discussed them in an ecological context (Stier et al. 2014; Becker et al.2015). One problem with studying cohort effects is that it can be difficult to tease apart true cohort effects from effects that arise due to sample degradation with storage time, and/or batch effects in telomere assays, although neither of these factors were a problem in our study. Indeed, the long-term Seychelles warbler dataset has allowed us to show that temporal variation in telomere dynamics can occur over substantial time periods."}
+\textit{"Although a few studies have shown that temporal variation in telomere dynamics occurs in natural populations, these have been limited in the number of seasons they cover (Mizutani et al. 2013; Watson, Bolton and Monaghan 2015; Fairlie et al. 2016). Other studies have found cohort effects but not discussed them in an ecological context (Stier et al. 2014; Becker et al.2015). One problem with studying cohort effects is that it can be difficult to tease apart true cohort effects from effects that arise due to sample degradation with storage time, and/or batch effects in telomere assays, although neither of these factors were a problem in our study. Indeed, the long-term Seychelles warbler dataset has allowed us to show that temporal variation in telomere dynamics can occur over substantial time periods."}
 
 \end{adjustwidth}
 
@@ -267,7 +267,7 @@ RESPONSE: We agree that while there is convincing evidence for cohort effects on
 
 **While I agree that your results are very interesting and biologically meaningful (age effect, sex effet, link with body size and food abundance), and that they are very similar to those on Soay sheep from Dan Nussey’s team, an intra-individual repeatability of 8% is a bit worrying in my opinion. This is especially worrying for using telomere length/dynamics as a “biomarker” as you suggest it in several places in the manuscript. A true biomarker should be at least to some extent consistent within an individual to be useful. You should raise such limitation in your discussion.**
 
-RESPONSE: We are not sure that "worrying" is the correct phrase to use, as we anticpiate that other studies in natural population will find similar patterns. Further, we disagree with the sentiment that a biomarker must be consistent over individual lifespans to be useful. We feel that we cover this point in the discussion, lines XX:
+RESPONSE: We are not sure that "worrying" is the correct phrase to use, as we anticipate that other studies in natural population will find similar patterns. Further, we disagree with the sentiment that a biomarker must be consistent over individual lifespans to be useful. We feel that we cover this point in the discussion, lines XX:
 
 \begin{adjustwidth}{2cm}{2cm}
 
