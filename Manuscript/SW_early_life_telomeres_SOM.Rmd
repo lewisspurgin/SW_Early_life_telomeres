@@ -1,6 +1,7 @@
 ---
 output: pdf_document
 classoption: landscape
+header-includes: \usepackage{graphicx}
 ---
 
 #Supplementary information for Spurgin *et al.* "Spatiotemporal variation in lifelong telomere dynamics in a long-term ecological study"
@@ -22,6 +23,7 @@ opts_knit$set(root.dir = '..')
 opts_chunk$set(echo=FALSE,
                warning=FALSE,
                message=FALSE,
+               cache = TRUE,
                fig.path='../Figures/',
                fig.width= 5,
                fig.height= 5)
@@ -155,7 +157,10 @@ kable(tableS4,digits=2)
 
 \pagebreak
 
-**Figure S1** Examples of DNA extractions from older and more recent Seychelles warbler samples. We found no evidence for differences in DNA integrity with sample age.
+
+\includegraphics[width = 10cm]{Fig_S1.png}
+
+**Figure S1** Examples of DNA extractions from older Seychelles warbler samples (sample year in brackets). We found no evidence for differences in DNA integrity with sample age.
 
 \pagebreak
 

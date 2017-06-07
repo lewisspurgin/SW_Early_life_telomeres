@@ -100,7 +100,7 @@ RESPONSE: The reviewer is correct that the estimate of repeatability is the intr
 
 **You should mention in the methods how the samples were assigned to the different plates (i.e. totally random, balanced between years/age, or all samples of 1 individual on the same plate?). If you allocated more or less randomly your samples to the different plates, can you check (and present as supplementary) that you do not have a “plate effect” on the average TL measurement. If you do observe such plate effect (something not that unusual with qPCR...), it might contribute to explain your low repeatability, and maybe part of the telomere lengthening that you describe.**
 
-RESPONSE: We are confident that plate effects are not a source of systematic bias in our data. Firstly, we assigned samples completely randomly (i.e. using a random number generator) to plates prior to running the telomere assays, minimising the chance that plate effects would introduce systematic differences among ages, sexes or cohorts. Secondly, our method of estimating RTL normalises samples across plates, as each RTL value is obtained by subtracting sample Cq values from Cq values obtained from a "calibrator" sample, which is run on every plate (information contained within Bebbington et al. 2016, cited). 
+RESPONSE: We are confident that plate effects are not a source of systematic bias in our data. Firstly, we assigned samples completely randomly (i.e. using a random number generator) to plates prior to running the telomere assays, minimising the chance that plate effects would introduce systematic differences among ages, sexes or cohorts. Secondly, our method of estimating RTL normalises samples across plates, as each RTL value is obtained by subtracting sample Cq values from Cq values obtained from a "calibrator" sample, which is run on every plate (information contained within Bebbington et al. 2016, cited). However, we appreciate that plate effects could still occur (e.g. because of an effect on the calibrator sample), so we have now included plate ID as a random effect in our models. Our results are almost identical, confirming that plate effects have not biased our results. We have updated the methods sections in the relevant places to describe the addition of this random effect.
 
 With regards to the observed telomere lengthening, it is very possible that inter-plate variability accounts some of the observed lengthening in our dataset, but it cannot account for the amount and extent of lengthening we find. Indeed, this is exactly what Figure 2B shows. The lengthening observed "within" samples can be attributed to error across plates, but the additional lengthening observed "among" samples cannot be explained by measurement error.
 
@@ -251,7 +251,7 @@ RESPONSE: See response above re. randomisation. While not an issue for our study
 
 **You mention in several places that telomere dynamics with age is different between cohorts (e.g. lines 241-244; 299-300; 350-54), but in my opinion this is not supported by your data; so such conclusion should be avoided. Indeed, in the first analysis of RTL, including the log age * cohort interaction only marginally improved the fit of the model (delta AIC of 1.40, lines 242-244), which is not sufficient to support your conclusion. In addition, you mention that including cohort ID in the within-individual analyse of TL was even decreasing the fit of the model to your data, again suggesting that telomere dynamics is not significantly impacted by the cohort. Please remove any reference to such effect or try to provide convincing analysis justifying your conclusion.**
 
-RESPONSE: We agree that while there is convincing evidence for cohort effects on telomere length, the evidence for cohort effects on telomere dynamics is much weaker. We have therefore removed references to this effect throughout.
+RESPONSE: Interestingly, this is the one effect that has changed from  including a plate ID random effect in our analyses, with delta AIC now ~11. However, we do not wish to place any strong conclusions on this analysis. We agree that while there is convincing evidence for cohort effects on telomere length, the evidence for cohort effects on telomere dynamics is weaker. We have therefore removed references to this effect throughout the discussion, and allow readers to interpret the effect as they wish.
 
 \bigskip
 
@@ -875,7 +875,7 @@ RESPONSE: We have now included intra-plate repeatability estimates on lines XX. 
 
 **Given an inter-plate repeatability of 0.68, how do you take plate ID into account in your statistical analyses? Random effect plate ID?**
 
-RESPONSE: As samples are normalised within plates, including a plate ID random effect would not make sense. The error across plates is random. See also response to reviewer 1. 
+RESPONSE: We have now included plate ID as a random effect, and this has not changed any of our results. See also response to reviewer 1. 
 
 \bigskip
 
