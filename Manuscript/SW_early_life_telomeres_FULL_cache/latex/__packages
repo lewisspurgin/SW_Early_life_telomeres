@@ -1,0 +1,15 @@
+base
+knitr
+MuMIn
+plyr
+ggplot2
+nlme
+magrittr
+rptR
+lattice
+Rmisc
+Matrix
+lme4
+MASS
+arm
+car
