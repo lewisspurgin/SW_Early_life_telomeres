@@ -930,6 +930,14 @@ RESPONSE: We are not convinced that this would be accurate enough to be useful, 
 	
 RESPONSE: We now include a formal test of the within and between individual slopes, as described in van de Pol and Wright (2009), and find that there is no difference between cross-sectional and longitudinal telomere shortening - lines XX:
 
+\begin{adjustwidth}{2cm}{2cm}
+
+\textit{"Further, we found no evidence that within and between individual slopes of telomere shortening varied (estimate = -0.003, CIs = -0.008, 0.003; see Van de Pol and Wright 2009), suggesting that there was no difference between cross-sectional and longitudinal telomere shortening with age."}
+
+\end{adjustwidth}
+
+
+
 
 
 \bigskip
@@ -983,7 +991,7 @@ RESPONSE: Now removed.
 
 **L 340: Does telomere lengthening or shortening relate to environmental conditions in your study?**
 
-RESPONSE: As stated in the discussion, we feel that this is an important area for future research, and we hope that it will be a whole manuscript on its own. We are already pushing the page limit for Journal of Animal Ecology, so adding in an entire new set of analyses is just not possible. But watch this space!
+RESPONSE: As stated in the discussion (lines XX), we feel that this is an important area for future research, and we hope that it will be a whole manuscript on its own. We are already pushing the page limit for Journal of Animal Ecology, so adding in an entire new set of analyses is just not possible.
 
 \bigskip
 
