@@ -85,7 +85,7 @@ RESPONSE: We thank Dr Stier for his constructive comments, and are pleased that 
 
 **I am not sure to understand how you calculated the inter-plate repeatability of 0.68 mentioned line 234. Assuming that it is more or less equivalent to the intraclass coefficient of correlation r, it would mean that approximately 50% of the variation in your measurement is linked to the error of measurement. If my understanding is correct, it would mean that your qPCR methodology is quite poorly repeatable. Can you please clarify this point?**
 
-RESPONSE: The reviewer is correct that the estimate of repeatability is the intraclass correlation coefficient (this is made clear in the rptR documentation, which we cite). We agree with the reviewer in the sense that repeatability is not as high as we would have hoped, although we note that in the context of the telomere literature, a repeatability estimate of 0.68 is not especially low. However, because of how the samples were run, we are confident that any issues of repeatability have not led to any kind of bias in our results, and in fact make our analyses conservative. We respond to this point in detail, and outline how we clarified our discussion, in our response to the next comment.
+RESPONSE: The reviewer is correct that the estimate of repeatability is the intraclass correlation coefficient (this is made clear in the rptR documentation, which we cite). Our understanding of the ICC is that it is a measurement of the proportion of variance explained by sample - so 32% (rather than 50%) of the vatiation is linked to measurement error. However, we agree with the reviewer in the sense that repeatability is not as high as we would have hoped, although we note that in the context of the telomere literature, a repeatability estimate of 0.68 is not especially low. However, because of how the samples were run, we are confident that any issues of repeatability have not led to any kind of bias in our results, and in fact make our analyses conservative. We respond to this point in detail, and outline how we clarified our discussion, in our response to the next comment.
 
 \bigskip
 
@@ -100,9 +100,9 @@ RESPONSE: The reviewer is correct that the estimate of repeatability is the intr
 
 **You should mention in the methods how the samples were assigned to the different plates (i.e. totally random, balanced between years/age, or all samples of 1 individual on the same plate?). If you allocated more or less randomly your samples to the different plates, can you check (and present as supplementary) that you do not have a “plate effect” on the average TL measurement. If you do observe such plate effect (something not that unusual with qPCR...), it might contribute to explain your low repeatability, and maybe part of the telomere lengthening that you describe.**
 
-RESPONSE: We are confident that plate effects are not a source of systematic bias in our data. Firstly, we assigned samples completely randomly (i.e. using a random number generator) to plates prior to running the telomere assays, minimising the chance that plate effects would introduce systematic differences among ages, sexes or cohorts. Secondly, our method of estimating RTL normalises samples across plates, as each RTL value is obtained by subtracting sample Cq values from Cq values obtained from a "calibrator" sample, which is run on every plate (information contained within Bebbington et al. 2016, cited). However, we appreciate that plate effects could still occur (e.g. because of an effect on the calibrator sample), so we have now included plate ID as a random effect in our models. Our results are almost identical, confirming that plate effects have not biased our results. We have updated the methods sections in the relevant places to describe the addition of this random effect.
+RESPONSE: We are confident that plate effects are not a source of systematic bias in our data. Firstly, we assigned samples completely randomly (i.e. using a random number generator) to plates prior to running the telomere assays, minimising the chance that plate effects would introduce systematic differences among ages, sexes or cohorts. Secondly, our method of estimating RTL normalises samples across plates, as each RTL value is obtained by subtracting sample Cq values from Cq values obtained from a "calibrator" sample, which is run on every plate (information contained within Bebbington et al. 2016, cited). However, we appreciate that plate effects could still occur (e.g. because of an effect on the calibrator sample), so we have now included plate ID as a random effect in our models. Our results are almost identical, with all the reported significant effects remaining. The only change is that the cohort x age effect on telomere length is now stronger (see response to reviewer 3). Overall, we can be very confident that plate effects have not biased our results. We have updated the methods sections in the relevant places to describe the addition of the plate ID random effect.
 
-With regards to the observed telomere lengthening, it is very possible that inter-plate variability accounts some of the observed lengthening in our dataset, but it cannot account for the amount and extent of lengthening we find. Indeed, this is exactly what Figure 2B shows. The lengthening observed "within" samples can be attributed to error across plates, but the additional lengthening observed "among" samples cannot be explained by measurement error.
+With regards to the observed telomere lengthening, it is very possible that inter-plate variability accounts for some of the observed lengthening in our dataset, but it cannot account for the amount and extent of lengthening we find. Indeed, this is exactly what Figure 2B shows. The lengthening observed "within" samples can be attributed to error across plates, but the additional lengthening observed "among" samples cannot be explained by measurement error.
 
 We now explain our randomisation approach in the methods, lines XX:
 
@@ -119,7 +119,7 @@ We also include a discussion on error rate on lines XX:
 \begin{adjustwidth}{2cm}{2cm}
 
 \textit{
-"Measurement error is one  factor that is an issue in our study, and other studies that use qPCR to measure telomere length (Nussey et al. 2014). Measurement error is unlikely to be a cause of type I error in our study, because we were careful to randomise all samples across qPCR plates, and normalise RTL estimates across plates. However, the noise associated with within and among plate measure may have resulted in a decrease in explanatory power, and possibly in a degree of type II error. Techniques for measuring telomere length with a greater degree of precision may probe helpful in future ecological studies of telomere dynamics, but at present there is still a trade-off between obtaining precise telomere measurements, and utilising the large sample sizes necessary for ecological study."
+"Measurement error is one  factor that is an issue in our study, and other studies that use qPCR to measure telomere length (Nussey et al. 2014). Measurement error is unlikely to be a cause of type I error in our study, because we were careful to randomise all samples across qPCR plates, and normalise RTL estimates across plates. However, the noise associated with within and among plate measure may have resulted in a decrease in explanatory power, and possibly in a degree of type II error. Techniques for measuring telomere length with a greater degree of precision may prove helpful in future ecological studies of telomere dynamics, but at present there is still a trade-off between obtaining precise telomere measurements, and utilising the large sample sizes necessary for ecological study."
 }
 
 \end{adjustwidth}
@@ -156,7 +156,7 @@ RESPONSE: We now provide more clarification about how we determined and analyse 
 \begin{adjustwidth}{2cm}{2cm}
 
 \textit{
-"The majority of individuals are ringed (with an individually numbered metal ring and unique combination of colour rings) within the first year of life, and so are of known age. We aged all birds using information on eye colour at first capture (Komdeur et al. 1991) and previous capture history (Richardson et al. 2003). Within the first year of life, birds are classified as nestlings less than one month old (rounded to one month for analyses), fledglings less than six month old (rounded to six months) or subadults up to one year old (rounded to 10 months). Ages for adult birds were rounded to the nearest year."
+"The majority (96%) of individuals are ringed (with an individually numbered metal ring and unique combination of colour rings) within the first year of life, and so are of known age. We aged all birds using information on eye colour at first capture (Komdeur et al. 1991) and previous capture history (Richardson et al. 2003). Within the first year of life, birds are classified as nestlings less than one month old (rounded to one month for analyses), fledglings less than six month old (rounded to six months) or subadults up to one year old (rounded to 10 months). Ages for adult birds were rounded to the nearest year."
 }
 
 \end{adjustwidth}
@@ -267,7 +267,7 @@ RESPONSE: Interestingly, this is the one effect that has changed from  including
 
 **While I agree that your results are very interesting and biologically meaningful (age effect, sex effet, link with body size and food abundance), and that they are very similar to those on Soay sheep from Dan Nussey’s team, an intra-individual repeatability of 8% is a bit worrying in my opinion. This is especially worrying for using telomere length/dynamics as a “biomarker” as you suggest it in several places in the manuscript. A true biomarker should be at least to some extent consistent within an individual to be useful. You should raise such limitation in your discussion.**
 
-RESPONSE: We are not sure that "worrying" is the correct phrase to use, as we anticipate that other studies in natural population will find similar patterns. Further, we disagree with the sentiment that a biomarker must be consistent over individual lifespans to be useful. We feel that we cover this point in the discussion, lines XX:
+RESPONSE: We are not sure that "worrying" is the correct phrase to use, as we anticipate that other studies in natural population will find similar patterns. Further, we disagree with the sentiment that a biomarker must be consistent over individual lifespans to be useful - rather, a useful barker needs to change with ecological context. We feel that we cover this point in the discussion, lines XX:
 
 \begin{adjustwidth}{2cm}{2cm}
 
@@ -646,7 +646,7 @@ RESPONSE: We thank Dr Nussey for his extremely kind words. It is not often that 
 
 **I apologise for a delayed submission of my review, but hope that you find my comments helpful!**
 
-RESPONSE: We are pleased that the reviewer is generally positive about are manuscript. We think it a little harsh to imply that we have not "cited correctly", but are grateful for the suggested changes. We respond to each of these questions/comments below.
+RESPONSE: We are pleased that the reviewer is generally positive about our manuscript. We thank the reviewer for pointing out areas where our citation of previous work was incomplete - although we believe our original citations were generally correct, we agree that there were one or two mistakes, and that it is important to provide the reader with a complete context for our work. We respond to each of the individual questions/comments below.
 
 \bigskip
 
@@ -662,7 +662,7 @@ RESPONSE: We are pleased that the reviewer is generally positive about are manus
 
 **L 53: In Monaghan & Haussmann 2006, data for 4 species are presented whereof two show telomere shortening. I therefore don't consider this the best citation for your statement. Also, given that by now there are plenty of others that show this relationship - including other Haussmann or Monaghan papers.**
 
-RESPONSE: We have changed the citations here.
+RESPONSE: We have removed the Monaghan and Haussmann reference and added in Muezlinner et al. 2013 as a replacement.
 
 \bigskip
 
@@ -726,7 +726,7 @@ RESPONSE: We have re-written the text so that the contrast is clearer here. Line
 
 \begin{adjustwidth}{2cm}{2cm}
 
-\textit{"When telomeres become critically short, cells senesce (Campisi 2003), and the accumulation of these cells has been suggested to result in organismal senescence and death (Wong et al. 2003). The association between senescence and telomere length has inspired a great deal of recent research into telomere evolutionary ecology, and relationships between telomere dynamics and survival or lifespan have been documented in wild population of several species (Haussmann and Marchetto 2010; Barrett et al. 2013; Stier et al. 2015). As yet, however, there is little direct evidence that the relationship between telomere dynamics and survival is causal (Simons 2015).} 
+\textit{"When telomeres become critically short, cells senesce (Campisi 2003), and the accumulation of these cells has been suggested to result in organismal senescence and death (Wong et al. 2003). The association between telomere length and senescence has inspired a great deal of recent research into telomere evolutionary ecology, and relationships between telomere dynamics and survival or lifespan have been documented in wild populations of several species (Haussmann and Marchetto 2010; Barrett et al. 2013; Stier et al. 2015). As yet, however, there is little direct evidence that the relationship between telomere dynamics and survival is causal (Simons 2015).} 
 
 \textit{"Although the causal role of telomeres in senescence and survival is not yet clear, there is mounting evidence that telomeres can act as biomarkers of individual condition and ageing in wild populations, providing a measure of the ecological stress that an individual has experienced, a signature that can otherwise be difficult to detect (e.g. Schultner et al. 2014; Asghar et al. 2015; Bebbington et al. 2016)."}
 
@@ -763,7 +763,15 @@ RESPONSE: Apologies - this is now in the bibliography (there was also a typo - t
 
 **L136: You describe how you assess territory quality etc. But how do you relate it to RTL or delta RTL in your statistical analyses? Do you only use territory quality in the hatching year? You could relate territory quality between RTL measurements to telomere dynamics. Is the variation of territory quality within-individually over time smaller than among-individually? Is the difference between years much larger than between territories?**
 
-RESPONSE: We now clarify (lines XX) that the territory quality estimates that we use in our statistical models are taken from the field period in which the telomere sample was taken. The same applies to insect abundance, group size etc. We feel that an in-depth explanation of how and why territory quality varies over space and time is outside the scope of this manuscript, especially given i) the word limit, and ii) the fact that territory quality is not related to RTL.
+RESPONSE: We now clarify (lines XX) that the territory quality estimates that we use in our statistical models are taken from the field period in which the telomere sample was taken. The same applies to insect abundance, group size etc. We feel that an in-depth explanation of how and why territory quality varies over space and time is outside the scope of this manuscript, especially given i) the word limit, and ii) the fact that territory quality is not related to RTL. However we do now include a reference to recent book chapter (Komdeur et al. 2016) which explains how and why territory quality varies on Cousin Island. Our updated section on territory quality and indect abundance is now on lines XX:
+
+\begin{adjustwidth}{2cm}{2cm}
+
+\textit{"Where territory quality estimates were not available for a specific year we used the average value for that territory across years (Hammers et al. 2013; see Komdeur et al. 2016 for an explanation of how territory quality varies on Cousin Island). Cousin is subject to considerable intra- and inter-annual variation in rainfall and, consequently, insect availability (Komdeur et al. 2016). Such island-wide temporal variation may override the effects of variation in individual territory quality across the island. As an estimate of seasonal variation in food availability, we calculated an index of the abundance of insects across the entire island during each main breeding season (referred to hereafter as 'insect abundance'). This index is calculated as the mean number of insects found per unit leaf area over all monthly surveys carried out on the island in a main breeding season.
+"}
+
+\end{adjustwidth}
+
 
 \bigskip
 
@@ -875,7 +883,7 @@ RESPONSE: We have now included intra-plate repeatability estimates on lines XX. 
 
 **Given an inter-plate repeatability of 0.68, how do you take plate ID into account in your statistical analyses? Random effect plate ID?**
 
-RESPONSE: We have now included plate ID as a random effect, and this has not changed any of our results. See also response to reviewer 1. 
+RESPONSE: We have now included plate ID as a random effect, and this has had almost no effect on our results. See response to reviewer 1. 
 
 \bigskip
 
@@ -905,7 +913,7 @@ RESPONSE: We used a mean. We have now clarified this on line XX.
 
 **L 238-239: If you would add a translation into base pairs lost per year, it would become easier to interpret your results. As the relationship is not linear give examples for a few ages.**
 
-RESPONSE: We are not convinced that this would be accurate enough to be useful, and very few ecological studies do this. See Bebbington et al. 2016 Mol Ecol for a discussion of why were using relative telomere length.
+RESPONSE: We are not convinced that this would be accurate enough to be useful, and very few ecological studies do this. See Bebbington et al. 2016 Mol Ecol for a discussion of why we are using relative telomere length.
 
 \bigskip
 
@@ -920,7 +928,9 @@ RESPONSE: We are not convinced that this would be accurate enough to be useful, 
 
 **L 247: Please compare cross-sectional and longitudinal telomere shortening and discuss it.**
 	
-RESPONSE: We are not sure exactly what the reviewer wants us to do here. We do compare cross-sectional and longitudinal telomere shortening, in the sense that we demonstrate how both measures shorten with log age. We are happy to add more if there is space, and if we are given a clarification.
+RESPONSE: We now include a formal test of the within and between individual slopes, as described in van de Pol and Wright (2009), and find that there is no difference between cross-sectional and longitudinal telomere shortening - lines XX:
+
+
 
 \bigskip
 
@@ -939,7 +949,7 @@ RESPONSE: No, it is not always the same time between sampling, as we now make cl
 
 \begin{adjustwidth}{2cm}{2cm}
 
-\textit{"Consistent with a pattern of sporadic changes in telomere length with age, we found that within-individual telomere measurements were only weakly correlated. Although some of this low within-individual repeatability will occur die to measurement error, our within-sample repeatability was still much higher than our within-individual repeatability."}
+\textit{"Consistent with a pattern of sporadic changes in telomere length with age, we found that within-individual telomere measurements were only weakly correlated. Although some of this low within-individual repeatability will occur due to measurement error, our within-sample repeatability was still much higher than our within-individual repeatability."}
 
 \end{adjustwidth}
 

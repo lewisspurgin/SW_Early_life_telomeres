@@ -16,6 +16,9 @@ RTL_Age <- lmer(RTL ~ Cohort + Agemonths + LogAge + FAge + Age2 + (1|BirdID) + (
 RTL_LogAge <- lmer(RTL ~ LogAge + Cohort + (1|BirdID) + (1|CatchYear)+ (1|PlateID),
                 data=dd,
                 REML = FALSE)
+RTL_LogAge2 <- lmer(RTL ~ LogAge + MeanAge + Cohort + (1|BirdID) + (1|CatchYear)+ (1|PlateID),
+                   data=dd,
+                   REML = FALSE)
 RTL_LogAgeXcohort <- lmer(RTL ~ LogAge*Cohort + (1|BirdID) + (1|CatchYear)+ (1|PlateID),
                    data=dd,
                    REML = FALSE)
