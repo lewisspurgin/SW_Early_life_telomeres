@@ -59,6 +59,27 @@ Lewis Spurgin (on behalf of all authors)
 
 
 
+
+#Associate editor comments
+
+---
+
+\bigskip
+
+**This manuscript describes spatio-temporal variation in telomere dynamics in the cooperatively breeding Seychelles warbler. It uses an impressive long-term longitudinal dataset of telomere lengths (obtained by qPCR) of >400 individuals and relates telomere length and dynamics to age, sex and various ecological variables, such as yearly insect availability and density, local territory quality and group size and the number of helpers during reproduction.**
+
+**The manuscript has now been read by three reviewers and myself. All of us are very impressed with the dataset and questions asked and answered in this manuscript. Two of the reviewers, however, have some important methodological questions, and some suggestions for updating the bibliography of the manuscript. I agree with their assessment, and believe that when the authors thoroughly clarify these issues, their paper will make an important contribution to the field and will be widely read and cited.**
+
+RESPONSE: We thank the editor and reviewers for their positive and constructive comments. We have now addressed the methodological questions raised by reviewers one and three, and have updated several of our analyses in line with their suggestions. We have also performed additional analyses to show that sample storage time does not affect telomere length, and included a discussion on repeatability. While almost none of our results have changed, we believe that incorporating the reviewer comments has substantially improved the clarity, readability and rigour of our work. Finally, we have updated our bibliography, in accordance with the reviewer comments.
+
+\newpage	
+
+
+
+
+
+
+
 #Reviewer 1
 
 ---
@@ -67,7 +88,7 @@ Lewis Spurgin (on behalf of all authors)
 
 **This paper reports interesting findings on lifelong telomere dynamics and its environmental correlates in a wild bird species. This is a very interesting study, but a moderate/major revision would be needed before considering this paper for publication in my opinion. With such revision, I am convinced that this paper will be an important contribution in the field of telomeres in ecology and evolution. I have some comments/criticism about the methodology presented by the authors, especially about the poor repeatability found between qPCR runs (see major comment 1) and the low efficiency for the telomere amplification. In addition, one main conclusion reached by the authors (i.e. that lifelong telomere dynamics is different between cohort, see comment 6) is not supported by the data in my opinion, or at least by the stats presented in the paper. Despite such limitations, the research question is novel and merits to be addressed and published in high-quality journal such as Journal of Animal Ecology. I really hope that my comments will be useful to the authors in revising their manuscript.**
 
-RESPONSE: We thank Dr Stier for his constructive comments, and are pleased that he believes our work to be novel and worthy of publication. We agree that the main issues he raises were not properly addressed/explained, and respond to these points in detail below.
+RESPONSE: We thank Dr Stier for his comments, and are pleased that he believes our work to be novel and worthy of publication. We agree that the main issues he raises were not properly addressed/explained, and respond to these points in detail below.
 
 \bigskip
 
@@ -295,7 +316,7 @@ RESPONSE: It is true that the shorter timescales of these studies may be the rea
 
 \end{adjustwidth}
 
-However, as we argue above, we do not think it is likely that the pattern is a result of sample storage/DNA integrity. Past discussions with the Nussey group suggests that they are also confident their telomere assay is not negatively affected by long-term sample storage.
+However, as we argue above, we do not think it is likely that the pattern is a result of sample storage/DNA integrity. We have no evidence from our samples that there is sample degradiation with respect to DNA integrity or telomere length (see above) - something confirmed by other studies (see Reichert et al. 2017; Oecologia)
 
 \bigskip
 
@@ -329,7 +350,7 @@ RESPONSE: Yes, this is a good point. We now clarify in the discussion, lines XX
 
 \begin{adjustwidth}{2cm}{2cm}
 
-\textit{"Our study adds to the substantial body of literature from humans and wild animals showing that telomere length decreases with age, and that this decrease is most rapid in early life - most likely as a consequence of cellular division..."}
+\textit{"Our study adds to the substantial body of literature from humans and wild animals showing that telomere length decreases with age, and that this decrease is most rapid in early life - most likely as a consequence of the much more rapid rate of cellular division that occurs during the growth phase, but also perhaps higher levels of cellular stress during development..."}
 
 \end{adjustwidth}
 
@@ -561,7 +582,7 @@ RESPONSE: We have removed this citation as part of a previous comment.
 
 **Lines 367-369: In my opinion, Heidinger et al. 2012 does not fit here (they do not look at differences in early-life conditions), but you might cite Reichert 2015, Stier 2014, 2015a, 2015b, Meillère 2016.**
 
-RESPONSE: We have removed the Heidinger reference, leaving two citations in - we felt this was sufficient.
+RESPONSE: We have now removed the Heidinger reference and added in Stier et al. 2014.
 
 \bigskip
 
@@ -707,7 +728,7 @@ RESPONSE: Done - see response to reviewer 1, who made the same point.
 
 **L 65: Please either cite a meta-analysis or some more like Barrett et al. There are quite some studies with original data showing a relationship between telomere length and survival. Given all the literature available, I do not consider to cite Simons 2015 a good choice here.**
 
-RESPONSE: We disagree here - Simons 2015 *is* a meta-analysis that shows that there is little evidence that the relationship between telomeres and survival is causal.
+RESPONSE: We agree that many such studies exist, and we do first give three cited examples of the relationship between telomere length and survival. We then cite the Simons paper (note that this is a meta-analysis) to highlight the point that we are not yet sure whether the relationship between telomeres and survival is causal.
 
 \bigskip
 
@@ -790,7 +811,7 @@ RESPONSE: Samples are taken as and when we can catch the birds, which is not alw
 
 \begin{adjustwidth}{2cm}{2cm}
 
-\textit{"Note that the follow-up time between samples varied among individuals, and that individuals are not always caught at exactly the same time of year."}
+\textit{"Individuals were not always caught at the same time of year, but within a 3 month breeding season window."}
 
 \end{adjustwidth}
 
@@ -934,6 +955,8 @@ RESPONSE: We now include a formal test of the within and between individual slop
 
 \textit{"Further, we found no evidence that within and between individual slopes of telomere shortening varied (estimate = -0.003, CIs = -0.008, 0.003; see Van de Pol and Wright 2009), suggesting that there was no difference between cross-sectional and longitudinal telomere shortening with age."}
 
+Not also that this analysis was done in one of the original Seychelles warbler telomere studies (Barrett et al. 2013; Mol. Ecol.)
+
 \end{adjustwidth}
 
 
@@ -953,7 +976,7 @@ RESPONSE: We now include a formal test of the within and between individual slop
 
 **L 252: It is always the same time span between sampling, right? Could the low repeatability/correlation be partly due to inter-plate differences? Did you run all samples of the same individuals on the same plates or partly on different plates?**
 
-RESPONSE: No, it is not always the same time between sampling, as we now make clear in the manuscript (see response to previous comment). And yes, part of the low repeatability could be explained by inter-plate error, as individual samples were fully randomised across plates. However, the within-individual repeatability is still far lower than the within-sample (across-plate) repeatability. We now add a caveat to this effect, on lines XX:
+RESPONSE: No, it is not always the same time between sampling, as we now make clear in the manuscript (see response to previous comment). We agree that part of the low repeatability could be explained by inter-plate error, as individual samples were fully randomised across plates. However, the within-individual repeatability is still far lower than the within-sample (across-plate) repeatability. We now add a caveat to this effect, on lines XX:
 
 \begin{adjustwidth}{2cm}{2cm}
 
@@ -991,7 +1014,7 @@ RESPONSE: Now removed.
 
 **L 340: Does telomere lengthening or shortening relate to environmental conditions in your study?**
 
-RESPONSE: As stated in the discussion (lines XX), we feel that this is an important area for future research, and we hope that it will be a whole manuscript on its own. We are already pushing the page limit for Journal of Animal Ecology, so adding in an entire new set of analyses is just not possible.
+RESPONSE: As stated in the discussion (lines XX), we feel that this is an important area for future research. However, this would involve a comprehensive, complex set of new analyses. Difficulties associated with such an analysis are incorporating temporal changes in territory quality/conditions, incorporating the effects of individuals moving territories, and moving beyong detecting telomere lenghthening at a population level, to distinguishing legthening from error at the individual level. Thus, we hope that addressing the relationship between telomere lengthening and enviroinment will form a whole manuscript on its own - but we need to do a lot more work before such a manuscript can be written. From a practical perspective, we are already pushing the page limit for Journal of Animal Ecology, so adding in an entire new set of analyses is just not possible.
 
 \bigskip
 

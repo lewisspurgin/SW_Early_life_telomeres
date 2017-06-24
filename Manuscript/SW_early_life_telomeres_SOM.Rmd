@@ -42,7 +42,7 @@ source('Scripts/SW juvenile telomeres IPC model averaging.r')
 ```
 
 
-**Table S1** Cohort sizes for each birth year of the Seychelles warbler dataset used in this study.
+**Table S1** Cohort sizes for each hatch year of the Seychelles warbler dataset used in this study. Note that cohort sizes on Cousin are typically small due to the saturated nature of the population.
 ```{r Table S1}
 x <- subset(dd,!duplicated(BirdID)) %>%
   ddply(.(LayYear),
