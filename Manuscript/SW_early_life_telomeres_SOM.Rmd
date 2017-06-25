@@ -122,7 +122,7 @@ kable(t1b,digits = 3)
 
 \pagebreak
 
-**Table S4** Model selection table for analysis of factors affecting $\Delta$RTL in Seychelles warblers, using longitudinal data. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here. TQ = territory quality.
+**Table S4** Model selection table for analysis of factors affecting $\Delta$RTL in Seychelles warblers, using longitudinal data. Only models that remained in the top model set for model averaging (AICc $\leq$ 6 compared to the top model) are included here.
 
 
 ```{r Table S4}
