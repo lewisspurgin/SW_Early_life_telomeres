@@ -1,0 +1,164 @@
+---
+output: 
+  pdf_document:
+header-includes:
+  \usepackage{graphicx}
+  \usepackage{changepage}
+  \usepackage{color}
+---
+
+
+
+\begin{flushright}
+
+\includegraphics{UEAlogo}
+
+\bigskip
+
+Dr Lewis G. Spurgin\\*
+BBSRC Research Fellow\\*
+School of Biological Sciences\\*
+University of East Anglia\\*
+Norwich\\*
+Norfolk, NR4 7TJ\\* 
+United Kingdom  
+
+L.Spurgin@uea.ac.uk\\*
+lewisspurgin.wordpress.com
+
+\end{flushright}
+
+\bigskip
+\bigskip
+
+**July 2017**
+
+\bigskip
+
+Dear Ben,
+
+Thank you for taking the time once again to read our manuscript and response letter. Once again the reviews have been robust but fair, and we have been very impressed at the quality of the reviewing process. We have now been through the second round of Associate Editor and Reviewer comments, and adjusted our manuscript accordingly. In particular, we have added further caveats to our discussion with regards to repeatability, and we agree that this does not take away from the positive aspects of the manuscript.
+
+In addition to the revised manuscript, below we provide a point-by-point response to the Associate Editor and Reviewer comments. As with our previous submission, the editor/reviewer comments are in bold, and edited manuscript sections are reproduced in italics and indented.
+
+Please let us know if you need anything else.
+
+\bigskip
+\bigskip
+
+Kind Regards,
+
+\bigskip
+\bigskip
+
+
+Lewis Spurgin (on behalf of all authors)
+
+\newpage		
+
+
+
+
+
+
+
+#Associate editor comments
+
+---
+
+\bigskip
+
+**One of the original reviewers and myself have now read your revised manuscript and we both think that it has improved substantially. The reviewer, however, very nicely describes some points that I strongly agree would need more attention in the discussion of the paper to more honestly balance/describe the strong AND weak points of your study. These weaker points do not decrease the impact, novelty or relevance of your study, but discussing them in more detail could rather inspire advances to the methodology used in your field of research.**
+
+RESPONSE: We are glad that you both agree that our manuscript has improved, and thank you again for your constructive comments. We agree with the central point made by reviewer and yourself, and have now adjusted our discussion accordingly. We hope you agree that this has further improved our manuscript, and we are hopful that this improved version will generate discussion about both the ecological and technical aspects of telomere dynamics in wild populations.
+
+\newpage
+
+
+
+
+
+#Reviewer 1
+
+---
+
+\bigskip
+
+**Line 441: It is very kind of the authors to acknowledge me by name, but my first name is Antoine, not Eric...**
+
+RESPONSE: We are very sorry about this, and we do of course know that your name is Antoine! We have now changed the ackowledgements.
+
+\bigskip
+
+
+
+
+
+
+---
+
+\bigskip
+
+**As far as I understand ICC, it is relatively close to a pearson r with some adjustments. Therefore, to quantify the proportion % of variance explained, you should square transform it to obtain something looking like a R2. Therefore, the repeatability of 0.68 mentioned by the authors would mean that 46.2% of their measurement is explained by the sample and that 53.8% is explained by measurement error.**
+
+RESPONSE: We feel that we will have to agree to disagree here. ICC is calculated as: 
+
+$variation between groups / (variation between groups + variation within groups)$
+
+Thus if within-group variation is extremely small (i.e. no measurement error), the ICC would be 1, so 0% of the variation would be explained by measurement error. Thus we would interpret an ICC of 0.68 as 68% of the variation being explained by sample identity and 32% by variation other than sample identity (i.e. measurement error).
+
+However, this feels like a debate over semantics. In the manuscript, we are careful not to phrase things in terms of repeatability, and nowhere do we state that 68% of the variance can be explained by sample identity.
+
+\bigskip
+
+
+
+
+
+
+---
+
+\bigskip
+
+**While I understand that measurement error is higher in their study due to the long-term nature of the data, such measurement error (if I am calculating/understanding the numbers properly) is still a major issue to underline with more emphasis in the paper. I agree that it will not lead to false positive, but still it is reducing the power to detect any relationship with other factors. In Bebbington 2016, the repeatability given is 0.94 despite having 1064 samples from the same population/dataset. What is explaining such a loss of repeatability between the two datasets?**
+
+**qPCR efficiency: An efficiency of 78% means that the qPCR conditions have not been optimized properly. Correcting with LinReg for differences in efficiency is minimizing noise related to such problem, but not fixing the problem when efficiency is so different from 100%. Again, this is likely to increase measurement error, but not to create false positive. Such limitation should be discussed in the paper too. The fact that others are publishing with poor efficiency is not a good answer in my opinion, and I can cite you many papers reporting efficiencies being in the range 90-110%, including most (all?) papers of Criscuolo’s lab and Monaghan’s lab. In LinReg, are you correcting for sample specific efficiency or per the average plate efficiency? Correcting for sample specific efficiency has been criticized in the past : "Sample specific PCR efficiency estimation has its usefulness, but currently only for outlier detection", Hellemans et al. 2007 qBase relative quantification framework and software for management and automated analysis of real-time quantitative PCR data.**
+
+RESPONSE: We are glad that the reviewer agrees that our observed repeatability/efficiency values will not lead to false positives. We agree that this issue deserves more discussion space, and have now addressed the issue of repeatability, and the specific issue of qPCR efficiency, in the discussion on lines XX:
+
+\bigskip
+
+
+
+
+
+
+---
+
+\bigskip
+
+**Information on the age of birds: While I acknowledge that the authors now provide better information on the age of individuals, the resolution they have for TL at the nestling age is not optimal in my opinion since many research groups (Criscuolo, Monaghan, Verhulst) have identified telomere shortening within 1-4weeks in nestlings, and the data the authors present here seems to indicate that most TL shortening occur early (very early?) in life.**
+
+RESPONSE: We would love to have had fine-scale longitudinal samples from within the nest, but this is not possible in the Seychelles warbler system, in which the nests are very high and difficult to access safely. Systems in which birds can be sample repeatedly early in life (e.g. from nest boxes) are much better for addressing the specific issue of early life telomere loss. The point that we tried to make was that the (lack of) sampling resolution in early life should be offset against have broad-scale, longitudinal samples froma  large number of cohorts. Nonetheless, we agree that we are likely be missing a degree of early-life telomere shortening, and have a added a section to the discussion on this, lines XX:
+
+
+
+\bigskip
+
+
+
+
+
+
+---
+
+\bigskip
+
+**Intra-individual repeatability of 8%: Maybe “worrying” was not the proper word; please excuse my approximate usage sometimes of English. Yet, I am still ‘puzzled’ by the very low intra-individual repeatability for telomere found here and by Dan Nussey’s team. I don’t have similar long-term dataset, but overall in my datasets, I find an intra-individual repeatability ca. 65% over a period of 9 days during growth in tits (see Fig below) for great and coal tits from Stier et al. 2016 J Avian Biol), and 28% over a period of 105 days in king penguin chicks (unpublished). Verhulst’s team find similar/stronger intra-individual repeatability (e.g. Boonekamp 2014 both for nestling and between nestling and adulthood; Bauch 2013 Mol Ecol in adult seabirds).**
+
+**Do you have any idea about the presence of interstitial telomeric sequence in your study species? Because presence of ITS would even artificially increase intra-individual repeatability when telomeres are measured with qPCR.
+If there is only 8% of intra-individual repeatability, it is quite surprising that telomere length at a given point can predict survival, as shown by many studies including in your own study system. With such a low intra-individual repeatability, I agree that telomeres can be seen as a biomarker of short-term “costs”, but we would have to re-think our way of using it as a biomarker of long-term costs and survival prospects. This idea should be better highlighted in the discussion in my opinion.**
+
+RESPONSE: We thank Dr Stier for clarifying this point. Unfortunately we do not have any data on the presence of ITS. However, we have now added further discussion on what may cause the difference between our study and the ones mentioned above. We have also now discussed what low intra-individual repeatability may mean for the relationship between telomere length and long-term survival - lines XX:
+
+
