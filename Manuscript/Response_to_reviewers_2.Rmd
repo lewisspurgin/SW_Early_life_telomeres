@@ -105,9 +105,9 @@ RESPONSE: We feel that we will have to agree to disagree here. ICC is calculated
 
 $variation between groups / (variation between groups + variation within groups)$
 
-Thus if within-group variation is extremely small (i.e. no measurement error), the ICC would be 1, so 0% of the variation would be explained by measurement error. Thus we would interpret an ICC of 0.68 as 68% of the variation being explained by sample identity and 32% by variation other than sample identity (i.e. measurement error).
+Thus if within-group variation is extremely small (i.e. no measurement error), the ICC would be 1, so 0% of the variation would be explained by measurement error. We would therefore interpret an ICC of 0.68 as 68% of the variation being explained by sample identity and 32% by variation other than sample identity (i.e. measurement error).
 
-However, this feels like a debate over semantics. In the manuscript, we are careful not to phrase things in terms of repeatability, and nowhere do we state that 68% of the variance can be explained by sample identity.
+However, this is a debate over semantics. In the manuscript, we are careful to phrase things in terms of repeatability and avoid using pearson R and R2 values as these are generally considered inappropriate for measuring repeatability. Nowhere do we state that 68% of the variance can be explained by sample identity.
 
 \bigskip
 
@@ -124,7 +124,9 @@ However, this feels like a debate over semantics. In the manuscript, we are care
 
 **qPCR efficiency: An efficiency of 78% means that the qPCR conditions have not been optimized properly. Correcting with LinReg for differences in efficiency is minimizing noise related to such problem, but not fixing the problem when efficiency is so different from 100%. Again, this is likely to increase measurement error, but not to create false positive. Such limitation should be discussed in the paper too. The fact that others are publishing with poor efficiency is not a good answer in my opinion, and I can cite you many papers reporting efficiencies being in the range 90-110%, including most (all?) papers of Criscuolo’s lab and Monaghan’s lab. In LinReg, are you correcting for sample specific efficiency or per the average plate efficiency? Correcting for sample specific efficiency has been criticized in the past : "Sample specific PCR efficiency estimation has its usefulness, but currently only for outlier detection", Hellemans et al. 2007 qBase relative quantification framework and software for management and automated analysis of real-time quantitative PCR data.**
 
-RESPONSE: We are glad that the reviewer agrees that our observed repeatability/efficiency values will not lead to false positives. We agree that this issue deserves more discussion space, and have now addressed the issue of repeatability, and the specific issue of qPCR efficiency, in the discussion on lines XX:
+RESPONSE: We are glad that the reviewer agrees that our observed repeatability/efficiency values will not lead to false positives. Our dataset includes repeats that have run several years apart, and these repeats are included in our repeatability estimates. We suspect that our dataset is fairly unique in this respect at pressent, but other studies will certainly have such data available in the near future. Thew Bebbington et al. paper only included the set of most recently run telomere samples, hence the higher repeatability. We agree that this issue deserves more discussion space, and have now devoted an entire paragraph to the issue of repeatability, and the specific issue of qPCR efficiency, in the discussion on lines XX:
+
+
 
 \bigskip
 
@@ -139,7 +141,7 @@ RESPONSE: We are glad that the reviewer agrees that our observed repeatability/e
 
 **Information on the age of birds: While I acknowledge that the authors now provide better information on the age of individuals, the resolution they have for TL at the nestling age is not optimal in my opinion since many research groups (Criscuolo, Monaghan, Verhulst) have identified telomere shortening within 1-4weeks in nestlings, and the data the authors present here seems to indicate that most TL shortening occur early (very early?) in life.**
 
-RESPONSE: We would love to have had fine-scale longitudinal samples from within the nest, but this is not possible in the Seychelles warbler system, in which the nests are very high and difficult to access safely. Systems in which birds can be sample repeatedly early in life (e.g. from nest boxes) are much better for addressing the specific issue of early life telomere loss. The point that we tried to make was that the (lack of) sampling resolution in early life should be offset against have broad-scale, longitudinal samples froma  large number of cohorts. Nonetheless, we agree that we are likely be missing a degree of early-life telomere shortening, and have a added a section to the discussion on this, lines XX:
+RESPONSE: We would love to have had fine-scale longitudinal samples from within the nest, but this is not possible in the Seychelles warbler system, in which the nests are very high and difficult to access safely. Systems in which birds can be sample repeatedly early in life (e.g. from nest boxes) are much better for addressing the specific issue of early life telomere loss. The point that we tried to make was that the (lack of) sampling resolution in early life should be offset against have broad-scale, longitudinal samples from a  large number of cohorts. Nonetheless, we agree that our set-up is not optimal for looking at early-life telomere shortening, and have added a section to the discussion on this, lines XX:
 
 
 
@@ -159,6 +161,6 @@ RESPONSE: We would love to have had fine-scale longitudinal samples from within 
 **Do you have any idea about the presence of interstitial telomeric sequence in your study species? Because presence of ITS would even artificially increase intra-individual repeatability when telomeres are measured with qPCR.
 If there is only 8% of intra-individual repeatability, it is quite surprising that telomere length at a given point can predict survival, as shown by many studies including in your own study system. With such a low intra-individual repeatability, I agree that telomeres can be seen as a biomarker of short-term “costs”, but we would have to re-think our way of using it as a biomarker of long-term costs and survival prospects. This idea should be better highlighted in the discussion in my opinion.**
 
-RESPONSE: We thank Dr Stier for clarifying this point. Unfortunately we do not have any data on the presence of ITS. However, we have now added further discussion on what may cause the difference between our study and the ones mentioned above. We have also now discussed what low intra-individual repeatability may mean for the relationship between telomere length and long-term survival - lines XX:
+RESPONSE: We thank the reviewer for clarifying this point. Unfortunately we do not have any data on the presence of ITS. However, we have now added further discussion on what may cause the difference between our study and the ones mentioned above. We have also now discussed what low intra-individual repeatability may mean for the relationship between telomere length and long-term survival - lines XX:
 
 

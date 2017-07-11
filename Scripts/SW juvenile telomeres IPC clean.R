@@ -3,6 +3,7 @@
 ## CLEAN THE DATA
 #################################################################################
 
+
 #Subset bad samples
 dd0 <- subset(dd0,CqTelomere < 25) %>%
   subset(CqGAPDH < 26) %>%

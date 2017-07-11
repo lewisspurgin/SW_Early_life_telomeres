@@ -28,3 +28,4 @@ insects <- read.csv('Data/Insects.csv')
 dens <- read.table('Data/PsizeFP.txt')
 chickinfo <- read.csv('Data/Table chick info.csv')
 mal <- read.csv('Data/Malaria.csv')
+
