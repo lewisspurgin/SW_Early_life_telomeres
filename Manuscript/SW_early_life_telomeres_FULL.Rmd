@@ -1,6 +1,6 @@
 ---
 output:
-  pdf_document:
+  word_document:
 bibliography: MyBib.bib
 header-includes: \usepackage{graphicx}
     \usepackage{setspace}
@@ -173,7 +173,7 @@ While sampling error is a problem in our study, we are confident that because of
 We thank Nature Seychelles for facilitating the long-term Seychelles warbler project. The Seychelles Bureau of Standards and Department of Environment gave permission for sampling and fieldwork. Emma Barrett laid the foundations for this study, generating the original telomere qPCR protocol. We thank everyone who has helped in the field, with lab work and with database management, and the Seychelles warbler research group for discussions. This work was funded by two Natural Environment Research Council (NERC) grants to DSR (NE/F02083X/1 and NE/K005502/1). LGS was also funded by a fellowship from the BBSRC (BB/N011759/1), HLD by a NERC fellowship (NE/I021748/1), MH was funded by a VENI fellowship from the Netherlands Organisation for Scientific Research (863.15.020), and TB by a Leverhulme fellowship. Antoine Stier, Dan Nussey and one anonymous reviewer provided helpful comments on the manuscript.
 
 ##Data accessibility
-This manuscript was written in R Markdown (http://rmarkdown.rstudio.com/). All data and scripts required to reproduce the manuscript, figures and analyses will be made available on GitHub.
+This manuscript was written in R Markdown (http://rmarkdown.rstudio.com/). All data and scripts required to reproduce the manuscript, figures and analyses are available on GitHub (doi: 10.5281/zenodo.835844).
 
 ##Author contributions
 DSR, HLD, JK and TB manage the long-term Seychelles warbler project. DSR conceived and obtained funding for the telomere research. EAF and KB performed the molecular work. LGS processed the telomere data, with input from EAF, KB, MH, HLD and DSR. LGS analysed the data and wrote the manuscript, with input from DSR and all authors.
@@ -269,11 +269,7 @@ kable(table1,digits = 3)
 
 
 
-
-
-**Figure 1**
-
-```{r Figure 1}
+```{r Figure 1,include = F}
 
 Fig1A <- ddply(dd,
                .(BirdID),
@@ -360,10 +356,14 @@ Fig1C <- transform(dd,Cohort = factor(LayYear)) %>%
   annotate('text',x = -1.5,y = 1.7,label = 'D')
 
 
+pdf("Figures/Figure 1.pdf",
+    width = 10,
+    height = 8,
+    paper = "a4")
 
 multiplot(Fig1A,Fig1B,Fig1C,Fig1D,layout = matrix(1:4,2,2,byrow = T))
 
-
+dev.off()
 ```
 
 \pagebreak
@@ -372,9 +372,8 @@ multiplot(Fig1A,Fig1B,Fig1C,Fig1D,layout = matrix(1:4,2,2,byrow = T))
 
 
 
-**Figure 2**
 
-```{r Figure 2}
+```{r Figure 2,include = F}
 
 temp <- subset(dd3,TimeDiff < 3.5)
 
@@ -459,9 +458,12 @@ ggplot(aes(x = Agemonths,
   geom_count(data = temp,aes(y = DeltaRTLF,x = Agemonths),col = "grey")+
   annotate('text',x = 0,y = 1.1,label = 'D')
 
-
+pdf("Figures/Figure 2.pdf",
+    width = 10,
+    height = 8,
+    paper = "a4")
 multiplot(Fig2A,Fig2B,Fig2C,Fig2D,layout = matrix(c(1,2,3,4),nrow = 2,byrow = T))
-
+dev.off()
 
 ```
 
@@ -471,9 +473,9 @@ multiplot(Fig2A,Fig2B,Fig2C,Fig2D,layout = matrix(c(1,2,3,4),nrow = 2,byrow = T)
 
 
 
-**Figure 3**
 
-```{r Figure 3}
+
+```{r Figure 3,include = F}
 
 RTL_Full2 <- standardize(RTL_Full)
 
@@ -542,7 +544,11 @@ Fig3C <- ggplot(dd,
    stat_smooth(method = 'lm',col = 'darkgrey') +
   annotate('text',x = 2.5,y = 1.6,label = 'C')
 
-
+pdf("Figures/Figure 3.pdf",
+    width = 10,
+    height = 8,
+    paper = "a4")
 multiplot(Fig3A,Fig3B,Fig3C,layout = matrix(c(1,1,2,3),byrow = T,nrow = 2))
+dev.off()
 
 ```
